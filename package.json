@@ -1,0 +1,18 @@
+{
+  "name": "shithead",
+  "version": "1.0.0",
+  "description": "A nice card game",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon ./server.js"
+  },
+  "author": "Jan Arends",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
