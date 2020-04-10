@@ -3,17 +3,29 @@ let mates = document.querySelector('#currentroommates');
 let nameinput = document.querySelector('#name');
 let newroominput = document.querySelector('#createroominput');
 let createbtn = document.querySelector('#createroombtn');
+let startbtn = document.querySelector('#startbtn');
 
 currentroommates = [];
+notavailablerooms = [];
 
 createbtn.onclick = () => {
-    socket.emit('join room',
+    if (!notavailablerooms.includes(newroominput.value)) {
+        socket.emit('join room',
         {
             user: nameinput.value,
             room: newroominput.value
         });
+    } 
 
 };
+
+startbtn.onclick = () => {
+    socket.emit('start', newroominput.value );
+};
+
+socket.on('game_started', (roomName) => {
+    notavailablerooms.push(roomName);
+});
 
 socket.on('new user in room', (data) => {
     currentroommates = data;
@@ -28,7 +40,7 @@ function showplayers() {
         let node = document.createTextNode(element.name);
         para.appendChild(node);
         mates.appendChild(para)
-});
+    });
 }
 
 

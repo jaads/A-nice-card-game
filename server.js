@@ -7,9 +7,10 @@ app.use(express.static("./public"))
 let server = app.listen(4000, () => console.log('Listening'))
 let io = socket(server);
 
+let users = [];
+
 io.on('connection', socket => {
     console.log("user connected");
-    users = [];
 
     function usersInRoom(room) {
         tmp = [];
@@ -33,9 +34,8 @@ io.on('connection', socket => {
         console.log('User ' + data.user + ' joined room ' + data.room);
     });
 
-        io.to(data.room).emit('new user in room', data.user + ' ist auch dabei.');
-        io.to(data.room).emit('userslist', usersInRoom(data.room) );
-        console.log('User ' + data.user + ' joined room ' + data.room);
+    socket.on('start', roomName => {
+        io.emit('game_started', roomName)
     });
 
     socket.on('disconnect', () => {
