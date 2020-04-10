@@ -25,10 +25,13 @@ io.on('connection', socket => {
         socket.join(data.room);
         let user = {
             id: socket.id,
-            name: data.name,
+            name: data.user,
             room: data.room
         };
         users.push(user);
+        io.to(data.room).emit('new user in room', usersInRoom(data.room));
+        console.log('User ' + data.user + ' joined room ' + data.room);
+    });
 
         io.to(data.room).emit('new user in room', data.user + ' ist auch dabei.');
         io.to(data.room).emit('userslist', usersInRoom(data.room) );

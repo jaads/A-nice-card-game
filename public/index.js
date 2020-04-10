@@ -1,5 +1,5 @@
 let socket = io.connect('http://localhost:4000');
-
+let mates = document.querySelector('#currentroommates');
 let nameinput = document.querySelector('#name');
 let newroominput = document.querySelector('#createroominput');
 let createbtn = document.querySelector('#createroombtn');
@@ -16,9 +16,19 @@ createbtn.onclick = () => {
 };
 
 socket.on('new user in room', (data) => {
-    console.log(data);
+    currentroommates = data;
+    console.log(currentroommates);
+    showplayers();
 });
 
-socket.on('userslist', data => {
-    console.log(data);
+function showplayers() {
+    mates.innerHTML = '';
+    currentroommates.forEach(element => {
+        let para = document.createElement("p");
+        let node = document.createTextNode(element.name);
+        para.appendChild(node);
+        mates.appendChild(para)
 });
+}
+
+
