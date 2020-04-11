@@ -4,46 +4,78 @@ let nameinput = document.querySelector('#name');
 let newroominput = document.querySelector('#createroominput');
 let createbtn = document.querySelector('#createroombtn');
 let startbtn = document.querySelector('#startbtn');
+let makemovebtn = document.querySelector('#makemovebtn');
+let playercount = document.querySelector('#playercount');
 
-currentroommates = [];
-notavailablerooms = [];
+let roommates = [];
+let notavailablerooms = [];
+let currentplayerIdx = 0;
 
 createbtn.onclick = () => {
-    let notjoinable = notavailablerooms.includes(newroominput.value); 
+    let notjoinable = notavailablerooms.includes(newroominput.value);
     if (notjoinable) {
         console.log('You cannt join anymore. A game already started in this room.');
     } else {
         socket.emit('join room',
-        {
-            user: nameinput.value,
-            room: newroominput.value
-        });
+            {
+                user: nameinput.value,
+                room: newroominput.value
+            });
     }
-
 };
 
 startbtn.onclick = () => {
-    socket.emit('start', newroominput.value );
+    if (roommates.length > 0) {
+        socket.emit('start-game', newroominput.value);
+    } else {
+        console.log("No players yet.");
+    }
 };
 
-socket.on('game_started', (roomName) => {
-    notavailablerooms.push(roomName);
+socket.on('broadcas_running_games', (runningGames) => {
+    notavailablerooms = runningGames;
+    console.log("These games are currently running:");
+    console.log(runningGames);
 });
 
+socket.on('game-started', (gamestate) => {
+    notavailablerooms.push(gamestate.room);
+    currentplayerIdx = gamestate.currPlayerIdx;
+    console.log('The game has started.');
+    console.log(roommates);
+
+    printCurrentPlayer();
+});
+
+makemovebtn.onclick = () => {
+    let move = {
+        room: newroominput.value,
+        currentIdx: currentplayerIdx
+    };
+    socket.emit('make_move', move);
+};
+
+socket.on('move_made', msg => {
+    currentplayerIdx = (currentplayerIdx + 1) % roommates.length;
+    printCurrentPlayer();
+});
+
+function printCurrentPlayer() {
+    console.log("It's " + roommates[currentplayerIdx].name + "'s turn.");
+}
+
 socket.on('new user in room', (data) => {
-    currentroommates = data;
-    console.log(currentroommates);
+    roommates = data;
+    playercount.innerText = roommates.length;
     showplayers();
 });
 
 function showplayers() {
     mates.innerHTML = '';
-    currentroommates.forEach(element => {
+    roommates.forEach(element => {
         let para = document.createElement("p");
         let node = document.createTextNode(element.name);
         para.appendChild(node);
         mates.appendChild(para)
     });
 }
-
-

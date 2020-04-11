@@ -8,9 +8,12 @@ let server = app.listen(4000, () => console.log('Listening'))
 let io = socket(server);
 
 let users = [];
+let runningGames = [];
 
 io.on('connection', socket => {
+
     console.log("user connected");
+    io.to(socket.id).emit('broadcas_running_games', runningGames);
 
     function usersInRoom(room) {
         tmp = [];
@@ -34,8 +37,17 @@ io.on('connection', socket => {
         console.log('User ' + data.user + ' joined room ' + data.room);
     });
 
-    socket.on('start', roomName => {
-        io.emit('game_started', roomName)
+    socket.on('start-game', roomName => {
+        runningGames.push(roomName);
+        let gamestate = {
+            room: roomName,
+            currPlayerIdx: 0
+        }
+        io.to(roomName).emit('game-started', gamestate)
+    });
+
+    socket.on('make_move', move => {
+        socket.to(move.room).emit('move_made', 'a move was made. next one..');
     });
 
     socket.on('disconnect', () => {
