@@ -9,13 +9,16 @@ currentroommates = [];
 notavailablerooms = [];
 
 createbtn.onclick = () => {
-    if (!notavailablerooms.includes(newroominput.value)) {
+    let notjoinable = notavailablerooms.includes(newroominput.value); 
+    if (notjoinable) {
+        console.log('You cannt join anymore. A game already started in this room.');
+    } else {
         socket.emit('join room',
         {
             user: nameinput.value,
             room: newroominput.value
         });
-    } 
+    }
 
 };
 
