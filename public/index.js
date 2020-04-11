@@ -1,3 +1,5 @@
+import { getDeck } from './card-logic.js';
+
 let socket = io.connect('http://localhost:4000');
 let mates = document.querySelector('#currentroommates');
 let nameinput = document.querySelector('#name');
@@ -42,8 +44,6 @@ socket.on('game-started', (gamestate) => {
     notavailablerooms.push(gamestate.room);
     currentplayerIdx = gamestate.currPlayerIdx;
     console.log('The game has started.');
-    console.log(roommates);
-
     printCurrentPlayer();
 });
 
