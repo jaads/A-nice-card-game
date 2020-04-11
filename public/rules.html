@@ -5,13 +5,12 @@
     <title>Shithead</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="stylesheet" href="paper.min.css">
-    <link rel="stylesheet" href="index.css">
 </head>
 
 <header>
     <nav class="border fixed split-nav background-primary">
         <div class="nav-brand">
-            <h3><a href="#">Shithead</a></h3>
+            <h3><a href="index.html">Shithead</a></h3>
         </div>
         <div class="collapsible">
             <input id="collapsible1" type="checkbox" name="collapsible1">
@@ -34,19 +33,19 @@
 </header>
 
 <body>
-    <div>
-        <label for="name">Name:</label>
-        <input id="name" type="text">
-        <label for="createroominput">Raum:</label>
-        <input id="createroominput" type="text">
-        <button id="createroombtn">Gooo</button>
-
-        <h3>Mitspieler (<span id="playercount">0</span>)</h3>
-        <div id="currentroommates"></div>
-        <button id="startbtn" class="background-success">Start game!</button>
-        <button id="makemovebtn" class="background-success">Make move</button>
-    </div>
-    <script src="index.js"></script>
+    <article class="article">
+        <h1 class="article-title"></h1>
+        <p class="article-meta">Written by Jan. More infos on: <a
+                href="https://en.wikipedia.org/wiki/Shithead_(card_game)" target_blank>here</a></p>
+        <p class="text-lead">Some rules exists.. </p>
+        <p>Well the algorithm should be resistent against not allowed moves - so you cannot make anything wrong ;)</p>
+        <p>Try reverve engeneering the game if your're to lazy the read the provided link.</p>
+        <div class="row">
+            <a href="index.html">
+                <button>Ready to play</button>
+            </a>
+        </div>
+    </article>
 </body>
 
 </html>
