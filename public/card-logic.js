@@ -1,7 +1,6 @@
-let values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-
-export function getDeck() {
+function getDeck() {
     let deck = []
     values.forEach((elem) => {
         for (let i = 0; i < 4; i++) {
@@ -15,10 +14,32 @@ export function getDeck() {
 function shuffle(array) {
     var m = array.length, t, i;
     while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
     }
     return array;
-  }
+}
+
+export function getSuffledDeck () {
+    let deck = getDeck();
+    return shuffle(deck);
+}
+
+export function isValidMove(prev, current, next) {
+    if (current == 2) {
+        return true;
+    }
+    if (current == 3) {
+        return (next >= prev) ? true : false;
+    }
+    if (current == 7) {
+        return (next <= 7 && next != 10) ? true : false;
+    } else {
+        if (next >= current || (next == 2 || next == 3)) {
+            return true;
+        }
+    }
+    return false;
+}
