@@ -1,6 +1,6 @@
 let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-export function getDeck() {
+function getDeck() {
     let deck = []
     values.forEach((elem) => {
         for (let i = 0; i < 4; i++) {
