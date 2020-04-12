@@ -1,6 +1,6 @@
 let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-function getDeck() {
+export function getDeck() {
     let deck = []
     values.forEach((elem) => {
         for (let i = 0; i < 4; i++) {
@@ -32,10 +32,14 @@ export function isValidMove(prev, current, next) {
         return true;
     }
     if (current == 3) {
-        return (next >= prev) ? true : false;
+        if (next >= prev) {
+            return true;
+        }
     }
     if (current == 7) {
-        return (next <= 7 && next != 10) ? true : false;
+        if (next <= 7 && next != 10) {
+            return true;
+        } 
     } else {
         if (next >= current || (next == 2 || next == 3)) {
             return true;
