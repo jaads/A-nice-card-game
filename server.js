@@ -8,12 +8,16 @@ let server = app.listen(4000, () => console.log('Listening'))
 let io = socket(server);
 
 let users = [];
-let runningGames = [];
+let closedRooms = [];
 
 io.on('connection', socket => {
 
     console.log("user connected");
-    io.to(socket.id).emit('broadcas_running_games', runningGames);
+    io.to(socket.id).emit('initialClosedRooms', closedRooms);
+
+    function broadcastClosedRooms() {
+        io.emit('closedRooms', closedRooms);
+    };
 
     function usersInRoom(room) {
         tmp = [];
@@ -38,7 +42,8 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', roomName => {
-        runningGames.push(roomName);
+        closedRooms.push(roomName);
+        broadcastClosedRooms();
         let gamestate = {
             room: roomName,
             currPlayerIdx: 0

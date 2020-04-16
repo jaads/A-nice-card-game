@@ -34,14 +34,17 @@ startbtn.onclick = () => {
     }
 };
 
-socket.on('broadcas_running_games', (runningGames) => {
-    notavailablerooms = runningGames;
+socket.on('initialClosedRooms', (closedRooms) => {
+    notavailablerooms = closedRooms;
     console.log("These games are currently running:");
-    console.log(runningGames);
+    console.log(closedRooms);
+});
+
+socket.on('closedRooms', (closedRooms) => {
+    notavailablerooms = closedRooms;
 });
 
 socket.on('game-started', (gamestate) => {
-    notavailablerooms.push(gamestate.room);
     currentplayerIdx = gamestate.currPlayerIdx;
     console.log('The game has started.');
     printCurrentPlayer();
@@ -62,7 +65,7 @@ socket.on('move_made', msg => {
 
 function printCurrentPlayer() {
     console.log("It's " + roommates[currentplayerIdx].name + "'s turn.");
-}
+};
 
 socket.on('new user in room', (data) => {
     roommates = data;
