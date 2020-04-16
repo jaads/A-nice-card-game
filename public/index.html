@@ -36,16 +36,20 @@
 
 <body>
     <div>
-        <label for="name">Name:</label>
-        <input id="name" type="text">
-        <label for="createroominput">Raum:</label>
-        <input id="createroominput" type="text">
-        <button id="createroombtn">Gooo</button>
+        <div class="row">
+            <label for="name">Name:</label>
+            <input id="name" type="text" class="margin">
+            <label for="createroominput">Raum:</label>
+            <input id="createroominput" type="text" class="margin">
+            <button id="createroombtn">Gooo</button>
+        </div>
 
         <h3>Mitspieler (<span id="playercount">0</span>)</h3>
         <div id="currentroommates"></div>
         <button id="startbtn" class="background-success">Start game!</button>
-        <button id="makemovebtn" class="background-success">Make move</button>
+
+        <h2 id="currentcard"></h2>
+        <input id="cardinput" type="number">
     </div>
     <script src="index.js" type="module"></script>
 </body>

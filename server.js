@@ -10,7 +10,7 @@ let io = socket(server);
 let allusers = [];
 let closedRooms = [];
 
-function getUsersFromRoom(room) {
+function getUsersbyRoom(room) {
     tmp = [];
     allusers.forEach(user => {
         if (user.room == room) {
@@ -19,15 +19,6 @@ function getUsersFromRoom(room) {
     });
     return tmp;
 };
-
-function startGame(room) {
-    game = new Game(room, getUsersFromRoom(room));
-    console.log(game);
-    game.print();
-    game.makemove(44);
-    console.log(game);
-    game.print();
-}
 
 io.on('connection', socket => {
 
@@ -46,24 +37,26 @@ io.on('connection', socket => {
             room: data.room
         };
         allusers.push(user);
-        io.to(data.room).emit('new user in room', getUsersFromRoom(data.room));
+        io.to(data.room).emit('new user in room', getUsersbyRoom(data.room));
         console.log('User ' + data.user + ' joined room ' + data.room);
     });
 
     socket.on('start-game', roomName => {
+        // Close room
         closedRooms.push(roomName);
         broadcastClosedRooms();
 
-        startGame(roomName);
+        // Setup game
+        newgame = new Game(roomName, getUsersbyRoom(roomName));
 
-        io.to(roomName).emit('game-started', {
-            room: roomName,
-            currPlayerIdx: 0
-        })
+        // Send game to everyone in room
+        io.to(roomName).emit('game-started', newgame)
     });
 
-    socket.on('make_move', move => {
-        socket.to(move.room).emit('move_made', 'a move was made. next one..');
+    socket.on('move', data => {
+        console.log(data.game);
+    
+        // socket.to(move.room).emit('move_made', 'a move was made. next one..');
     });
 
     socket.on('disconnect', () => {
@@ -126,11 +119,7 @@ class Game {
     }
 
     getCardFromDeck() {
-        if (this.deck.length > 0) {
-            return this.deck.pop();
-        } else {
-            return 0;
-        }
+        return this.deck.pop();
     };
 
     makemove(card) {
@@ -144,7 +133,9 @@ class Game {
 
         // Get new card from deck if needed
         if (this.cards[this.currentPlayerIdx].handCards.length < 3) {
-            this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
+            if (this.deck.length > 0) {
+                this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
+            }
         }
 
         // Set next player

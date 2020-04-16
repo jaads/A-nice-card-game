@@ -18,3 +18,20 @@ export function isValidMove(prev, current, next) {
     }
     return false;
 };
+
+
+export function getNumberMapping(letter) {
+    if (letter == 'j') {
+        return 11;
+    }
+    if (letter == 'q') {
+        return 12;
+    }
+    if (letter == 'k') {
+        return 13;
+    }
+    if (letter == 'a') {
+        return 14;
+    }
+    return 0;
+}

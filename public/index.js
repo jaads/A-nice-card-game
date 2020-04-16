@@ -4,16 +4,21 @@ let nameinput = document.querySelector('#name');
 let newroominput = document.querySelector('#createroominput');
 let createbtn = document.querySelector('#createroombtn');
 let startbtn = document.querySelector('#startbtn');
-let makemovebtn = document.querySelector('#makemovebtn');
 let playercount = document.querySelector('#playercount');
+let currentCard = document.querySelector('#currentcard');
+let cardinput = document.querySelector('#cardinput');
+
+import { isValidMove, getNumberMapping } from './card-logic.js';
 
 let roommates = [];
 let notavailablerooms = [];
 let currentplayerIdx = 0;
+let currentlyInGame = false;
+let game = null;
 
 createbtn.onclick = () => {
-    let notjoinable = notavailablerooms.includes(newroominput.value);
-    if (notjoinable) {
+    let roomClosed = notavailablerooms.includes(newroominput.value);
+    if (roomClosed) {
         console.log('You cannt join anymore. A game already started in this room.');
     } else {
         socket.emit('join room',
@@ -42,18 +47,34 @@ socket.on('closedRooms', (closedRooms) => {
     notavailablerooms = closedRooms;
 });
 
-socket.on('game-started', (gamestate) => {
-    currentplayerIdx = gamestate.currPlayerIdx;
+socket.on('game-started', gameparam => {
     console.log('The game has started.');
-    printCurrentPlayer();
+    currentlyInGame = true;
+    game = gameparam;
+    console.log(game);
+    currentCard.innerText = game.currentCard;
+    cardinput.focus();
+
+    // TODO: Show users cards.. we might get in trouble here.. 
+    console.log("Yore're cards on table are: ");
+    
+    // printCurrentPlayer();
 });
 
-makemovebtn.onclick = () => {
-    let move = {
-        room: newroominput.value,
-        currentIdx: currentplayerIdx
-    };
-    socket.emit('make_move', move);
+cardinput.onkeyup = (e) => {
+    if (currentlyInGame) {
+        let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
+        let validMove = isValidMove(game.previousCard, game.currentCard, mappedCardInput);
+        let isActuallyOnHand = game.cards[currentplayerIdx].handCards.includes(mappedCardInput);
+
+        if (validMove && isActuallyOnHand) {
+            console.log("valid move");
+            socket.emit("move", {game: game, card: mappedCardInput});
+        } else {
+            console.log("not valid move");
+        }
+        cardinput.value = '';
+    }
 };
 
 socket.on('move_made', msg => {
