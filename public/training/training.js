@@ -1,4 +1,4 @@
-import { isValidMove } from './card-logic.js';
+import { isValidMove } from '../card-logic.js';
 
 let prev = document.querySelector('#prev');
 let current = document.querySelector('#current');

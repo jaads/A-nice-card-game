@@ -46,4 +46,4 @@ export function isValidMove(prev, current, next) {
         }
     }
     return false;
-}
+};

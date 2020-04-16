@@ -3,14 +3,14 @@
 
 <head>
     <title>Shithead</title>
-    <link rel="stylesheet" href="paper.min.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../vendor/paper.min.css">
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <header>
     <nav class="border fixed split-nav background-primary">
         <div class="nav-brand">
-            <h3><a href="index.html">Shithead</a></h3>
+            <h3><a href="../index.html">Shithead</a></h3>
         </div>
         <div class="collapsible">
             <input id="collapsible1" type="checkbox" name="collapsible1">
@@ -23,7 +23,8 @@
             </button>
             <div class="collapsible-body">
                 <ul class="inline">
-                    <li><a href="rules.html">Rules</a></li>
+                    <li><a href="../rules/rules.html">Rules</a></li>
+                    <li><a href="#">Training</a></li>
                     <li><a href="https://github.com/jaads/A-nice-card-game" target="_blank">Github</a></li>
                     <li><a href="#">About</a></li>
                 </ul>
@@ -34,16 +35,10 @@
 
 <body>
     <article class="article">
-        <h1 class="article-title"></h1>
-        <p class="article-meta">More infos on: <a href="https://en.wikipedia.org/wiki/Shithead_(card_game)"
-                target_blank>here</a></p>
-        <p class="text-lead">Some rules exists.. </p>
-        <p>Well the algorithm should be resistent against not allowed moves - so you cannot make anything wrong ;)</p>
-        <p><u>Challange:</u> Try reverse engeneering the game. It's not too hard.</p>
-
-        <p>Let's do some <b>training:</b></p>
-        <p>Press the number on your keyboard. But press, <code>J</code>(ack) for 11, <code>Q</code>(ueen) for 12,
-            <code>K</code>(ing) for 13 and <code>A</code>(ce) for 14. All lower case.</p>
+        <h1 class="article-title">Let's do some training:</h1>      
+        <p>Below you see the top of the card stack. It's your turn. Which number you wanna play?</p> 
+        <p>Press the number on your keyboard. But press, <code>j</code>(ack) for 11, <code>q</code>(ueen) for 12,
+            <code>k</code>(ing) for 13 and <code>a</code>(ce) for 14. All lower case.</p>
         <div class="row" id="testnumberrow">
             <button id="refreshbtn">New</button>
             <div><span class="badge margin">...</span></div>
@@ -55,7 +50,7 @@
 
         <div class="row">
             <a href="index.html">
-                <button>Ready to play</button>
+                <button>Ready for a game</button>
             </a>
         </div>
     </article>
