@@ -3,8 +3,8 @@
 
 <head>
     <title>Shithead</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="stylesheet" href="paper.min.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <header>
@@ -35,17 +35,31 @@
 <body>
     <article class="article">
         <h1 class="article-title"></h1>
-        <p class="article-meta">Written by Jan. More infos on: <a
-                href="https://en.wikipedia.org/wiki/Shithead_(card_game)" target_blank>here</a></p>
+        <p class="article-meta">More infos on: <a href="https://en.wikipedia.org/wiki/Shithead_(card_game)"
+                target_blank>here</a></p>
         <p class="text-lead">Some rules exists.. </p>
         <p>Well the algorithm should be resistent against not allowed moves - so you cannot make anything wrong ;)</p>
-        <p>Try reverve engeneering the game if your're to lazy the read the provided link.</p>
+        <p><u>Challange:</u> Try reverse engeneering the game. It's not too hard.</p>
+
+        <p>Let's do some <b>training:</b></p>
+        <p>Press the number on your keyboard. But press, <code>J</code>(ack) for 11, <code>Q</code>(ueen) for 12,
+            <code>K</code>(ing) for 13 and <code>A</code>(ce) for 14. All lower case.</p>
+        <div class="row" id="testnumberrow">
+            <button id="refreshbtn">New</button>
+            <div><span class="badge margin">...</span></div>
+            <div><span id="prev" class="badge margin">123</span></div>
+            <div><span id="current" class="badge margin">123</span></div>
+            <div><span id="next" class="badge margin">?</span></div>
+            <input id="testinput" type="number">
+        </div>
+
         <div class="row">
             <a href="index.html">
                 <button>Ready to play</button>
             </a>
         </div>
     </article>
+    <script src="training.js" type="module"></script>
 </body>
 
 </html>
