@@ -7,8 +7,18 @@ app.use(express.static("./public"))
 let server = app.listen(4000, () => console.log('Listening'))
 let io = socket(server);
 
-let users = [];
+let allusers = [];
 let closedRooms = [];
+
+function getUsersFromRoom(room) {
+    tmp = [];
+    allusers.forEach(element => {
+        if (element.room == room) {
+            tmp.push(element);
+        }
+    });
+    return tmp;
+};
 
 io.on('connection', socket => {
 
@@ -18,17 +28,7 @@ io.on('connection', socket => {
     function broadcastClosedRooms() {
         io.emit('closedRooms', closedRooms);
     };
-
-    function usersInRoom(room) {
-        tmp = [];
-        users.forEach(element => {
-            if (element.room == room) {
-                tmp.push(element);
-            }
-        });
-        return tmp;
-    }
-
+    
     socket.on('join room', data => {
         socket.join(data.room);
         let user = {
@@ -36,19 +36,18 @@ io.on('connection', socket => {
             name: data.user,
             room: data.room
         };
-        users.push(user);
-        io.to(data.room).emit('new user in room', usersInRoom(data.room));
+        allusers.push(user);
+        io.to(data.room).emit('new user in room', getUsersFromRoom(data.room));
         console.log('User ' + data.user + ' joined room ' + data.room);
     });
 
     socket.on('start-game', roomName => {
         closedRooms.push(roomName);
         broadcastClosedRooms();
-        let gamestate = {
+        io.to(roomName).emit('game-started', {
             room: roomName,
             currPlayerIdx: 0
-        }
-        io.to(roomName).emit('game-started', gamestate)
+        })
     });
 
     socket.on('make_move', move => {
