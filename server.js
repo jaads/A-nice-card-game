@@ -11,13 +11,7 @@ let allusers = [];
 let closedRooms = [];
 
 function getUsersbyRoom(room) {
-    tmp = [];
-    allusers.forEach(user => {
-        if (user.room == room) {
-            tmp.push(user);
-        }
-    });
-    return tmp;
+    return allusers.filter(user => user.room == room);
 };
 
 io.on('connection', socket => {
