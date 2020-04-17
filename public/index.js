@@ -54,12 +54,15 @@ socket.on('game-started', gameparam => {
     console.log(game);
     currentCard.innerText = game.currentCard;
     cardinput.focus();
-
-    // TODO: Show users cards.. we might get in trouble here.. 
-    console.log("Yore're cards on table are: ");
-    
+    socket.emit('get-users-index', newroominput.value );
     // printCurrentPlayer();
 });
+
+socket.on('user-index', myindex => {
+    console.log("Yore're cards on table are: ");
+    console.log(game.cards[myindex]);
+});
+
 
 cardinput.onkeyup = (e) => {
     if (currentlyInGame) {
@@ -69,7 +72,7 @@ cardinput.onkeyup = (e) => {
 
         if (validMove && isActuallyOnHand) {
             console.log("valid move");
-            socket.emit("move", {game: game, card: mappedCardInput});
+            socket.emit("move", { game: game, card: mappedCardInput });
         } else {
             console.log("not valid move");
         }

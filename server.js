@@ -55,8 +55,12 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         console.log(data.game);
-    
         // socket.to(move.room).emit('move_made', 'a move was made. next one..');
+    });
+
+    socket.on('get-users-index', room => {
+        let neededIndex = getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
+        io.to(socket.id).emit('user-index', neededIndex);
     });
 
     socket.on('disconnect', () => {
@@ -142,7 +146,6 @@ class Game {
         this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
 
     };
-
 
     print() {
         for (let i = 0; i < this.players.length; i++) {
