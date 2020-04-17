@@ -7,6 +7,8 @@ let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let currentCard = document.querySelector('#currentcard');
 let cardinput = document.querySelector('#cardinput');
+let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
+let cardsOnTableDiv = document.querySelector('#cardsontablediv');
 
 import { isValidMove, getNumberMapping } from './card-logic.js';
 
@@ -59,16 +61,14 @@ socket.on('game-started', gameparam => {
 
 socket.on('user-index', indexParam => {
     playersIndex = indexParam;
-    console.log("your index is:" + playersIndex);
-
-    console.log("Yore're cards on table are:");
-    console.log(game.cards[playersIndex]);
+    renderCardsOnHand();
 });
 
 socket.on('move-made', updatedGame => {
     game = updatedGame;
     renderCurrentCard();
     printCurrentPlayer();
+    renderCardsOnHand();
 });
 
 cardinput.onkeyup = (e) => {
@@ -124,4 +124,24 @@ function showplayers() {
 
 function renderCurrentCard() {
     currentCard.innerText = game.currentCard;
+};
+
+function renderCardsOnHand() {
+    cardsOnHandDiv.innerHTML = '';
+    game.cards[playersIndex].handCards.forEach( card => {
+        let newdiv = document.createElement('div');
+        newdiv.classList.add('margin');
+        let node = document.createTextNode(card);
+        newdiv.appendChild(node);
+        cardsOnHandDiv.appendChild(newdiv);
+    });
+    
+    cardsOnTableDiv.innerHTML = '';
+    game.cards[playersIndex].lastCards.forEach( card => {
+        let newdiv = document.createElement('div');
+        newdiv.classList.add('margin');
+        let node = document.createTextNode(card);
+        newdiv.appendChild(node);
+        cardsOnTableDiv.appendChild(newdiv);
+    });
 };

@@ -53,7 +53,7 @@ io.on('connection', socket => {
         let targetedGame = allgames.filter(elem => room = data.room)[0];
         targetedGame.makemove(data.card);
         console.log("move was made");
-        socket.to(data.room).emit('move-made', targetedGame);
+        io.to(data.room).emit('move-made', targetedGame);
     });
 
     function getPlayersIndex(room) {
@@ -69,7 +69,6 @@ io.on('connection', socket => {
     })
 
 });
-
 
 function getDeck() {
     let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -121,6 +120,7 @@ class Game {
         this.cards = handOutCards(this.deck, this.players);
         this.previousCard = 1;
         this.currentCard = this.getCardFromDeck();
+        this.stack = [];
     }
 
     getCardFromDeck() {
@@ -129,10 +129,11 @@ class Game {
 
     makemove(card) {
         // Remove card from hand   
-        let index = this.cards[this.currentPlayerIdx].handCards.indexOf(card);
+        let index = this.cards[this.currentPlayerIdx].handCards.indexOf(Number(card));        
         this.cards[this.currentPlayerIdx].handCards.splice(index, 1);
 
         // Put on stack
+        this.stack.push(card);
         this.previousCard = this.currentCard;
         this.currentCard = card;
 
