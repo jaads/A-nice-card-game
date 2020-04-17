@@ -12,7 +12,7 @@ export function isValidMove(prev, current, next) {
             return true;
         } 
     } else {
-        if (next >= current || (next == 2 || next == 3)) {
+        if (next >= current || next == 2 || next == 3) {
             return true;
         }
     }
@@ -21,6 +21,9 @@ export function isValidMove(prev, current, next) {
 
 
 export function getNumberMapping(letter) {
+    if (letter == 't') {
+        return 10;
+    }
     if (letter == 'j') {
         return 11;
     }

@@ -12,9 +12,9 @@ import { isValidMove, getNumberMapping } from './card-logic.js';
 
 let roommates = [];
 let notavailablerooms = [];
-let currentplayerIdx = 0;
 let currentlyInGame = false;
 let game = null;
+let playersIndex = null;
 
 createbtn.onclick = () => {
     let roomClosed = notavailablerooms.includes(newroominput.value);
@@ -51,42 +51,59 @@ socket.on('game-started', gameparam => {
     console.log('The game has started.');
     currentlyInGame = true;
     game = gameparam;
-    console.log(game);
-    currentCard.innerText = game.currentCard;
     cardinput.focus();
-    socket.emit('get-users-index', newroominput.value );
-    // printCurrentPlayer();
+    socket.emit('get-users-index', newroominput.value);
+    renderCurrentCard();
+    printCurrentPlayer();
 });
 
-socket.on('user-index', myindex => {
-    console.log("Yore're cards on table are: ");
-    console.log(game.cards[myindex]);
+socket.on('user-index', indexParam => {
+    playersIndex = indexParam;
+    console.log("your index is:" + playersIndex);
+
+    console.log("Yore're cards on table are:");
+    console.log(game.cards[playersIndex]);
 });
 
+socket.on('move-made', updatedGame => {
+    game = updatedGame;
+    renderCurrentCard();
+    printCurrentPlayer();
+});
 
 cardinput.onkeyup = (e) => {
     if (currentlyInGame) {
         let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
         let validMove = isValidMove(game.previousCard, game.currentCard, mappedCardInput);
-        let isActuallyOnHand = game.cards[currentplayerIdx].handCards.includes(mappedCardInput);
+        let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(Number(mappedCardInput));
 
-        if (validMove && isActuallyOnHand) {
-            console.log("valid move");
-            socket.emit("move", { game: game, card: mappedCardInput });
+        console.log(mappedCardInput);
+        console.log(game.cards[game.currentPlayerIdx].handCards);
+        console.log(isActuallyOnHand);
+        
+        
+        if (game.currentPlayerIdx == playersIndex) {
+            console.log(game.previousCard + " " + game.currentCard + " " + mappedCardInput);
+            if (isActuallyOnHand) {
+                if (validMove) {
+                    console.log("valid move");
+                    socket.emit("move", { room: game.room, card: mappedCardInput });
+                } else {
+                    console.log("not valid move");
+                }
+            } else {
+                console.log("Seems the card is not on your hand.");  
+            }
         } else {
-            console.log("not valid move");
+            console.log("It's not your turn..");
         }
+
         cardinput.value = '';
     }
 };
 
-socket.on('move_made', msg => {
-    currentplayerIdx = (currentplayerIdx + 1) % roommates.length;
-    printCurrentPlayer();
-});
-
 function printCurrentPlayer() {
-    console.log("It's " + roommates[currentplayerIdx].name + "'s turn.");
+    console.log("It's " + game.players[game.currentPlayerIdx].name + " turn.");
 };
 
 socket.on('new user in room', (data) => {
@@ -103,4 +120,8 @@ function showplayers() {
         para.appendChild(node);
         mates.appendChild(para)
     });
-}
+};
+
+function renderCurrentCard() {
+    currentCard.innerText = game.currentCard;
+};

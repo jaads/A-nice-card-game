@@ -9,6 +9,7 @@ let io = socket(server);
 
 let allusers = [];
 let closedRooms = [];
+let allgames = [];
 
 function getUsersbyRoom(room) {
     return allusers.filter(user => user.room == room);
@@ -42,19 +43,25 @@ io.on('connection', socket => {
 
         // Setup game
         newgame = new Game(roomName, getUsersbyRoom(roomName));
+        allgames.push(newgame);
 
         // Send game to everyone in room
-        io.to(roomName).emit('game-started', newgame)
+        io.to(roomName).emit('game-started', newgame);
     });
 
     socket.on('move', data => {
-        console.log(data.game);
-        // socket.to(move.room).emit('move_made', 'a move was made. next one..');
+        let targetedGame = allgames.filter(elem => room = data.room)[0];
+        targetedGame.makemove(data.card);
+        console.log("move was made");
+        socket.to(data.room).emit('move-made', targetedGame);
     });
 
+    function getPlayersIndex(room) {
+        return getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
+    }
+
     socket.on('get-users-index', room => {
-        let neededIndex = getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
-        io.to(socket.id).emit('user-index', neededIndex);
+        io.to(socket.id).emit('user-index', getPlayersIndex(room));
     });
 
     socket.on('disconnect', () => {
