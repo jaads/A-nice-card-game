@@ -15,6 +15,10 @@ function getUsersbyRoom(room) {
     return allusers.filter(user => user.room == room);
 };
 
+function getGamebyRoom(room) {
+    return allgames.filter((game) => game.room = room)[0];
+}
+
 io.on('connection', socket => {
 
     console.log("user connected");
@@ -50,10 +54,16 @@ io.on('connection', socket => {
     });
 
     socket.on('move', data => {
-        let targetedGame = allgames.filter(elem => room = data.room)[0];
+        let targetedGame = getGamebyRoom(data.room);
         targetedGame.makemove(data.card);
         console.log("move was made");
         io.to(data.room).emit('move-made', targetedGame);
+    });
+
+    socket.on('pick-up', room => {
+        let targetedGame = getGamebyRoom(room);
+        targetedGame.pickUp();
+        io.to(room).emit('move-made', targetedGame);
     });
 
     function getPlayersIndex(room) {
@@ -119,8 +129,7 @@ class Game {
         this.currentPlayerIdx = 0;
         this.cards = handOutCards(this.deck, this.players);
         this.previousCard = 1;
-        this.currentCard = this.getCardFromDeck();
-        this.stack = [];
+        this.stack = [this.getCardFromDeck()];
     }
 
     getCardFromDeck() {
@@ -129,13 +138,11 @@ class Game {
 
     makemove(card) {
         // Remove card from hand   
-        let index = this.cards[this.currentPlayerIdx].handCards.indexOf(Number(card));        
+        let index = this.cards[this.currentPlayerIdx].handCards.indexOf(Number(card));
         this.cards[this.currentPlayerIdx].handCards.splice(index, 1);
 
         // Put on stack
         this.stack.push(card);
-        this.previousCard = this.currentCard;
-        this.currentCard = card;
 
         // Get new card from deck if needed
         if (this.cards[this.currentPlayerIdx].handCards.length < 3) {
@@ -145,8 +152,21 @@ class Game {
         }
 
         // Set next player
-        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+        this.setNextPlayer();
+    };
 
+    pickUp() {
+        this.stack.forEach(() => {
+            this.cards[this.currentPlayerIdx].handCards.push(this.stack.pop());
+        });
+        if (this.deck.length > 0) {
+            this.stack.push(this.getCardFromDeck());
+        }
+        this.setNextPlayer();
+    };
+
+    setNextPlayer() {
+        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
     };
 
     print() {

@@ -73,32 +73,33 @@ socket.on('move-made', updatedGame => {
 
 cardinput.onkeyup = (e) => {
     if (currentlyInGame) {
-        let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
-        let validMove = isValidMove(game.previousCard, game.currentCard, mappedCardInput);
-        let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(Number(mappedCardInput));
+        if (e.key == 'Enter') {
+            socket.emit('pick-up', newroominput.value);
+        } else {
+            let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
+            let topCard = game.stack[game.stack.length - 1];
+            let secondTopCard = game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
+            let validMove = isValidMove(secondTopCard, topCard, mappedCardInput);
+            let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(Number(mappedCardInput));
 
-        console.log(mappedCardInput);
-        console.log(game.cards[game.currentPlayerIdx].handCards);
-        console.log(isActuallyOnHand);
-        
-        
-        if (game.currentPlayerIdx == playersIndex) {
-            console.log(game.previousCard + " " + game.currentCard + " " + mappedCardInput);
-            if (isActuallyOnHand) {
-                if (validMove) {
-                    console.log("valid move");
-                    socket.emit("move", { room: game.room, card: mappedCardInput });
+            if (game.currentPlayerIdx == playersIndex) {
+
+                if (isActuallyOnHand) {
+                    if (validMove) {
+                        console.log("valid move");
+                        socket.emit("move", { room: game.room, card: mappedCardInput });
+                    } else {
+                        console.log("not valid move");
+                    }
                 } else {
-                    console.log("not valid move");
+                    console.log("Seems the card is not on your hand.");
                 }
             } else {
-                console.log("Seems the card is not on your hand.");  
+                console.log("It's not your turn..");
             }
-        } else {
-            console.log("It's not your turn..");
-        }
 
-        cardinput.value = '';
+            cardinput.value = '';
+        }
     }
 };
 
@@ -122,22 +123,22 @@ function showplayers() {
     });
 };
 
-function renderCurrentCard() {
-    currentCard.innerText = game.currentCard;
+function renderCurrentCard() {  
+    currentCard.innerText = game.stack[game.stack.length - 1];
 };
 
 function renderCardsOnHand() {
     cardsOnHandDiv.innerHTML = '';
-    game.cards[playersIndex].handCards.forEach( card => {
+    game.cards[playersIndex].handCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('margin');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
     });
-    
+
     cardsOnTableDiv.innerHTML = '';
-    game.cards[playersIndex].lastCards.forEach( card => {
+    game.cards[playersIndex].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('margin');
         let node = document.createTextNode(card);
