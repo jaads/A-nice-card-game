@@ -6,6 +6,7 @@ let createbtn = document.querySelector('#createroombtn');
 let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let currentCard = document.querySelector('#currentcard');
+let prevcard = document.querySelector('#prevcard');
 let cardinput = document.querySelector('#cardinput');
 let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
@@ -79,34 +80,60 @@ socket.on('move-made', updatedGame => {
 
 cardinput.onkeyup = (e) => {
     if (currentlyInGame) {
-        if (e.key == 'Enter') {
-            socket.emit('pick-up', game.room);
-        } else {
+        if (game.currentPlayerIdx == playersIndex) {
             let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : Number(e.key);
-            if (game.currentPlayerIdx == playersIndex) {
-                let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(mappedCardInput);
-                if (isActuallyOnHand) {
-
-                    let topCard = game.stack[game.stack.length - 1] != undefined ? game.stack[game.stack.length - 1] : 1;
-                    let secondTopCard = game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
-                    let validMove = isValidMove(secondTopCard, topCard, mappedCardInput);
-
-                    if (validMove) {
-                        console.log("valid move");
-                        socket.emit("move", { room: game.room, card: mappedCardInput });
-                    } else {
-                        console.log("not valid move");
-                    }
-                } else {
-                    console.log("Seems the card is not on your hand.");
-                }
+            if (e.key == 'Enter') {
+                socket.emit('pick-up', game.room);
             } else {
-                console.log("It's not your turn..");
-            }
+                let playersCardsOnFirstStage = game.cards[game.currentPlayerIdx].handCards;
+                let playersCardsOnSecondStage = game.cards[game.currentPlayerIdx].lastCards;
+                let playersCardsOnLastStage = game.cards[game.currentPlayerIdx].lastCards;
 
-            cardinput.value = '';
+
+                if (isValidMove(getPreviousCard(), getCurrentCard(), mappedCardInput)) {
+
+
+                    if (playersCardsOnFirstStage.length > 0) {
+                        if (playersCardsOnFirstStage.includes(mappedCardInput)) {
+                            socket.emit("move", { room: game.room, card: mappedCardInput });
+                        } else {
+                            console.log("This card is not availbale to you on the first stage.");
+                        }
+                    } else if (playersCardsOnSecondStage.length > 0) {
+                        if (playersCardsOnSecondStage.includes(mappedCardInput)) {
+                            socket.emit("move", { room: game.room, card: mappedCardInput });
+                        } else {
+                            console.log("This card is not availbale to you on the first stage.");
+                        }
+                    } else if (playersCardsOnLastStage.length > 0) {
+                        if (playersCardsOnLastStage.includes(mappedCardInput)) {
+                            socket.emit("move", { room: game.room, card: mappedCardInput });
+                        } else {
+                            console.log("This card is not availbale to you on the first stage.");
+                        }
+                    } else {
+                        console.log("yeaah YOU WON!!!!");
+                    }
+
+
+                } else {
+                    console.log("not valid move");
+                }
+
+            }
+        } else {
+            console.log("It's not your turn..");
         }
+        cardinput.value = '';
     }
+};
+
+function getCurrentCard() {
+    return game.stack[game.stack.length - 1] != undefined ? game.stack[game.stack.length - 1] : 1;
+};
+
+function getPreviousCard() {
+    return game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
 };
 
 function printCurrentPlayer() {
@@ -139,6 +166,12 @@ function renderCurrentCard() {
         currentCard.innerText = game.stack[game.stack.length - 1];
     } else {
         currentCard.innerHTML = "&empty;";
+    }
+
+    if (game.stack.length >= 2) {
+        prevcard.innerText = game.stack[game.stack.length - 2];
+    } else {
+        prevcard.innerHTML = "&empty;";
     }
 };
 

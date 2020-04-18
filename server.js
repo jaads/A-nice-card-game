@@ -64,9 +64,7 @@ io.on('connection', socket => {
         let targetedGame = getGamebyRoom(room);
         targetedGame.pickUp();
         io.to(room).emit('move-made', targetedGame);
-        console.log(targetedGame);
-        
-    });
+     });
 
     function getPlayersIndex(room) {
         return getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
@@ -140,17 +138,27 @@ class Game {
 
     makemove(card) {
         // Remove card from hand   
-        let index = this.cards[this.currentPlayerIdx].handCards.indexOf(card);
-        this.cards[this.currentPlayerIdx].handCards.splice(index, 1);
+        let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
+        let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].handCards;
+        let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].handCards;
+
+        if (playersCardsOnFirstStage.length > 0) {
+            let index = playersCardsOnFirstStage.indexOf(card);
+            playersCardsOnFirstStage.splice(index, 1);
+        } else if (playersCardsOnSecondStage.length > 0) {
+            let index = playersCardsOnSecondStage.indexOf(card);
+            playersCardsOnSecondStage.splice(index, 1);
+        } else if (playersCardsOnThirdStage.length > 0) {
+            let index = playersCardsOnThirdStage.indexOf(card);
+            playersCardsOnThirdStage.splice(index, 1);
+        }
 
         // Put on stack
         this.stack.push(card);
 
         // Get new card from deck if needed
-        if (this.cards[this.currentPlayerIdx].handCards.length < 3) {
-            if (this.deck.length > 0) {
-                this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
-            }
+        if (this.deck.length > 0 && playersCardsOnFirstStage.length < 3) {
+            this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
         }
 
         if (card != 10) {
@@ -171,14 +179,11 @@ class Game {
     };
 
     setNextPlayer() {
-        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
-    };
-
-    print() {
-        for (let i = 0; i < this.players.length; i++) {
-            console.log(this.players[i].name);
-            console.log(this.cards[i]);
+        if (this.stack[this.stack.length -1] != 8 ) {
+            this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+        } else {
+            this.currentPlayerIdx = (this.currentPlayerIdx + 2) % this.players.length;
         }
-    }
+    };
 
 };

@@ -3,18 +3,20 @@ export function isValidMove(prev, current, next) {
         return true;
     }
     if (current == 3) {
-        if (next >= prev) {
-            return true;
+        if (prev == 7) {
+            return next <= prev ? true : false;
         }
+        if (next >= prev || next == 10) {
+            return true;
+        } 
     }
     if (current == 7) {
         if (next <= 7) {
             return true;
-        } 
-    } else {
-        if (next >= current || next == 2 || next == 3 || next == 10) {
-            return true;
         }
+    }
+    if (next >= current || next == 2 || next == 3 || next == 10) {
+        return true;
     }
     return false;
 };
