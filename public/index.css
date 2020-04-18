@@ -13,3 +13,7 @@ header {
 #prevcard {
     font-size: 3rem;
 }
+
+.acard:hover {
+    cursor: pointer;
+}

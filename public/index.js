@@ -12,6 +12,7 @@ let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
 let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
 let decksize = document.querySelector('#decksize');
+let pickupbtn = document.querySelector('#pickupbtn');
 
 import { isValidMove, getNumberMapping } from './card-logic.js';
 
@@ -65,68 +66,77 @@ socket.on('game-started', gameparam => {
 
 socket.on('user-index', indexParam => {
     playersIndex = indexParam;
-    renderCardsOnHand();
+    renderCards();
 });
 
 socket.on('move-made', updatedGame => {
     game = updatedGame;
     renderCurrentCard();
     printCurrentPlayer();
-    renderCardsOnHand();
+    renderCards();
     updateNumberOfCardsOnStack();
-    console.log(game);
-
 });
 
 cardinput.onkeyup = (e) => {
+    let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : Number(e.key);
+    if (e.key == 'Enter') {
+        pickUpCards();
+        return;
+    }
+    tryMakeAMove(mappedCardInput);
+    cardinput.value = '';
+};
+
+pickupbtn.onclick = pickUpCards;
+
+function pickUpCards() {
+    socket.emit('pick-up', game.room);
+};
+
+function tryMakeAMove(playedCard) {
     if (currentlyInGame) {
         if (game.currentPlayerIdx == playersIndex) {
-            let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : Number(e.key);
-            if (e.key == 'Enter') {
-                socket.emit('pick-up', game.room);
-            } else {
-                let playersCardsOnFirstStage = game.cards[game.currentPlayerIdx].handCards;
-                let playersCardsOnSecondStage = game.cards[game.currentPlayerIdx].lastCards;
-                let playersCardsOnLastStage = game.cards[game.currentPlayerIdx].lastCards;
+            let playersCardsOnFirstStage = game.cards[game.currentPlayerIdx].handCards;
+            let playersCardsOnSecondStage = game.cards[game.currentPlayerIdx].lastCards;
+            let playersCardsOnLastStage = game.cards[game.currentPlayerIdx].lastCards;
 
 
-                if (isValidMove(getPreviousCard(), getCurrentCard(), mappedCardInput)) {
+            if (isValidMove(getPreviousCard(), getCurrentCard(), playedCard)) {
 
 
-                    if (playersCardsOnFirstStage.length > 0) {
-                        if (playersCardsOnFirstStage.includes(mappedCardInput)) {
-                            socket.emit("move", { room: game.room, card: mappedCardInput });
-                        } else {
-                            console.log("This card is not availbale to you on the first stage.");
-                        }
-                    } else if (playersCardsOnSecondStage.length > 0) {
-                        if (playersCardsOnSecondStage.includes(mappedCardInput)) {
-                            socket.emit("move", { room: game.room, card: mappedCardInput });
-                        } else {
-                            console.log("This card is not availbale to you on the first stage.");
-                        }
-                    } else if (playersCardsOnLastStage.length > 0) {
-                        if (playersCardsOnLastStage.includes(mappedCardInput)) {
-                            socket.emit("move", { room: game.room, card: mappedCardInput });
-                        } else {
-                            console.log("This card is not availbale to you on the first stage.");
-                        }
+                if (playersCardsOnFirstStage.length > 0) {
+                    if (playersCardsOnFirstStage.includes(playedCard)) {
+                        socket.emit("move", { room: game.room, card: playedCard });
                     } else {
-                        console.log("yeaah YOU WON!!!!");
+                        console.log(playedCard);
+
+                        console.log("This card is not availbale to you on the first stage.");
                     }
-
-
+                } else if (playersCardsOnSecondStage.length > 0) {
+                    if (playersCardsOnSecondStage.includes(playedCard)) {
+                        socket.emit("move", { room: game.room, card: playedCard });
+                    } else {
+                        console.log("This card is not availbale to you on the first stage.");
+                    }
+                } else if (playersCardsOnLastStage.length > 0) {
+                    if (playersCardsOnLastStage.includes(playedCard)) {
+                        socket.emit("move", { room: game.room, card: playedCard });
+                    } else {
+                        console.log("This card is not availbale to you on the first stage.");
+                    }
                 } else {
-                    console.log("not valid move");
+                    console.log("yeaah YOU WON!!!!");
                 }
 
+
+            } else {
+                console.log("not valid move");
             }
         } else {
             console.log("It's not your turn..");
         }
-        cardinput.value = '';
     }
-};
+}
 
 function getCurrentCard() {
     return game.stack[game.stack.length - 1] != undefined ? game.stack[game.stack.length - 1] : 1;
@@ -175,22 +185,28 @@ function renderCurrentCard() {
     }
 };
 
-function renderCardsOnHand() {
+function renderCards() {
     cardsOnHandDiv.innerHTML = '';
     game.cards[playersIndex].handCards.forEach(card => {
         let newdiv = document.createElement('div');
-        newdiv.classList.add('margin');
+        newdiv.classList.add('margin', 'badge', 'acard');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
+        newdiv.onclick = () => {
+            tryMakeAMove(Number(newdiv.textContent));
+        };
     });
 
     cardsOnTableDiv.innerHTML = '';
     game.cards[playersIndex].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
-        newdiv.classList.add('margin');
+        newdiv.classList.add('margin', 'badge', 'acard');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
+        newdiv.onclick = () => {
+            tryMakeAMove(Number(newdiv.textContent));
+        };
     });
 };
