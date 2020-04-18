@@ -55,7 +55,7 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
-        targetedGame.makemove(Number(data.card));
+        targetedGame.makemove(data.card);
         console.log("move was made");
         io.to(data.room).emit('move-made', targetedGame);
     });
@@ -64,6 +64,8 @@ io.on('connection', socket => {
         let targetedGame = getGamebyRoom(room);
         targetedGame.pickUp();
         io.to(room).emit('move-made', targetedGame);
+        console.log(targetedGame);
+        
     });
 
     function getPlayersIndex(room) {
@@ -128,7 +130,6 @@ class Game {
         this.players = players;
         this.currentPlayerIdx = 0;
         this.cards = handOutCards(this.deck, this.players);
-        this.previousCard = 1;
         this.stack = [this.getCardFromDeck()];
         this.outOfGameCards = [];
     }
@@ -155,19 +156,16 @@ class Game {
         if (card != 10) {
             this.setNextPlayer();
         } else {
-            this.stack.forEach(() => {
+            while (this.stack.length > 0) {
                 this.outOfGameCards.push(this.stack.pop());
-            });
+            }
         }
 
     };
 
     pickUp() {
-        this.stack.forEach(() => {
+        while (this.stack.length > 0) {
             this.cards[this.currentPlayerIdx].handCards.push(this.stack.pop());
-        });
-        if (this.deck.length > 0) {
-            this.stack.push(this.getCardFromDeck());
         }
         this.setNextPlayer();
     };

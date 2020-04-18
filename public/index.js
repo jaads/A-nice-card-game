@@ -9,6 +9,8 @@ let currentCard = document.querySelector('#currentcard');
 let cardinput = document.querySelector('#cardinput');
 let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
+let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
+let decksize = document.querySelector('#decksize');
 
 import { isValidMove, getNumberMapping } from './card-logic.js';
 
@@ -57,6 +59,7 @@ socket.on('game-started', gameparam => {
     socket.emit('get-users-index', newroominput.value);
     renderCurrentCard();
     printCurrentPlayer();
+    updateNumberOfCardsOnStack();
 });
 
 socket.on('user-index', indexParam => {
@@ -69,22 +72,25 @@ socket.on('move-made', updatedGame => {
     renderCurrentCard();
     printCurrentPlayer();
     renderCardsOnHand();
+    updateNumberOfCardsOnStack();
+    console.log(game);
+
 });
 
 cardinput.onkeyup = (e) => {
     if (currentlyInGame) {
         if (e.key == 'Enter') {
-            socket.emit('pick-up', newroominput.value);
+            socket.emit('pick-up', game.room);
         } else {
-            let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
-            let topCard = game.stack[game.stack.length - 1];
-            let secondTopCard = game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
-            let validMove = isValidMove(secondTopCard, topCard, mappedCardInput);
-            let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(Number(mappedCardInput));
-
+            let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : Number(e.key);
             if (game.currentPlayerIdx == playersIndex) {
-
+                let isActuallyOnHand = game.cards[game.currentPlayerIdx].handCards.includes(mappedCardInput);
                 if (isActuallyOnHand) {
+
+                    let topCard = game.stack[game.stack.length - 1] != undefined ? game.stack[game.stack.length - 1] : 1;
+                    let secondTopCard = game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
+                    let validMove = isValidMove(secondTopCard, topCard, mappedCardInput);
+
                     if (validMove) {
                         console.log("valid move");
                         socket.emit("move", { room: game.room, card: mappedCardInput });
@@ -123,8 +129,17 @@ function showplayers() {
     });
 };
 
-function renderCurrentCard() {  
-    currentCard.innerText = game.stack[game.stack.length - 1];
+function updateNumberOfCardsOnStack() {
+    NrOfCardsOnStack.innerText = game.stack.length;
+    decksize.innerText = game.deck.length;
+};
+
+function renderCurrentCard() {
+    if (game.stack.length > 0) {
+        currentCard.innerText = game.stack[game.stack.length - 1];
+    } else {
+        currentCard.innerHTML = "&empty;";
+    }
 };
 
 function renderCardsOnHand() {
