@@ -11,9 +11,7 @@ export function isValidMove(prev, current, next) {
         } 
     }
     if (current == 7) {
-        if (next <= 7) {
-            return true;
-        }
+        return next <= 7 ? true : false;
     }
     if (next >= current || next == 2 || next == 3 || next == 10) {
         return true;

@@ -37,7 +37,6 @@ io.on('connection', socket => {
         };
         allusers.push(user);
         io.to(data.room).emit('new user in room', getUsersbyRoom(data.room));
-        console.log('User ' + data.user + ' joined room ' + data.room);
     });
 
     socket.on('start-game', roomName => {
@@ -56,7 +55,6 @@ io.on('connection', socket => {
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
         targetedGame.makemove(data.card);
-        console.log("move was made");
         io.to(data.room).emit('move-made', targetedGame);
     });
 
@@ -128,12 +126,21 @@ class Game {
         this.players = players;
         this.currentPlayerIdx = 0;
         this.cards = handOutCards(this.deck, this.players);
-        this.stack = [this.getCardFromDeck()];
+        this.stack = this.initstack();
         this.outOfGameCards = [];
     }
 
     getCardFromDeck() {
         return this.deck.pop();
+    };
+
+    initstack() {
+        let firstCard = this.getCardFromDeck();
+        while (firstCard == 10) {
+            this.outOfGameCards.push(firstCard);
+            console.log("First card was a 10.");
+        }
+        return [firstCard];
     };
 
     makemove(card) {
