@@ -8,11 +8,11 @@ export function isValidMove(prev, current, next) {
         }
     }
     if (current == 7) {
-        if (next <= 7 && next != 10) {
+        if (next <= 7) {
             return true;
         } 
     } else {
-        if (next >= current || next == 2 || next == 3) {
+        if (next >= current || next == 2 || next == 3 || next == 10) {
             return true;
         }
     }
