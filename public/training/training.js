@@ -1,4 +1,4 @@
-import { isValidMove } from '../card-logic.js';
+import { isValidMove, getNumberMapping } from '../card-logic.js';
 
 let prev = document.querySelector('#prev');
 let current = document.querySelector('#current');
@@ -36,21 +36,6 @@ refreshbtn.onclick = () => {
     testinput.disabled = false;
 };
 
-function getNumberMapping(letter) {
-    if (letter == 'j') {
-        return 11;
-    }
-    if (letter == 'q') {
-        return 12;
-    }
-    if (letter == 'k') {
-        return 13;
-    }
-    if (letter == 'a') {
-        return 14;
-    }
-    return 0;
-}
 
 testinput.onkeyup = (e) => {
     testinput.disabled = true;

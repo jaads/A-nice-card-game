@@ -1,49 +1,43 @@
-let values = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-
-function getDeck() {
-    let deck = []
-    values.forEach((elem) => {
-        for (let i = 0; i < 4; i++) {
-            deck.push(elem);
-        }
-    });
-    return shuffle(deck);;
-};
-
-// Nice in-place O(n) shuffle thanks to this post: https://bost.ocks.org/mike/shuffle/
-function shuffle(array) {
-    var m = array.length, t, i;
-    while (m) {
-        i = Math.floor(Math.random() * m--);
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-    return array;
-}
-
-export function getSuffledDeck () {
-    let deck = getDeck();
-    return shuffle(deck);
-}
-
+// TODO: Use recursive function based on the actual stack
 export function isValidMove(prev, current, next) {
     if (current == 2) {
         return true;
     }
     if (current == 3) {
-        if (next >= prev) {
+        if (prev == 7) {
+            return next <= prev ? true : false;
+        }
+        if (next >= prev || next == 10) {
             return true;
+        } else {
+            return false;
         }
     }
     if (current == 7) {
-        if (next <= 7 && next != 10) {
-            return true;
-        } 
-    } else {
-        if (next >= current || (next == 2 || next == 3)) {
-            return true;
-        }
+        return next <= 7 ? true : false;
+    }
+    if (next >= current || next == 2 || next == 3 || next == 10) {
+        return true;
     }
     return false;
 };
+
+
+export function getNumberMapping(letter) {
+    if (letter == 't') {
+        return 10;
+    }
+    if (letter == 'j') {
+        return 11;
+    }
+    if (letter == 'q') {
+        return 12;
+    }
+    if (letter == 'k') {
+        return 13;
+    }
+    if (letter == 'a') {
+        return 14;
+    }
+    return 0;
+}

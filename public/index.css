@@ -5,3 +5,15 @@ header {
 #testnumberrow {
     font-size: 3rem;
 }
+
+#currentcard {
+    font-size: 4rem;
+}
+
+#prevcard {
+    font-size: 3rem;
+}
+
+.acard:hover {
+    cursor: pointer;
+}
