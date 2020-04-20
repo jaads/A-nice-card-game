@@ -1,3 +1,4 @@
+// TODO: Use recursive function based on the actual stack
 export function isValidMove(prev, current, next) {
     if (current == 2) {
         return true;
@@ -8,7 +9,9 @@ export function isValidMove(prev, current, next) {
         }
         if (next >= prev || next == 10) {
             return true;
-        } 
+        } else {
+            return false;
+        }
     }
     if (current == 7) {
         return next <= 7 ? true : false;
