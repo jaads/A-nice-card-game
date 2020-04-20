@@ -1,4 +1,4 @@
-let socket = io.connect('http://localhost:4000');
+let socket = io.connect('http://192.168.0.253:4000');
 let mates = document.querySelector('#currentroommates');
 let nameinput = document.querySelector('#name');
 let newroominput = document.querySelector('#createroominput');
