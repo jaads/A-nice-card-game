@@ -13,6 +13,7 @@ let cardsOnTableDiv = document.querySelector('#cardsontablediv');
 let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
 let decksize = document.querySelector('#decksize');
 let pickupbtn = document.querySelector('#pickupbtn');
+let amountOptions = document.querySelector('#amountOptions');
 
 import { isValidMove, getNumberMapping } from './card-logic.js';
 
@@ -83,7 +84,6 @@ cardinput.onkeyup = (e) => {
         pickUpCards();
         return;
     }
-    tryMakeAMove(mappedCardInput);
     cardinput.value = '';
 };
 
@@ -93,42 +93,44 @@ function pickUpCards() {
     socket.emit('pick-up', game.room);
 };
 
-function tryMakeAMove(playedCard) {
+function decideAmount(playedCard) {
+    let tmp = game.cards[game.currentPlayerIdx].handCards.filter((card) => card == playedCard);
+    if (tmp.length > 1) {
+        showAmountInput(tmp);
+    } else {
+        tryMakeAMove([playedCard]);
+    }
+};
+
+function tryMakeAMove(playedCardArr) {
     if (currentlyInGame) {
         if (game.currentPlayerIdx == playersIndex) {
             let playersCardsOnFirstStage = game.cards[game.currentPlayerIdx].handCards;
             let playersCardsOnSecondStage = game.cards[game.currentPlayerIdx].lastCards;
             let playersCardsOnLastStage = game.cards[game.currentPlayerIdx].lastCards;
-
-
-            if (isValidMove(getPreviousCard(), getCurrentCard(), playedCard)) {
-
-
+            let cardNumber = playedCardArr[0];
+            if (isValidMove(getPreviousCard(), getCurrentCard(), cardNumber)) {
                 if (playersCardsOnFirstStage.length > 0) {
-                    if (playersCardsOnFirstStage.includes(playedCard)) {
-                        socket.emit("move", { room: game.room, card: playedCard });
+                    if (playersCardsOnFirstStage.includes(cardNumber)) {
+                        socket.emit("move", { room: game.room, cards: playedCardArr });
                     } else {
-                        console.log(playedCard);
-
                         console.log("This card is not availbale to you on the first stage.");
                     }
                 } else if (playersCardsOnSecondStage.length > 0) {
-                    if (playersCardsOnSecondStage.includes(playedCard)) {
-                        socket.emit("move", { room: game.room, card: playedCard });
+                    if (playersCardsOnSecondStage.includes(cardNumber)) {
+                        socket.emit("move", { room: game.room, cards: playedCardArr });
                     } else {
                         console.log("This card is not availbale to you on the first stage.");
                     }
                 } else if (playersCardsOnLastStage.length > 0) {
-                    if (playersCardsOnLastStage.includes(playedCard)) {
-                        socket.emit("move", { room: game.room, card: playedCard });
+                    if (playersCardsOnLastStage.includes(cardNumber)) {
+                        socket.emit("move", { room: game.room, cards: playedCardArr });
                     } else {
                         console.log("This card is not availbale to you on the first stage.");
                     }
                 } else {
                     console.log("yeaah YOU WON!!!!");
                 }
-
-
             } else {
                 console.log("not valid move");
             }
@@ -194,7 +196,7 @@ function renderCards() {
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            tryMakeAMove(Number(newdiv.textContent));
+            decideAmount(Number(newdiv.textContent));
         };
     });
 
@@ -206,7 +208,34 @@ function renderCards() {
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            tryMakeAMove(Number(newdiv.textContent));
+            decideAmount(Number(newdiv.textContent));
         };
     });
+};
+
+function showAmountInput(list) {
+    for (let i = 0; i < list.length; i++) {
+        let newdiv = document.createElement('div');
+        newdiv.classList.add('margin', 'badge', 'secondary');
+        let node = document.createTextNode(i + 1);
+        newdiv.appendChild(node);
+        amountOptions.appendChild(newdiv);
+        newdiv.onclick = () => {
+            let desiredAmount = Number(newdiv.textContent);
+            handleAmountInput(list, desiredAmount);
+        }
+    };
+};
+
+function handleAmountInput(possibleCards, desiredAmount) {
+    let finallist = [];
+    while (finallist.length < desiredAmount) {
+        finallist.push(possibleCards.pop());
+    }
+    tryMakeAMove(finallist);
+    hideAmountInput();
+};
+
+function hideAmountInput() {
+    amountOptions.innerHTML = '';
 };

@@ -54,7 +54,10 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
-        targetedGame.makemove(data.card);
+        console.log(data.cards);
+
+        targetedGame.makemove(data.cards);
+
         io.to(data.room).emit('move-made', targetedGame);
     });
 
@@ -62,7 +65,7 @@ io.on('connection', socket => {
         let targetedGame = getGamebyRoom(room);
         targetedGame.pickUp();
         io.to(room).emit('move-made', targetedGame);
-     });
+    });
 
     function getPlayersIndex(room) {
         return getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
@@ -126,8 +129,8 @@ class Game {
         this.players = players;
         this.currentPlayerIdx = 0;
         this.cards = handOutCards(this.deck, this.players);
-        this.stack = this.initstack();
         this.outOfGameCards = [];
+        this.stack = this.initstack();
     }
 
     getCardFromDeck() {
@@ -143,32 +146,34 @@ class Game {
         return [firstCard];
     };
 
-    makemove(card) {
-        // Remove card from hand   
+    makemove(playedCards) {
         let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
         let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].handCards;
         let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].handCards;
 
-        if (playersCardsOnFirstStage.length > 0) {
-            let index = playersCardsOnFirstStage.indexOf(card);
-            playersCardsOnFirstStage.splice(index, 1);
-        } else if (playersCardsOnSecondStage.length > 0) {
-            let index = playersCardsOnSecondStage.indexOf(card);
-            playersCardsOnSecondStage.splice(index, 1);
-        } else if (playersCardsOnThirdStage.length > 0) {
-            let index = playersCardsOnThirdStage.indexOf(card);
-            playersCardsOnThirdStage.splice(index, 1);
-        }
 
-        // Put on stack
-        this.stack.push(card);
+        // Remove card from hand
+        playedCards.forEach((card) => {
+            if (playersCardsOnFirstStage.length > 0) {
+                let index = playersCardsOnFirstStage.indexOf(card);
+                playersCardsOnFirstStage.splice(index, 1);
+            } else if (playersCardsOnSecondStage.length > 0) {
+                let index = playersCardsOnSecondStage.indexOf(card);
+                playersCardsOnSecondStage.splice(index, 1);
+            } else if (playersCardsOnThirdStage.length > 0) {
+                let index = playersCardsOnThirdStage.indexOf(card);
+                playersCardsOnThirdStage.splice(index, 1);
+            }
+            // Put on stack
+            this.stack.push(card);
 
+        });
         // Get new card from deck if needed
-        if (this.deck.length > 0 && playersCardsOnFirstStage.length < 3) {
+        while (this.deck.length > 0 && playersCardsOnFirstStage.length < 3) {
             this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
         }
 
-        if (card != 10) {
+        if (playedCards[0] != 10) {
             this.setNextPlayer();
         } else {
             while (this.stack.length > 0) {
@@ -186,7 +191,7 @@ class Game {
     };
 
     setNextPlayer() {
-        if (this.stack[this.stack.length -1] != 8 ) {
+        if (this.stack[this.stack.length - 1] != 8) {
             this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
         } else {
             this.currentPlayerIdx = (this.currentPlayerIdx + 2) % this.players.length;
