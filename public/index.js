@@ -1,14 +1,14 @@
 let socket = io.connect('http://localhost:4000');
 let nameinput = document.querySelector('#name');
-let newroominput = document.querySelector('#createroominput');
-let createbtn = document.querySelector('#createroombtn');
+let roominput = document.querySelector('#joinroominput');
+let joinroombtn = document.querySelector('#joinroombtn');
 let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let cardinput = document.querySelector('#cardinput');
 let pickupbtn = document.querySelector('#pickupbtn');
 
 import { isValidMove, getNumberMapping } from './card-logic.js';
-import { renderCards, showAmountInput, showplayers, updateView  } from './rendering-module.js';
+import { renderCards, showAmountInput, showplayers, updateView } from './rendering-module.js';
 
 export let roommates = [];
 export let game = null;
@@ -17,22 +17,26 @@ export let playersIndex = null;
 let notavailablerooms = [];
 let currentlyInGame = false;
 
-createbtn.onclick = () => {
-    let roomClosed = notavailablerooms.includes(newroominput.value);
+joinroombtn.onclick = () => {
+    let roomClosed = notavailablerooms.includes(roominput.value);
     if (roomClosed) {
         console.log('You cannt join anymore. A game already started in this room.');
     } else {
-        socket.emit('join room',
+        socket.emit('join-room',
             {
                 user: nameinput.value,
-                room: newroominput.value
+                room: roominput.value
             });
     }
 };
 
+socket.on('full-room', () => {
+    alert("Reached maximum amount of players already.")
+});
+
 startbtn.onclick = () => {
     if (roommates.length > 0) {
-        socket.emit('start-game', newroominput.value);
+        socket.emit('start-game', roominput.value);
     } else {
         console.log("No players yet.");
     }
@@ -59,7 +63,7 @@ socket.on('game-started', gameparam => {
     currentlyInGame = true;
     game = gameparam;
     cardinput.focus();
-    socket.emit('get-users-index', newroominput.value);
+    socket.emit('get-users-index', roominput.value);
     updateView();
 });
 

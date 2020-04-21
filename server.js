@@ -28,15 +28,21 @@ io.on('connection', socket => {
         io.emit('closedRooms', closedRooms);
     };
 
-    socket.on('join room', data => {
-        socket.join(data.room);
-        let user = {
-            id: socket.id,
-            name: data.user,
-            room: data.room
-        };
-        allusers.push(user);
-        io.to(data.room).emit('new user in room', getUsersbyRoom(data.room));
+    socket.on('join-room', data => {
+        if (getUsersbyRoom(data.room).length < 5) {
+            socket.join(data.room);
+            let user = {
+                id: socket.id,
+                name: data.user,
+                room: data.room
+            };
+            allusers.push(user);
+            io.to(data.room).emit('new user in room', getUsersbyRoom(data.room));
+        } else {
+            // Room reached maximum amount of players
+            io.to(socket.id).emit('full-room');
+        }
+
     });
 
     socket.on('start-game', roomName => {
