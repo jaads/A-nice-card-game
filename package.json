@@ -4,7 +4,8 @@
   "description": "A nice card game",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon ./server.js"
+    "dev": "nodemon ./server.js",
+    "test": "node validation.test.js"
   },
   "author": "Jan Arends",
   "license": "GPL-3.0-only",
