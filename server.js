@@ -8,7 +8,6 @@ let server = app.listen(4000, () => console.log('Listening'))
 let io = socket(server);
 
 let allusers = [];
-let closedRooms = [];
 let allgames = [];
 
 function getUsersbyRoom(room) {
@@ -17,19 +16,27 @@ function getUsersbyRoom(room) {
 
 function getGamebyRoom(room) {
     return allgames.filter((game) => game.room = room)[0];
-}
+};
+
+function isGameRunning(room) {
+    let tmp = [];
+    allgames.forEach(element => {
+        if (element.room == room) {
+            tmp.push(element)
+        }
+    });
+    return tmp.length >= 1;
+};
 
 io.on('connection', socket => {
-
     console.log("user connected");
-    io.to(socket.id).emit('initialClosedRooms', closedRooms);
-
-    function broadcastClosedRooms() {
-        io.emit('closedRooms', closedRooms);
-    };
 
     socket.on('join-room', data => {
-        if (getUsersbyRoom(data.room).length < 5) {
+        let reachedMaxAmountOfPlayers = getUsersbyRoom(data.room).length >= 5;
+        let roomIsAlreadyPlaying = isGameRunning(data.room);
+        if (reachedMaxAmountOfPlayers || roomIsAlreadyPlaying) {
+            io.to(socket.id).emit('full-room');
+        } else {
             socket.join(data.room);
             let user = {
                 id: socket.id,
@@ -37,19 +44,11 @@ io.on('connection', socket => {
                 room: data.room
             };
             allusers.push(user);
-            io.to(data.room).emit('new user in room', getUsersbyRoom(data.room));
-        } else {
-            // Room reached maximum amount of players
-            io.to(socket.id).emit('full-room');
+            io.to(data.room).emit('user-joined', getUsersbyRoom(data.room));
         }
-
     });
 
     socket.on('start-game', roomName => {
-        // Close room
-        closedRooms.push(roomName);
-        broadcastClosedRooms();
-
         // Setup game
         newgame = new Game(roomName, getUsersbyRoom(roomName));
         allgames.push(newgame);

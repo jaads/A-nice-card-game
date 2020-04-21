@@ -13,26 +13,16 @@ import { renderCards, showAmountInput, showplayers, updateView } from './renderi
 export let roommates = [];
 export let game = null;
 export let playersIndex = null;
-
-let notavailablerooms = [];
 let currentlyInGame = false;
 
 joinroombtn.onclick = () => {
-    let roomClosed = notavailablerooms.includes(roominput.value);
-    if (roomClosed) {
-        console.log('You cannt join anymore. A game already started in this room.');
-    } else {
-        socket.emit('join-room',
-            {
-                user: nameinput.value,
-                room: roominput.value
-            });
-    }
+    socket.emit('join-room', {
+        user: nameinput.value,
+        room: roominput.value
+    });
 };
 
-socket.on('full-room', () => {
-    alert("Reached maximum amount of players already.")
-});
+socket.on('full-room', () => alert("Sorry, you are too late."));
 
 startbtn.onclick = () => {
     if (roommates.length > 0) {
@@ -42,20 +32,10 @@ startbtn.onclick = () => {
     }
 };
 
-socket.on('new user in room', data => {
-    roommates = data;
+socket.on('user-joined', playersInRoom => {
+    roommates = playersInRoom;
     playercount.innerText = roommates.length;
     showplayers();
-});
-
-socket.on('initialClosedRooms', closedRooms => {
-    notavailablerooms = closedRooms;
-    console.log("These games are currently running:");
-    console.log(closedRooms);
-});
-
-socket.on('closedRooms', closedRooms => {
-    notavailablerooms = closedRooms;
 });
 
 socket.on('game-started', gameparam => {
