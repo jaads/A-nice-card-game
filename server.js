@@ -54,10 +54,7 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
-        console.log(data.cards);
-
         targetedGame.makemove(data.cards);
-
         io.to(data.room).emit('move-made', targetedGame);
     });
 
@@ -142,6 +139,7 @@ class Game {
         while (firstCard == 10) {
             this.outOfGameCards.push(firstCard);
             console.log("First card was a 10.");
+            firstCard = this.getCardFromDeck();
         }
         return [firstCard];
     };

@@ -17,3 +17,7 @@ header {
 .acard:hover {
     cursor: pointer;
 }
+
+.amountoption {
+    cursor: pointer;
+}
