@@ -1,5 +1,6 @@
 let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
+let laststagecardsdiv = document.querySelector('#laststagecardsdiv');
 let currentCard = document.querySelector('#currentcard');
 let prevcard = document.querySelector('#prevcard');
 let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
@@ -31,6 +32,22 @@ export function renderCards() {
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
             decideAmount(Number(newdiv.textContent));
+        };
+    });
+
+    laststagecardsdiv.innerHTML = '';
+    game.cards[playersIndex].flippedCards.forEach(card => {
+        let newdiv = document.createElement('div');
+        newdiv.classList.add('margin', 'badge', 'acard');
+        let node = document.createTextNode('?');
+        newdiv.appendChild(node);
+        laststagecardsdiv.appendChild(newdiv);
+        newdiv.onclick = () => {
+            if (game.cards[playersIndex].lastCards.length <= 0) {
+                node.textContent = card;
+            } else {
+                console.log('You cannot see this cards yet.');
+            }
         };
     });
 };
