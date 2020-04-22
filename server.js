@@ -9,6 +9,7 @@ let io = socket(server);
 
 let allusers = [];
 let allgames = [];
+let dailyGames = 0;
 
 function getUsersbyRoom(room) {
     return allusers.filter(user => user.room == room);
@@ -30,6 +31,7 @@ function isGameRunning(room) {
 
 io.on('connection', socket => {
     console.log("user connected");
+
 
     socket.on('join-room', data => {
         let reachedMaxAmountOfPlayers = getUsersbyRoom(data.room).length >= 5;
@@ -55,6 +57,7 @@ io.on('connection', socket => {
 
         // Send game to everyone in room
         io.to(roomName).emit('game-started', newgame);
+        dailyGames ++;
     });
 
     socket.on('move', data => {
@@ -76,10 +79,6 @@ io.on('connection', socket => {
     socket.on('get-users-index', room => {
         io.to(socket.id).emit('user-index', getPlayersIndex(room));
     });
-
-    socket.on('disconnect', () => {
-        io.emit('user left', 'A user left the room.')
-    })
 
 });
 
@@ -122,6 +121,10 @@ function handOutCards(deck, players) {
     });
     return tmp;
 };
+
+setInterval(() => {
+    console.log("Started games during the last 24 hours: " + dailyGames);
+}, 86400000);
 
 class Game {
 
