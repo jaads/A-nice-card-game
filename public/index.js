@@ -5,7 +5,9 @@ let joinroombtn = document.querySelector('#joinroombtn');
 let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let pickupbtn = document.querySelector('#pickupbtn');
-
+let notvalidalertdiv = document.querySelector('#notvalidalert');
+let notyourturnalertdiv = document.querySelector('#notyourturnalert');
+let gamediv = document.querySelector('#game');
 import { isValidMove } from './card-logic.js';
 import { renderCards, showAmountInput, showplayers, updateView, disableInputs } from './rendering-module.js';
 
@@ -42,7 +44,7 @@ socket.on('game-started', gameparam => {
     disableInputs();
     game = gameparam;
     currentlyInGame = true;
-    socket.emit('get-users-index', roominput.value);
+    gamediv.style.visibility = 'visible';
     updateView();
 });
 
@@ -73,37 +75,16 @@ export function decideAmount(playedCard) {
 export function tryMakeAMove(playedCardArr) {
     if (currentlyInGame) {
         if (game.currentPlayerIdx == playersIndex) {
-            let playersCardsOnFirstStage = game.cards[game.currentPlayerIdx].handCards;
-            let playersCardsOnSecondStage = game.cards[game.currentPlayerIdx].lastCards;
-            let playersCardsOnLastStage = game.cards[game.currentPlayerIdx].lastCards;
             let cardNumber = playedCardArr[0];
             if (isValidMove(getPreviousCard(), getCurrentCard(), cardNumber)) {
-                if (playersCardsOnFirstStage.length > 0) {
-                    if (playersCardsOnFirstStage.includes(cardNumber)) {
-                        socket.emit("move", { room: game.room, cards: playedCardArr });
-                    } else {
-                        console.log("This card is not availbale to you on the first stage.");
-                    }
-                } else if (playersCardsOnSecondStage.length > 0) {
-                    if (playersCardsOnSecondStage.includes(cardNumber)) {
-                        socket.emit("move", { room: game.room, cards: playedCardArr });
-                    } else {
-                        console.log("This card is not availbale to you on the first stage.");
-                    }
-                } else if (playersCardsOnLastStage.length > 0) {
-                    if (playersCardsOnLastStage.includes(cardNumber)) {
-                        socket.emit("move", { room: game.room, cards: playedCardArr });
-                    } else {
-                        console.log("This card is not availbale to you on the first stage.");
-                    }
-                } else {
-                    console.log("yeaah YOU WON!!!!");
-                }
+                socket.emit("move", { room: game.room, cards: playedCardArr });
             } else {
-                console.log("not valid move");
+                notvalidalertdiv.style.display = "inline";
+                setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
             }
         } else {
-            console.log("It's not your turn..");
+            notyourturnalertdiv.style.display = "block";
+            setTimeout(() => notyourturnalertdiv.style.display = "none", 3000);
         }
     }
 }
@@ -115,4 +96,3 @@ function getCurrentCard() {
 function getPreviousCard() {
     return game.stack[game.stack.length - 2] != undefined ? game.stack[game.stack.length - 2] : 1;
 };
-

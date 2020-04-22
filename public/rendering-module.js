@@ -10,6 +10,9 @@ let mates = document.querySelector('#currentroommates');
 let nameinput = document.querySelector('#name');
 let roominput = document.querySelector('#joinroominput');
 let joinroombtn = document.querySelector('#joinroombtn');
+let howmanycardstextpara = document.querySelector('#howmanycardstext');
+let notyetalertdiv = document.querySelector('#notyetalert');
+let notvalidalertdiv = document.querySelector('#notvalidalert');
 
 import { decideAmount, game, playersIndex, playerQueue, tryMakeAMove } from './index.js';
 
@@ -34,7 +37,12 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            decideAmount(Number(newdiv.textContent));
+            if (game.cards[playersIndex].handCards.length > 0) {
+                notvalidalertdiv.style.display = "block";
+                setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
+            } else {
+                decideAmount(Number(newdiv.textContent));
+            }
         };
     });
 
@@ -46,16 +54,18 @@ export function renderCards() {
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[playersIndex].lastCards.length <= 0) {
-                node.textContent = card;
+            if (game.cards[playersIndex].lastCards.length > 0) {
+                notyetalertdiv.style.display = "block";
+                setTimeout(() => notyetalertdiv.style.display = "none", 3000);
             } else {
-                console.log('You cannot see this cards yet.');
+                node.textContent = card;
             }
         };
     });
 };
 
 export function showAmountInput(list) {
+    howmanycardstextpara.style.display = "block";
     for (let i = 0; i < list.length; i++) {
         let newdiv = document.createElement('div');
         newdiv.classList.add('margin', 'badge', 'secondary', 'amountoption');
@@ -64,6 +74,7 @@ export function showAmountInput(list) {
         amountOptions.appendChild(newdiv);
         newdiv.onclick = () => {
             let desiredAmount = Number(newdiv.textContent);
+            howmanycardstextpara.style.display = "none";
             handleAmountInput(list, desiredAmount);
         }
     };
@@ -86,6 +97,7 @@ export function disableInputs() {
     nameinput.disabled = true;
     roominput.disabled = true;
     joinroombtn.disabled = true;
+    startbtn.style.visibility = "hidden";
 };
 
 export function updateView() {
@@ -105,7 +117,7 @@ export function showplayers() {
     });
 };
 
-function highlightCurrentPlayer(params) {
+function highlightCurrentPlayer() {
     mates.innerHTML = '';
     game.players.forEach((player, idx) => {
         let div = document.createElement("div");

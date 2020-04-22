@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
+
+</html>
 <html>
 
 <head>
@@ -51,22 +53,33 @@
         <div id="currentroommates"></div>
         <button id="startbtn" class="background-success">Start game!</button>
 
-        <div class="row">
-            <span id="NrOfCardsOnStack"></span>
-            <span class="badge" id="currentcard"></span>
-            <span id="decksize"></span>
+        <div id="game" class="row flex-center">
+            <div class="col-7 col">
+                <div class="card" style="width: 20rem;">
+                    <div class="card-header">
+                        <span>Decksize: </span>
+                        <span id="decksize"></span>
+                    </div>
+                    <div class="card-body">
+                        <div id="currentcard"></div>
+                    </div>
+                    <div class="card-footer">
+                        <button id="pickupbtn">Pick up cards ( <span id="NrOfCardsOnStack"></span> )</button>
+                    </div>
+                </div>
+                <span class="badge" id="prevcard"></span>
+                <div>
+                    <p id="howmanycardstext">How many cards you wanna play?</p>
+                    <div id="amountOptions" class="row"></div>
+                </div>
+                <div class="row" id="cardsonhanddiv"></div>
+                <div class="row" id="cardsontablediv" disabled></div>
+                <div class="row" id="laststagecardsdiv"></div>
+            </div>
         </div>
-        <span class="badge" id="prevcard"></span>
-        <div class="row">
-            <button id="pickupbtn">Pick up</button>
-        </div>
-        <div>
-            <p>How many cards you wanna play?</p>
-            <div id="amountOptions" class="row"></div>
-        </div>
-        <div class="row" id="cardsonhanddiv"></div>
-        <div class="row" id="cardsontablediv"></div>
-        <div class="row" id="laststagecardsdiv"></div>
+        <div id="notvalidalert" class="alert alert-warning">This is not a valid move</div>
+        <div id="notyourturnalert" class="alert alert-warning">It's not your turn</div>
+        <div id="notyetalert" class="alert alert-warning">You cannot see this cards just yet</div>
     </div>
     <script src="index.js" type="module"></script>
 </body>

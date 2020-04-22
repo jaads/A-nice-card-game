@@ -14,8 +14,17 @@ header {
     font-size: 3rem;
 }
 
+
+#pickupbtn {
+    text-align: center;
+}
+
 .acard:hover {
     cursor: pointer;
+}
+
+#howmanycardstext {
+    display: none;
 }
 
 .amountoption {
@@ -25,4 +34,20 @@ header {
 .playername {
     margin: 0.5rem;
     font-size: larger;
+}
+
+#notvalidalert, #notyourturnalert, #notyetalert {
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    font-size: larger;
+    display: none;
+}
+
+#game {
+    visibility: hidden;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }

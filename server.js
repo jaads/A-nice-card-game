@@ -30,8 +30,6 @@ function isGameRunning(room) {
 };
 
 io.on('connection', socket => {
-    console.log("user connected");
-
 
     socket.on('join-room', data => {
         let reachedMaxAmountOfPlayers = getUsersbyRoom(data.room).length >= 5;
@@ -51,12 +49,10 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', roomName => {
-        // Setup game
         newgame = new Game(roomName, getUsersbyRoom(roomName));
         allgames.push(newgame);
-
-        // Send game to everyone in room
         io.to(roomName).emit('game-started', newgame);
+        io.to(socket.id).emit('user-index', getPlayersIndex(roomName));
         dailyGames ++;
     });
 
@@ -75,10 +71,6 @@ io.on('connection', socket => {
     function getPlayersIndex(room) {
         return getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
     }
-
-    socket.on('get-users-index', room => {
-        io.to(socket.id).emit('user-index', getPlayersIndex(room));
-    });
 
 });
 
