@@ -21,3 +21,8 @@ header {
 .amountoption {
     cursor: pointer;
 }
+
+.playername {
+    margin: 0.5rem;
+    font-size: larger;
+}

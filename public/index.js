@@ -4,13 +4,12 @@ let roominput = document.querySelector('#joinroominput');
 let joinroombtn = document.querySelector('#joinroombtn');
 let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
-let cardinput = document.querySelector('#cardinput');
 let pickupbtn = document.querySelector('#pickupbtn');
 
-import { isValidMove, getNumberMapping } from './card-logic.js';
-import { renderCards, showAmountInput, showplayers, updateView } from './rendering-module.js';
+import { isValidMove } from './card-logic.js';
+import { renderCards, showAmountInput, showplayers, updateView, disableInputs } from './rendering-module.js';
 
-export let roommates = [];
+export let playerQueue = [];
 export let game = null;
 export let playersIndex = null;
 let currentlyInGame = false;
@@ -25,7 +24,7 @@ joinroombtn.onclick = () => {
 socket.on('full-room', () => alert("Sorry, you are too late."));
 
 startbtn.onclick = () => {
-    if (roommates.length > 0) {
+    if (playerQueue.length > 0) {
         socket.emit('start-game', roominput.value);
     } else {
         console.log("No players yet.");
@@ -33,16 +32,16 @@ startbtn.onclick = () => {
 };
 
 socket.on('user-joined', playersInRoom => {
-    roommates = playersInRoom;
-    playercount.innerText = roommates.length;
+    playerQueue = playersInRoom;
+    playercount.innerText = playerQueue.length;
     showplayers();
 });
 
 socket.on('game-started', gameparam => {
     console.log('The game has started.');
-    currentlyInGame = true;
+    disableInputs();
     game = gameparam;
-    cardinput.focus();
+    currentlyInGame = true;
     socket.emit('get-users-index', roominput.value);
     updateView();
 });
@@ -58,18 +57,7 @@ socket.on('move-made', updatedGame => {
     updateView();
 });
 
-cardinput.onkeyup = (e) => {
-    let mappedCardInput = isNaN(e.key) ? getNumberMapping(e.key) : Number(e.key);
-    if (e.key == 'Enter') {
-        pickUpCards();
-        return;
-    }
-    cardinput.value = '';
-};
-
-pickupbtn.onclick = pickUpCards;
-
-function pickUpCards() {
+pickupbtn.onclick = () => {
     socket.emit('pick-up', game.room);
 };
 

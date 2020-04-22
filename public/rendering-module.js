@@ -7,8 +7,11 @@ let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
 let amountOptions = document.querySelector('#amountOptions');
 let decksize = document.querySelector('#decksize');
 let mates = document.querySelector('#currentroommates');
+let nameinput = document.querySelector('#name');
+let roominput = document.querySelector('#joinroominput');
+let joinroombtn = document.querySelector('#joinroombtn');
 
-import { decideAmount, game, playersIndex, roommates, tryMakeAMove } from './index.js';
+import { decideAmount, game, playersIndex, playerQueue, tryMakeAMove } from './index.js';
 
 export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
@@ -79,19 +82,40 @@ function hideAmountInput() {
     amountOptions.innerHTML = '';
 };
 
+export function disableInputs() {
+    nameinput.disabled = true;
+    roominput.disabled = true;
+    joinroombtn.disabled = true;
+};
+
 export function updateView() {
     renderCurrentCard();
-    printCurrentPlayer();
+    highlightCurrentPlayer();
     updateNumberOfCardsOnStack();
 };
 
 export function showplayers() {
     mates.innerHTML = '';
-    roommates.forEach(element => {
-        let para = document.createElement("p");
+    playerQueue.forEach(element => {
+        let div = document.createElement("div");
+        div.classList.add('badge', 'playername');
         let node = document.createTextNode(element.name);
-        para.appendChild(node);
-        mates.appendChild(para)
+        div.appendChild(node);
+        mates.appendChild(div);
+    });
+};
+
+function highlightCurrentPlayer(params) {
+    mates.innerHTML = '';
+    game.players.forEach((player, idx) => {
+        let div = document.createElement("div");
+        div.classList.add('badge', 'playername');
+        if (idx == game.currentPlayerIdx) {
+            div.classList.add('success');
+        }
+        let node = document.createTextNode(player.name);
+        div.appendChild(node);
+        mates.appendChild(div)
     });
 };
 
@@ -113,8 +137,4 @@ function renderCurrentCard() {
     } else {
         prevcard.innerHTML = "&empty;";
     }
-};
-
-function printCurrentPlayer() {
-    console.log("It's " + game.players[game.currentPlayerIdx].name + " turn.");
 };
