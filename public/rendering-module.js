@@ -13,6 +13,7 @@ let joinroombtn = document.querySelector('#joinroombtn');
 let howmanycardstextpara = document.querySelector('#howmanycardstext');
 let notyetalertdiv = document.querySelector('#notyetalert');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
+let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 
 import { decideAmount, game, playersIndex, playerQueue, tryMakeAMove } from './index.js';
 
@@ -134,6 +135,7 @@ function highlightCurrentPlayer() {
 function updateNumberOfCardsOnStack() {
     NrOfCardsOnStack.innerText = game.stack.length;
     decksize.innerText = game.deck.length;
+    amountburnedcardsspan.innerText = game.outOfGameCards.length;
 };
 
 
