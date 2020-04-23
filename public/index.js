@@ -8,8 +8,10 @@ let pickupbtn = document.querySelector('#pickupbtn');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
 let notyourturnalertdiv = document.querySelector('#notyourturnalert');
 let gamediv = document.querySelector('#game');
+let prevcarbtn = document.querySelector('#prevcardbtn');
+
 import { isValidMove } from './card-logic.js';
-import { renderCards, showAmountInput, showplayers, updateView, disableInputs } from './rendering-module.js';
+import { renderCards, showAmountInput, showplayers, updateView, disableInputs, renderPrevCard} from './rendering-module.js';
 
 export let playerQueue = [];
 export let game = null;
@@ -22,6 +24,8 @@ joinroombtn.onclick = () => {
         room: roominput.value
     });
 };
+
+prevcarbtn.onclick = renderPrevCard;
 
 socket.on('full-room', () => alert("Sorry, you are too late."));
 

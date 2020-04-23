@@ -50,7 +50,4 @@ header {
 #game {
     visibility: hidden;
     margin: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }

@@ -145,7 +145,9 @@ function renderCurrentCard() {
     } else {
         currentCard.innerHTML = "&empty;";
     }
+};
 
+export function renderPrevCard() {
     if (game.stack.length >= 2) {
         prevcard.innerText = game.stack[game.stack.length - 2];
     } else {
