@@ -51,3 +51,11 @@ header {
     visibility: hidden;
     margin: auto;
 }
+
+#coplayer {
+    display: inline-block;
+}
+
+.opponentCard {
+    padding: 0.5rem;
+}

@@ -14,6 +14,8 @@ let howmanycardstextpara = document.querySelector('#howmanycardstext');
 let notyetalertdiv = document.querySelector('#notyetalert');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
 let amountburnedcardsspan = document.querySelector('#amountburnedcards');
+let coplayerstemplate = document.querySelector('#coplayerstemplate');
+let coplayerssection = document.querySelector('#coplayers');
 
 import { decideAmount, game, playersIndex, playerQueue, tryMakeAMove } from './index.js';
 
@@ -77,7 +79,7 @@ export function showAmountInput(list) {
             let desiredAmount = Number(newdiv.textContent);
             howmanycardstextpara.style.display = "none";
             handleAmountInput(list, desiredAmount);
-        }
+        };
     };
 };
 
@@ -103,7 +105,7 @@ export function disableInputs() {
 
 export function updateView() {
     renderCurrentCard();
-    highlightCurrentPlayer();
+    rendercoplayers();
     updateNumberOfCardsOnStack();
 };
 
@@ -118,17 +120,23 @@ export function showplayers() {
     });
 };
 
-function highlightCurrentPlayer() {
-    mates.innerHTML = '';
+export function rendercoplayers() {
+    coplayerssection.innerHTML = '';
     game.players.forEach((player, idx) => {
-        let div = document.createElement("div");
-        div.classList.add('badge', 'playername');
+        const template = coplayerstemplate.content.cloneNode(true);
         if (idx == game.currentPlayerIdx) {
-            div.classList.add('success');
+            template.querySelector('#coplayer').classList.add('background-success');
         }
-        let node = document.createTextNode(player.name);
-        div.appendChild(node);
-        mates.appendChild(div)
+        template.querySelector('#coplayername').innerText = player.name;
+        game.cards[idx].lastCards.forEach((card)=> {
+            let newdiv = document.createElement('span');
+            newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
+            let node = document.createTextNode(card);
+            newdiv.appendChild(node);
+            template.querySelector('#coplayercards').appendChild(newdiv);
+        });
+        template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].lastCards.length;
+        coplayerssection.appendChild(template);
     });
 };
 

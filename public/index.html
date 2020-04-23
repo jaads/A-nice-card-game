@@ -51,6 +51,17 @@
 
         <h3>Players (<span id="playercount">0</span>)</h3>
         <div id="currentroommates"></div>
+        <section id="coplayers">
+            <template id="coplayerstemplate">
+                <div id="coplayer" class="background-primary margin">
+                    <div class="row flex-center">
+                        <span id="coplayername"></span>
+                        &nbsp(&nbsp<span id="coplayernrcardsleft"></span>&nbsp)
+                    </div>
+                    <div id="coplayercards"></div>
+                </div>
+            </template>
+        </section>
         <button id="startbtn" class="background-success">Start game!</button>
 
         <div id="game" class="row flex-center">
