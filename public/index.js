@@ -76,7 +76,7 @@ export function tryMakeAMove(playedCardArr) {
     if (currentlyInGame) {
         if (game.currentPlayerIdx == playersIndex) {
             let cardNumber = playedCardArr[0];
-            if (isValidMove(getPreviousCard(), getCurrentCard(), cardNumber)) {
+            if (isValidMove(game.stack, cardNumber)) {
                 socket.emit("move", { room: game.room, cards: playedCardArr });
             } else {
                 notvalidalertdiv.style.display = "inline";

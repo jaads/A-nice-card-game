@@ -1,27 +1,26 @@
-// TODO: Use recursive function based on the actual stack
-export function isValidMove(prev, current, next) {
-    if (current == 2) {
+export function isValidMove(stack, card) {
+    let topCard = stack[stack.length - 1];
+    if (topCard == 2) {
         return true;
     }
-    if (current == 3) {
-        if (prev == 7) {
-            return next <= prev ? true : false;
+    if (topCard == 3) {
+        if (stack.length > 0) {
+            return isValidMove(stack.slice(0, stack.length - 1), card);
         }
-        if (next >= prev || next == 10) {
+    }
+    if (topCard == 7) {
+        return card <= 7 ? true : false;
+    }
+    if (card == 10) {
+        if (topCard != 7) {
             return true;
-        } else {
-            return false;
         }
     }
-    if (current == 7) {
-        return next <= 7 ? true : false;
-    }
-    if (next >= current || next == 2 || next == 3 || next == 10) {
+    if (topCard <= card || card == 3 || card == 2) {
         return true;
     }
     return false;
 };
-
 
 export function getNumberMapping(letter) {
     if (letter == 't') {
