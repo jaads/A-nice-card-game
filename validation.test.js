@@ -1,4 +1,7 @@
 function isValidMove(stack, card) {
+    if (stack.length == 0) {
+        return true;
+    }
     let topCard = stack[stack.length - 1];
     if (topCard == 2) {
         return true;
@@ -50,4 +53,5 @@ testValidation([11, 3, 3], 10, true);
 testValidation([4, 7, 3, 2], 4, true);
 testValidation([4, 7, 3, 3], 4, true);
 testValidation([4, 7, 3, 3, 4], 9, true);
+testValidation([3], 5, true);
 

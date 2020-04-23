@@ -1,4 +1,7 @@
 export function isValidMove(stack, card) {
+    if (stack.length == 0) {
+        return true;
+    }
     let topCard = stack[stack.length - 1];
     if (topCard == 2) {
         return true;
