@@ -54,8 +54,8 @@
         <button id="startbtn" class="background-success">Start game!</button>
 
         <div id="game" class="row flex-center">
-            <div class="col-7 col">
-                <div class="card" style="width: 20rem;">
+            <div class="sm-10 md-8 lg-4 col">
+                <div class="card">
                     <div class="card-header">
                         <span>Decksize: </span>
                         <span id="decksize"></span>
@@ -76,14 +76,11 @@
                     <p id="howmanycardstext">How many cards you wanna play?</p>
                     <div id="amountOptions" class="row"></div>
                 </div>
-                <div class="row" id="cardsonhanddiv"></div>
-                <div class="row" id="cardsontablediv" disabled></div>
-                <div class="row" id="laststagecardsdiv"></div>
+                <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
+                <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv" disabled></div>
+                <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
             </div>
         </div>
-        <div id="notvalidalert" class="alert alert-warning">This is not a valid move</div>
-        <div id="notyourturnalert" class="alert alert-warning">It's not your turn</div>
-        <div id="notyetalert" class="alert alert-warning">You cannot see this cards just yet</div>
     </div>
     <script src="index.js" type="module"></script>
 </body>

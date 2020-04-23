@@ -8,15 +8,18 @@ header {
 
 #currentcard {
     font-size: 4rem;
+    text-align: center;
 }
 
 #prevcard {
     font-size: 3rem;
 }
 
-
-#pickupbtn {
+.acard {
+    font-size: larger;
     text-align: center;
+    padding: 1.5rem 0;
+    width: 3.5rem;
 }
 
 .acard:hover {

@@ -21,7 +21,7 @@ export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
     game.cards[playersIndex].handCards.forEach(card => {
         let newdiv = document.createElement('div');
-        newdiv.classList.add('margin', 'badge', 'acard');
+        newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
@@ -33,7 +33,7 @@ export function renderCards() {
     cardsOnTableDiv.innerHTML = '';
     game.cards[playersIndex].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
-        newdiv.classList.add('margin', 'badge', 'acard');
+        newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
@@ -50,7 +50,7 @@ export function renderCards() {
     laststagecardsdiv.innerHTML = '';
     game.cards[playersIndex].flippedCards.forEach(card => {
         let newdiv = document.createElement('div');
-        newdiv.classList.add('margin', 'badge', 'acard');
+        newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode('?');
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
