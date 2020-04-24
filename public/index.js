@@ -11,7 +11,7 @@ let gamediv = document.querySelector('#game');
 let prevcarbtn = document.querySelector('#prevcardbtn');
 
 import { isValidMove } from './card-logic.js';
-import { renderCards, showAmountInput, showplayers, updateView, disableInputs, renderPrevCard} from './rendering-module.js';
+import { showAmountInput, showplayers, updateView, disableInputs, renderPrevCard} from './rendering-module.js';
 
 export let playerQueue = [];
 export let game = null;
@@ -46,20 +46,15 @@ socket.on('user-joined', playersInRoom => {
 socket.on('game-started', gameparam => {
     console.log('The game has started.');
     disableInputs();
-    game = gameparam;
+    game = gameparam.game;
+    playersIndex = gameparam.index;
     currentlyInGame = true;
     gamediv.style.visibility = 'visible';
     updateView();
 });
 
-socket.on('user-index', indexParam => {
-    playersIndex = indexParam;
-    renderCards(game, playersIndex);
-});
-
 socket.on('move-made', updatedGame => {
     game = updatedGame;
-    renderCards(game, playersIndex);
     updateView();
 });
 

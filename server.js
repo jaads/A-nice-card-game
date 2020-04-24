@@ -51,9 +51,10 @@ io.on('connection', socket => {
     socket.on('start-game', roomName => {
         newgame = new Game(roomName, getUsersbyRoom(roomName));
         allgames.push(newgame);
-        io.to(roomName).emit('game-started', newgame);
-        io.to(socket.id).emit('user-index', getPlayersIndex(roomName));
-        dailyGames ++;
+        newgame.players.forEach((player, idx) => {
+            io.to(player.id).emit('game-started', {game : newgame, index: idx});
+        });
+        dailyGames++;
     });
 
     socket.on('move', data => {
@@ -67,11 +68,6 @@ io.on('connection', socket => {
         targetedGame.pickUp();
         io.to(room).emit('move-made', targetedGame);
     });
-
-    function getPlayersIndex(room) {
-        return getUsersbyRoom(room).map((e) => e.id).indexOf(socket.id);
-    }
-
 });
 
 function getDeck() {

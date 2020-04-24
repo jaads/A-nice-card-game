@@ -101,10 +101,13 @@ export function disableInputs() {
     roominput.disabled = true;
     joinroombtn.disabled = true;
     startbtn.style.visibility = "hidden";
+    mates.innerHTML = '';
+    document.querySelector('#playersamout').innerHTML = '';
 };
 
 export function updateView() {
     renderCurrentCard();
+    renderCards(game, playersIndex);
     rendercoplayers();
     updateNumberOfCardsOnStack();
 };
