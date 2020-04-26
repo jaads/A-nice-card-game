@@ -6,10 +6,6 @@ let prevcard = document.querySelector('#prevcard');
 let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
 let amountOptions = document.querySelector('#amountOptions');
 let decksize = document.querySelector('#decksize');
-let mates = document.querySelector('#currentroommates');
-let nameinput = document.querySelector('#name');
-let roominput = document.querySelector('#joinroominput');
-let joinroombtn = document.querySelector('#joinroombtn');
 let howmanycardstextpara = document.querySelector('#howmanycardstext');
 let notyetalertdiv = document.querySelector('#notyetalert');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
@@ -17,11 +13,11 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { decideAmount, game, playersIndex, playerQueue, tryMakeAMove } from './index.js';
+import { decideAmount, tryMakeAMove } from './game.js';
 
-export function renderCards() {
+export function renderCards(game, index) {
     cardsOnHandDiv.innerHTML = '';
-    game.cards[playersIndex].handCards.forEach(card => {
+    game.cards[index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
@@ -33,14 +29,14 @@ export function renderCards() {
     });
 
     cardsOnTableDiv.innerHTML = '';
-    game.cards[playersIndex].lastCards.forEach(card => {
+    game.cards[index].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[playersIndex].handCards.length > 0) {
+            if (game.cards[index].handCards.length > 0) {
                 notvalidalertdiv.style.display = "block";
                 setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
             } else {
@@ -50,14 +46,14 @@ export function renderCards() {
     });
 
     laststagecardsdiv.innerHTML = '';
-    game.cards[playersIndex].flippedCards.forEach(card => {
+    game.cards[index].flippedCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode('?');
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[playersIndex].lastCards.length > 0) {
+            if (game.cards[index].lastCards.length > 0) {
                 notyetalertdiv.style.display = "block";
                 setTimeout(() => notyetalertdiv.style.display = "none", 3000);
             } else {
@@ -96,34 +92,14 @@ function hideAmountInput() {
     amountOptions.innerHTML = '';
 };
 
-export function disableInputs() {
-    nameinput.disabled = true;
-    roominput.disabled = true;
-    joinroombtn.disabled = true;
-    startbtn.style.visibility = "hidden";
-    mates.innerHTML = '';
-    document.querySelector('#playersamout').innerHTML = '';
+export function updateView(game, index) {    
+    renderCurrentCard(game);
+    renderCards(game, index);
+    rendercoplayers(game);
+    updateNumberOfCardsOnStack(game);
 };
 
-export function updateView() {
-    renderCurrentCard();
-    renderCards(game, playersIndex);
-    rendercoplayers();
-    updateNumberOfCardsOnStack();
-};
-
-export function showplayers() {
-    mates.innerHTML = '';
-    playerQueue.forEach(element => {
-        let div = document.createElement("div");
-        div.classList.add('badge', 'playername');
-        let node = document.createTextNode(element.name);
-        div.appendChild(node);
-        mates.appendChild(div);
-    });
-};
-
-export function rendercoplayers() {
+export function rendercoplayers(game) {
     coplayerssection.innerHTML = '';
     game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
@@ -143,14 +119,14 @@ export function rendercoplayers() {
     });
 };
 
-function updateNumberOfCardsOnStack() {
+function updateNumberOfCardsOnStack(game) {
     NrOfCardsOnStack.innerText = game.stack.length;
     decksize.innerText = game.deck.length;
     amountburnedcardsspan.innerText = game.outOfGameCards.length;
 };
 
 
-function renderCurrentCard() {
+function renderCurrentCard(game) {
     if (game.stack.length > 0) {
         currentCard.innerText = game.stack[game.stack.length - 1];
     } else {

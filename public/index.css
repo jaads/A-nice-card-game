@@ -47,9 +47,8 @@ header {
     display: none;
 }
 
-#game {
+#gamesection {
     visibility: hidden;
-    margin: auto;
 }
 
 #coplayer {

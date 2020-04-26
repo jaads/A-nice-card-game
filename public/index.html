@@ -41,65 +41,72 @@
 
 <body>
     <div>
-        <div class="row">
-            <label for="name">Name:</label>
-            <input id="name" type="text" class="margin">
-            <label for="joinroominput">Room:</label>
-            <input id="joinroominput" type="text" class="margin">
-            <button id="joinroombtn">Join</button>
-        </div>
+        <section id="joinsection">
+            <div class="row">
+                <label for="name">Name:</label>
+                <input id="name" type="text" class="margin">
+                <label for="joinroominput">Room:</label>
+                <input id="joinroominput" type="text" class="margin">
+                <button id="joinroombtn">Join</button>
+            </div>
 
-        <h3 id="playersamout">Players (<span id="playercount">0</span>)</h3>
-        <div id="currentroommates"></div>
-        <section id="coplayers">
-            <template id="coplayerstemplate">
-                <div id="coplayer" class="background-primary margin">
-                    <div class="row flex-center">
-                        <span id="coplayername"></span>
-                        &nbsp(&nbsp<span id="coplayernrcardsleft"></span>&nbsp)
-                    </div>
-                    <div id="coplayercards"></div>
-                </div>
-            </template>
+            <h3 id="playersamout">Players (<span id="playercount">0</span>)</h3>
+            <div id="currentroommates"></div>
+            <button id="startbtn" class="background-success">Start game!</button>
         </section>
-        <button id="startbtn" class="background-success">Start game!</button>
 
-        <div id="game" class="row flex-center">
-            <div class="sm-10 md-8 lg-4 col">
-                <div class="card">
-                    <div class="card-header">
-                        <span>Decksize: </span>
-                        <span id="decksize"></span>
-                        <div>
-                            <span>Burned cards:</span>
-                            <spanid id="amountburnedcards">0</span>
+        <section id="gamesection">
+            <div id="coplayers">
+                <template id="coplayerstemplate">
+                    <div id="coplayer" class="background-primary margin">
+                        <div class="row flex-center">
+                            <span id="coplayername"></span>
+                            &nbsp(&nbsp<span id="coplayernrcardsleft"></span>&nbsp)
+                        </div>
+                        <div id="coplayercards"></div>
+                    </div>
+                </template>
+            </div>
+
+            <div id="game" class="row flex-center">
+                <div class="sm-10 md-8 lg-4 col">
+                    <div class="card">
+                        <div class="card-header">
+                            <span>Decksize: </span>
+                            <span id="decksize"></span>
+                            <div>
+                                <span>Burned cards:</span>
+                                <spanid id="amountburnedcards">0</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="currentcard"></div>
+                            <span id="prevcard"></span>
+                        </div>
+                        <div class="card-footer">
+                            <button id="prevcardbtn">Check previous card</button>
+                            <button id="pickupbtn">Pick up cards ( <span id="NrOfCardsOnStack"></span> )</button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div id="currentcard"></div>
-                        <span id="prevcard"></span>
+                    <div>
+                        <p id="howmanycardstext">How many cards you wanna play?</p>
+                        <div id="amountOptions" class="row"></div>
                     </div>
-                    <div class="card-footer">
-                        <button id="prevcardbtn">Check previous card</button>
-                        <button id="pickupbtn">Pick up cards ( <span id="NrOfCardsOnStack"></span> )</button>
-                    </div>
+                    <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
+                    <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv" disabled></div>
+                    <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
                 </div>
-                <div>
-                    <p id="howmanycardstext">How many cards you wanna play?</p>
-                    <div id="amountOptions" class="row"></div>
-                </div>
-                <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
-                <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv" disabled></div>
-                <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
             </div>
-        </div>
-        <div class="row flex-center">
-            <div id="notvalidalert" class="alert alert-warning col-5 col">This is not a valid move</div>
-            <div id="notyourturnalert" class="alert alert-warning col-5 col">It's not your turn</div>
-            <div id="notyetalert" class="alert alert-warning col-5 col">You cannot see this cards just yet</div>
-        </div>
+            <div class="row flex-center">
+                <div id="notvalidalert" class="alert alert-warning col-5 col">This is not a valid move</div>
+                <div id="notyourturnalert" class="alert alert-warning col-5 col">It's not your turn</div>
+                <div id="notyetalert" class="alert alert-warning col-5 col">You cannot see this cards just yet</div>
+            </div>
+        </section>
     </div>
     <script src="index.js" type="module"></script>
+    <script src="join.js" type="module"></script>
+    <script src="game.js" type="module"></script>
 </body>
 
 </html>
