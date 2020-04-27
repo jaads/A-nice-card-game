@@ -84,6 +84,15 @@ io.on('connection', socket => {
         targetedGame.pickUp();
         io.to(room).emit('move-made', targetedGame);
     });
+
+    socket.on('disconnect', () => {
+        // Remove user from list of current players
+        allusers.forEach((user, idx) => {
+            if (user.id == socket.id) {
+                allusers.splice(idx, 1);
+            }
+        });
+    });
 });
 
 function getDeck() {
