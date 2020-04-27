@@ -47,7 +47,7 @@ header {
     display: none;
 }
 
-#gamesection {
+#swapsection, #gamesection {
     visibility: hidden;
 }
 

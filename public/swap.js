@@ -10,8 +10,14 @@ socket.on('room-closed', (data) => {
     console.log('Room closed');
     setGame(data.game);
     setIndex(data.index);
+    showSwapSection();
     renderCardsForSwapping();
 });
+
+function showSwapSection() {
+    document.querySelector('#joinsection').innerHTML = '';
+    document.querySelector('#swapsection').style.visibility = 'visible';
+};
 
 function renderCardsForSwapping() {
     swapcardsfirststage.innerHTML = '';
