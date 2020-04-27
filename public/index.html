@@ -55,6 +55,15 @@
             <button id="startbtn" class="background-success">Start game!</button>
         </section>
 
+        <section id="swapsection">
+            <div class="row flex-center">
+                <button id="swapbtn">Swap</button>
+                <button id="readybtn">Ready</button>
+            </div>
+            <div class="row flex-center child-borders child-shadows-hover" id="swapcardsfirststage"></div>
+            <div class="row flex-center child-borders child-shadows-hover" id="swapcardssecondstage"></div>
+        </section>
+
         <section id="gamesection">
             <div id="coplayers">
                 <template id="coplayerstemplate">
@@ -106,6 +115,7 @@
     </div>
     <script src="index.js" type="module"></script>
     <script src="join.js" type="module"></script>
+    <script src="swap.js" type="module"></script>
     <script src="game.js" type="module"></script>
 </body>
 

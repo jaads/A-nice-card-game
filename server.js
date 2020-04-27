@@ -48,13 +48,29 @@ io.on('connection', socket => {
         }
     });
 
-    socket.on('start-game', roomName => {
+    socket.on('close-room', roomName => {
         newgame = new Game(roomName, getUsersbyRoom(roomName));
         allgames.push(newgame);
         newgame.players.forEach((player, idx) => {
-            io.to(player.id).emit('game-started', {game : newgame, index: idx});
+            io.to(player.id).emit('room-closed', { game: newgame, index: idx });
         });
         dailyGames++;
+    });
+
+
+    socket.on('swap-cards', data => {
+        getGamebyRoom(data.room).cards[data.index].handCards = data.newHandCards;
+        getGamebyRoom(data.room).cards[data.index].lastCards = data.newLastCards;
+    });
+
+    socket.on('i-am-ready', room => {
+        let g = getGamebyRoom(room);
+        g.nrofreadyplayers++;
+        if (g.nrofreadyplayers == g.players.length) {
+            io.to(room).emit('all-ready', getGamebyRoom(room));
+        } else {
+            io.to(socket.id).emit('wait-for-others-to-swap');
+        }
     });
 
     socket.on('move', data => {
@@ -124,7 +140,8 @@ class Game {
         this.cards = handOutCards(this.deck, this.players);
         this.outOfGameCards = [];
         this.stack = this.initstack();
-    }
+        this.nrofreadyplayers = 0;
+    };
 
     getCardFromDeck() {
         return this.deck.pop();
