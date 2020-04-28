@@ -27,26 +27,23 @@ class Game {
 
     makemove(playedCards) {
         let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
-        let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].handCards;
-        let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].handCards;
-
+        let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].lastCards;
+        let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].flippedCards;
 
         // Remove card from hand
-        playedCards.forEach((card) => {
-            if (playersCardsOnFirstStage.length > 0) {
-                let index = playersCardsOnFirstStage.indexOf(card);
-                playersCardsOnFirstStage.splice(index, 1);
-            } else if (playersCardsOnSecondStage.length > 0) {
-                let index = playersCardsOnSecondStage.indexOf(card);
-                playersCardsOnSecondStage.splice(index, 1);
-            } else if (playersCardsOnThirdStage.length > 0) {
-                let index = playersCardsOnThirdStage.indexOf(card);
-                playersCardsOnThirdStage.splice(index, 1);
+        playedCards.forEach(card => {
+            if (playersCardsOnFirstStage.indexOf(card) != -1) {
+                playersCardsOnFirstStage.splice(playersCardsOnFirstStage.indexOf(card), 1);
+            } else if (playersCardsOnSecondStage.indexOf(card) != -1) {
+                playersCardsOnSecondStage.splice(playersCardsOnSecondStage.indexOf(card), 1);
+            } else if (playersCardsOnThirdStage.indexOf(card) != -1) {
+                playersCardsOnThirdStage.splice(playersCardsOnThirdStage.indexOf(card), 1);
             }
+
             // Put on stack
             this.stack.push(card);
-
         });
+
         // Get new card from deck if needed
         while (this.deck.length > 0 && playersCardsOnFirstStage.length < 3) {
             this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());

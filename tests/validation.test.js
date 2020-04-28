@@ -34,7 +34,9 @@ function testValidation(teststack, card, expected) {
     }
 };
 
-console.log('## Testing the validation function');
+
+console.log('\nTesting validation function...');
+
 testValidation([4, 5], 7, true);
 testValidation([11, 3], 12, true);
 testValidation([7, 3], 8, false);
