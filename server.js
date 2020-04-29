@@ -4,8 +4,9 @@ const Game = require('./gamemodel.js');
 
 // Setup
 let app = express();
+const port = process.env.port || 4000
 app.use(express.static("./public"))
-let server = app.listen(4000, () => console.log('Listening'))
+let server = app.listen(port, () => console.log('Listening'))
 let io = socket(server);
 
 let allusers = [];
