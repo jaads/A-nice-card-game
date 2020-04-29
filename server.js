@@ -18,7 +18,7 @@ function getUsersbyRoom(room) {
 };
 
 function getGamebyRoom(room) {
-    return allgames.filter((game) => game.room = room)[0];
+    return allgames.filter(game => game.room == room)[0];
 };
 
 function isGameRunning(room) {
@@ -50,15 +50,14 @@ io.on('connection', socket => {
         }
     });
 
-    socket.on('close-room', roomName => {
-        newgame = new Game(roomName, getUsersbyRoom(roomName));
+    socket.on('start-game', roomName => {
+        let newgame = new Game(roomName, getUsersbyRoom(roomName));
         allgames.push(newgame);
         newgame.players.forEach((player, idx) => {
             io.to(player.id).emit('room-closed', { game: newgame, index: idx });
         });
         dailyGames++;
     });
-
 
     socket.on('swap-cards', data => {
         getGamebyRoom(data.room).cards[data.index].handCards = data.newHandCards;

@@ -8,7 +8,6 @@
     <title>Shithead</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="stylesheet" href="./vendor/paper.min.css">
     <link rel="stylesheet" href="index.css">
 </head>
@@ -41,24 +40,28 @@
     </header>
 
     <main>
-        <button id="moin">winner</button>
         <section id="joinsection">
-            <div class="row">
+
+            <div id="joinarea" class="shadow padding-large">
                 <label for="name">Name:</label>
                 <input id="name" type="text" class="margin">
                 <label for="joinroominput">Room:</label>
                 <input id="joinroominput" type="text" class="margin">
-                <button id="joinroombtn">Join</button>
-            </div>
+                <button id="joinroombtn" class="background-success">Join</button>
+                <hr>
 
-            <h3 id="playersamout">Players (<span id="playercount">0</span>)</h3>
-            <div id="currentroommates"></div>
-            <button id="startbtn" class="background-success">Start game!</button>
+                <h3 id="playersamout">Players (<span id="playercount">0</span>)</h3>
+                <div id="currentroommates"></div>
+                <div class="row flex-center">
+                    <button id="startbtn" class="margin background-success">Start game!</button>
+                </div>
+            </div>
         </section>
 
         <section id="swapsection">
+            <h1 class="row flex-center">Prepare yourself!</h1>
             <div class="row flex-center">
-                <button id="swapbtn">Swap</button>
+                <button id="swapbtn" class="margin">Swap</button>
                 <button id="readybtn">Ready</button>
             </div>
             <div class="row flex-center child-borders child-shadows-hover" id="swapcardsfirststage"></div>
@@ -82,11 +85,15 @@
                 <div class="sm-10 md-8 lg-4 col">
                     <div class="card">
                         <div class="card-header">
-                            <span>Decksize: </span>
-                            <span id="decksize"></span>
-                            <div>
-                                <span>Burned cards:</span>
-                                <spanid id="amountburnedcards">0</span>
+                            <div class="row flex-edges">
+                                <div>
+                                    <span>Decksize: </span>
+                                    <span id="decksize"></span>
+                                </div>
+                                <div>
+                                    <span>Burned cards:</span>
+                                    <span id="amountburnedcards">0</span>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -114,6 +121,7 @@
             </div>
         </section>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="index.js" type="module"></script>
     <script src="join.js" type="module"></script>
     <script src="swap.js" type="module"></script>

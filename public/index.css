@@ -2,6 +2,10 @@ header {
     margin-bottom: 5rem;
 }
 
+#startbtn {
+    width: 100%;
+}
+
 #testnumberrow {
     font-size: 3rem;
 }
@@ -63,3 +67,22 @@ header {
     font-size: 5rem;
     margin-top: 40vh;
 }
+
+#joinsection {
+    display: flex;
+    flex-direction: column;
+    max-width: 23rem;
+    margin: auto;
+}
+
+#joinarea {
+    background-color: whitesmoke;
+}
+
+#joinarea input{
+    width: 100%;
+    margin: 0;
+    margin-bottom: 1.5rem;
+}
+
+

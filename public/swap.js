@@ -90,7 +90,6 @@ function swapCards(index1, index2) {
     game.cards[index].lastCards[index2] = tmp;
 };
 
-
 readybtn.onclick = () => {
     socket.emit('swap-cards', {
         room: room,
@@ -100,7 +99,6 @@ readybtn.onclick = () => {
     });
     socket.emit('i-am-ready', room);
 };
-
 
 socket.on('wait-for-others-to-swap', () => {
     document.querySelector('#swapsection').innerHTML = '';
