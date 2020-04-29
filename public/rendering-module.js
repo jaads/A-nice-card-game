@@ -14,6 +14,7 @@ let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
 import { decideAmount, tryMakeAMove } from './game.js';
+import { index, game } from './index.js';
 
 export function renderCards(game, index) {
     cardsOnHandDiv.innerHTML = '';
@@ -92,7 +93,7 @@ function hideAmountInput() {
     amountOptions.innerHTML = '';
 };
 
-export function updateView(game, index) {    
+export function updateView(game, index) {
     renderCurrentCard(game);
     renderCards(game, index);
     rendercoplayers(game);
@@ -107,7 +108,7 @@ export function rendercoplayers(game) {
             template.querySelector('#coplayer').classList.add('background-success');
         }
         template.querySelector('#coplayername').innerText = player.name;
-        game.cards[idx].lastCards.forEach((card)=> {
+        game.cards[idx].lastCards.forEach((card) => {
             let newdiv = document.createElement('span');
             newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
             let node = document.createTextNode(card);
@@ -140,4 +141,25 @@ export function renderPrevCard() {
     } else {
         prevcard.innerHTML = "&empty;";
     }
+};
+
+export function showWinner() {
+    document.querySelector('body header').innerHTML = '';
+    document.querySelector('body main').innerHTML = '';
+    let body = document.querySelector('body');
+
+    let d = document.createElement('div');
+    d.setAttribute('id', 'winnertext');
+    d.classList.add('row', 'flex-center');
+    let winnersname = null;
+    if (game.winnersIndex == index) {
+        winnersname = "You";
+        body.classList.add('background-success');
+    } else {
+        winnersname = game.players[game.currentPlayerIdx].name;
+        body.classList.add('background-warning');
+    }
+    let winnertextnode = document.createTextNode(winnersname.toUpperCase() + " WON");
+    d.appendChild(winnertextnode);
+    body.appendChild(d);
 };

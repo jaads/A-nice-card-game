@@ -13,34 +13,35 @@
     <link rel="stylesheet" href="index.css">
 </head>
 
-<header>
-    <nav class="border fixed split-nav background-primary">
-        <div class="nav-brand">
-            <h3><a href="#">Shithead</a></h3>
-        </div>
-        <div class="collapsible">
-            <input id="collapsible1" type="checkbox" name="collapsible1">
-            <button>
-                <label for="collapsible1">
-                    <div class="bar1"></div>
-                    <div class="bar2"></div>
-                    <div class="bar3"></div>
-                </label>
-            </button>
-            <div class="collapsible-body">
-                <ul class="inline">
-                    <li><a href="rules/rules.html">Rules</a></li>
-                    <li><a href="training/training.html">Training</a></li>
-                    <li><a href="https://github.com/jaads/A-nice-card-game" target="_blank">Github</a></li>
-                    <li><a href="#">About</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
 <body>
-    <div>
+    <header>
+        <nav class="border fixed split-nav background-primary">
+            <div class="nav-brand">
+                <h3><a href="#">Shithead</a></h3>
+            </div>
+            <div class="collapsible">
+                <input id="collapsible1" type="checkbox" name="collapsible1">
+                <button>
+                    <label for="collapsible1">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                    </label>
+                </button>
+                <div class="collapsible-body">
+                    <ul class="inline">
+                        <li><a href="rules/rules.html">Rules</a></li>
+                        <li><a href="training/training.html">Training</a></li>
+                        <li><a href="https://github.com/jaads/A-nice-card-game" target="_blank">Github</a></li>
+                        <li><a href="#">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <button id="moin">winner</button>
         <section id="joinsection">
             <div class="row">
                 <label for="name">Name:</label>
@@ -112,7 +113,7 @@
                 <div id="notyetalert" class="alert alert-warning col-5 col">You cannot see this cards just yet</div>
             </div>
         </section>
-    </div>
+    </main>
     <script src="index.js" type="module"></script>
     <script src="join.js" type="module"></script>
     <script src="swap.js" type="module"></script>

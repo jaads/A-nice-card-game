@@ -58,3 +58,8 @@ header {
 .opponentCard {
     padding: 0.5rem;
 }
+
+#winnertext {
+    font-size: 5rem;
+    margin-top: 40vh;
+}

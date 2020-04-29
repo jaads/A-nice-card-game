@@ -1,6 +1,6 @@
 import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateView, renderPrevCard } from './rendering-module.js';
+import { showAmountInput, updateView, renderPrevCard, showWinner } from './rendering-module.js';
 
 let pickupbtn = document.querySelector('#pickupbtn');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
@@ -23,6 +23,9 @@ function showGameSection() {
 socket.on('move-made', updatedGame => {
     setGame(updatedGame);
     updateView(game, index);
+    if (game.isOver) {
+        showWinner();
+    }
 });
 
 pickupbtn.onclick = () => {

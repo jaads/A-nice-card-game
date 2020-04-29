@@ -9,6 +9,8 @@ class Game {
         this.outOfGameCards = [];
         this.stack = this.initstack();
         this.nrofreadyplayers = 0;
+        this.isOver = false;
+        this.winnersIndex = null;
     };
 
     getCardFromDeck() {
@@ -49,14 +51,19 @@ class Game {
             this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
         }
 
-        if (playedCards[0] != 10) {
+        if (playersCardsOnFirstStage.length == 0
+            && playersCardsOnSecondStage.length == 0
+            && playersCardsOnThirdStage.length == 0) {
+            this.isOver = true;
+            this.winnersIndex = this.currentPlayerIdx;
+        } else if (playedCards[0] != 10) {
             this.setNextPlayer();
         } else {
+            // When 10, then burn all cards from stack
             while (this.stack.length > 0) {
                 this.outOfGameCards.push(this.stack.pop());
             }
         }
-
     };
 
     pickUp() {
