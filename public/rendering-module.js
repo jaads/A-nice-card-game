@@ -120,6 +120,7 @@ export function updateView(game, index) {
     renderCards(game, index);
     rendercoplayers(game);
     updateNumberOfCardsOnStack(game);
+    updateBackground(game);
 };
 
 export function rendercoplayers(game) {
@@ -154,6 +155,14 @@ function renderCurrentCard(game) {
         currentCard.innerText = game.stack[game.stack.length - 1];
     } else {
         currentCard.innerHTML = "&empty;";
+    }
+};
+
+function updateBackground(game) {
+    if (game.currentPlayerIdx == index) {
+        document.querySelector('body').classList.add('background-success');
+    } else {
+        document.querySelector('body').classList.remove('background-success');
     }
 };
 
