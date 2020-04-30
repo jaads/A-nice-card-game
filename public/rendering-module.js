@@ -115,7 +115,7 @@ export function rendercoplayers(game) {
             newdiv.appendChild(node);
             template.querySelector('#coplayercards').appendChild(newdiv);
         });
-        template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].lastCards.length;
+        template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].handCards.length;
         coplayerssection.appendChild(template);
     });
 };
