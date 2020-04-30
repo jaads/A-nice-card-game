@@ -116,11 +116,16 @@ function hideAmountInput() {
 };
 
 export function updateView(game, index) {
-    renderCurrentCard(game);
-    renderCards(game, index);
-    rendercoplayers(game);
-    updateNumberOfCardsOnStack(game);
-    updateBackground(game);
+    if (!game.isOver) {
+        renderCurrentCard(game);
+        renderCards(game, index);
+        rendercoplayers(game);
+        updateNumberOfCardsOnStack(game);
+        updateBackground(game);
+        prevcard.innerText = '';
+    } else {
+        showWinner();
+    }
 };
 
 export function rendercoplayers(game) {
