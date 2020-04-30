@@ -81,9 +81,9 @@
                 </template>
             </div>
 
-            <div id="game" class="row flex-center">
-                <div class="sm-10 md-8 lg-4 col">
-                    <div class="card">
+            <div id="game">
+                <div class="row flex-center">
+                    <div id="stacketc" class="row flex-center card margin-large">
                         <div class="card-header">
                             <div class="row flex-edges">
                                 <div>
@@ -105,14 +105,14 @@
                             <button id="pickupbtn">Pick up cards ( <span id="NrOfCardsOnStack"></span> )</button>
                         </div>
                     </div>
-                    <div>
-                        <p id="howmanycardstext">How many cards you wanna play?</p>
-                        <div id="amountOptions" class="row"></div>
-                    </div>
-                    <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
-                    <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv" disabled></div>
-                    <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
                 </div>
+                <div>
+                    <p id="howmanycardstext">How many cards you wanna play?</p>
+                    <div id="amountOptions" class="row"></div>
+                </div>
+                <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
+                <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv" disabled></div>
+                <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
             </div>
             <div class="row flex-center">
                 <div id="notvalidalert" class="alert alert-warning col-5 col">This is not a valid move</div>

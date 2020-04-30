@@ -85,4 +85,9 @@ header {
     margin-bottom: 1.5rem;
 }
 
+#stacketc {
+    width: 100%;
+    max-width: 50rem;
+}
+
 
