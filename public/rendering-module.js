@@ -38,8 +38,7 @@ export function renderCards(game, index) {
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
             if (game.cards[index].handCards.length > 0) {
-                notvalidalertdiv.style.display = "block";
-                setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
+                showNotValidAlert();
             } else {
                 decideAmount(Number(newdiv.textContent));
             }
@@ -54,14 +53,37 @@ export function renderCards(game, index) {
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[index].lastCards.length > 0) {
-                notyetalertdiv.style.display = "block";
-                setTimeout(() => notyetalertdiv.style.display = "none", 3000);
+            if (game.cards[index].lastCards.length > 0 || game.cards[index].lastCards.length > 0) {
+                showNotYetAlert();
             } else {
-                node.textContent = card;
+
+                // Check if another cards has already been turned
+                let anotherCardIsAlreadyturned = false;
+                document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
+                    if (elem.innerText != '?') {
+                        anotherCardIsAlreadyturned = true;
+                    }
+                });
+
+                if (anotherCardIsAlreadyturned) {
+                    showNotYetAlert();
+                } else {
+                    node.textContent = card;
+                    newdiv.onclick = decideAmount(Number(newdiv.textContent));
+                }
             }
         };
     });
+};
+
+function showNotValidAlert() {
+    notvalidalertdiv.style.display = "block";
+    setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
+};
+
+function showNotYetAlert() {
+    notyetalertdiv.style.display = "block";
+    setTimeout(() => notyetalertdiv.style.display = "none", 3000);
 };
 
 export function showAmountInput(list) {
