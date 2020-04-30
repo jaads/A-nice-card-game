@@ -44,7 +44,7 @@ header {
 }
 
 #notvalidalert, #notyourturnalert, #notyetalert {
-    position: absolute;
+    position: fixed;
     top: 4rem;
     text-align: center;
     font-size: larger;
