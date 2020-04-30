@@ -132,19 +132,21 @@ export function rendercoplayers(game) {
     coplayerssection.innerHTML = '';
     game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
-        if (idx == game.currentPlayerIdx) {
-            template.querySelector('#coplayer').classList.add('background-success');
+        if (idx != index) {
+            template.querySelector('#coplayername').innerText = player.name;
+            if (idx == game.currentPlayerIdx) {
+                template.querySelector('#coplayer').classList.add('background-success');
+            } 
+            game.cards[idx].lastCards.forEach(card => {
+                let newdiv = document.createElement('span');
+                newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
+                let node = document.createTextNode(card);
+                newdiv.appendChild(node);
+                template.querySelector('#coplayercards').appendChild(newdiv);
+            });
+            template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].handCards.length;
+            coplayerssection.appendChild(template);
         }
-        template.querySelector('#coplayername').innerText = player.name;
-        game.cards[idx].lastCards.forEach((card) => {
-            let newdiv = document.createElement('span');
-            newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
-            let node = document.createTextNode(card);
-            newdiv.appendChild(node);
-            template.querySelector('#coplayercards').appendChild(newdiv);
-        });
-        template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].handCards.length;
-        coplayerssection.appendChild(template);
     });
 };
 
