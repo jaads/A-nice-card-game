@@ -112,7 +112,7 @@ function hideAmountInput() {
     amountOptions.innerHTML = '';
 };
 
-export function updateView(game, index) {
+export function updateView(game) {
     if (!game.isOver) {
         renderCurrentCard(game);
         renderCards();

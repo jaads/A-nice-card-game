@@ -51,6 +51,8 @@ class Game {
             this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
         }
 
+        this.sortHandCards(this.currentPlayerIdx);
+
         if (playersCardsOnFirstStage.length == 0
             && playersCardsOnSecondStage.length == 0
             && playersCardsOnThirdStage.length == 0) {
@@ -63,11 +65,26 @@ class Game {
         }
     };
 
+    sortHandCards(index) {
+        this.cards[index].handCards.sort(numericSort);
+    };
+
+    sortLastCards(index) {
+        this.cards[index].lastCards.sort(numericSort);
+    };
+
     pickUp() {
         while (this.stack.length > 0) {
             this.cards[this.currentPlayerIdx].handCards.push(this.stack.pop());
         }
         this.setNextPlayer();
+    };
+
+    swapCards(playerIndex, newhand, newlast) {
+        this.cards[playerIndex].handCards = newhand;
+        this.cards[playerIndex].lastCards = newlast;
+        this.sortHandCards(playerIndex);
+        this.sortLastCards(playerIndex);
     };
 
     burnStack() {
@@ -129,6 +146,10 @@ function handOutCards(deck, players) {
         tmp.push(playersCards);
     });
     return tmp;
+};
+
+function numericSort(a,b) {
+    return a-b;
 };
 
 module.exports = Game;

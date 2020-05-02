@@ -60,8 +60,7 @@ io.on('connection', socket => {
     });
 
     socket.on('swap-cards', data => {
-        getGamebyRoom(data.room).cards[data.index].handCards = data.newHandCards;
-        getGamebyRoom(data.room).cards[data.index].lastCards = data.newLastCards;
+        getGamebyRoom(data.room).swapCards(data.index, data.newHandCards, data.newLastCards);
     });
 
     socket.on('i-am-ready', room => {
@@ -98,7 +97,7 @@ io.on('connection', socket => {
 
     socket.on('face-up', data => {
         let g = getGamebyRoom(data.room);
-        g.faceUp(data.flippedCardsIdx);        
+        g.faceUp(data.flippedCardsIdx);
         broadcastUpdatedGame(data.room, g);
     });
 
