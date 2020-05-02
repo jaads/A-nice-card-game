@@ -56,13 +56,10 @@ class Game {
             && playersCardsOnThirdStage.length == 0) {
             this.isOver = true;
             this.winnersIndex = this.currentPlayerIdx;
-        } else if (playedCards[0] != 10) {
-            this.setNextPlayer();
+        } else if (playedCards[0] == 10 || playedCards.length == 4) {
+            this.burnStack();
         } else {
-            // When 10, then burn all cards from stack
-            while (this.stack.length > 0) {
-                this.outOfGameCards.push(this.stack.pop());
-            }
+            this.setNextPlayer();
         }
     };
 
@@ -71,6 +68,12 @@ class Game {
             this.cards[this.currentPlayerIdx].handCards.push(this.stack.pop());
         }
         this.setNextPlayer();
+    };
+
+    burnStack() {
+        while (this.stack.length > 0) {
+            this.outOfGameCards.push(this.stack.pop());
+        }
     };
 
     faceUp(flippedCardIndex) {
