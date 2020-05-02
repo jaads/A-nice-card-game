@@ -19,7 +19,11 @@ socket.on('move-made', updatedGame => {
 document.querySelector('#prevcardbtn').onclick = showPrevCards;
 
 document.querySelector('#pickupbtn').onclick = () => {
-    socket.emit('pick-up', game.room);
+    if (game.currentPlayerIdx == index) {
+        socket.emit('pick-up', game.room);
+    } else {
+        showNotYourTurnAlert();
+    }
 };
 
 export function decideAmount(playedCard) {
