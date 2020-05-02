@@ -1,10 +1,10 @@
 import { socket, game, setGame, setIndex, index, room } from './index.js';
+import { showSwapSection } from './section-rendering.js';
 
 let swapbtn = document.querySelector('#swapbtn');
 let readybtn = document.querySelector('#readybtn');
 let swapcardsfirststage = document.querySelector('#swapcardsfirststage');
 let swapcardssecondstage = document.querySelector('#swapcardssecondstage');
-
 
 socket.on('room-closed', (data) => {
     console.log('Room closed');
@@ -13,11 +13,6 @@ socket.on('room-closed', (data) => {
     showSwapSection();
     renderCardsForSwapping();
 });
-
-function showSwapSection() {
-    document.querySelector('#joinsection').innerHTML = '';
-    document.querySelector('#swapsection').style.visibility = 'visible';
-};
 
 function renderCardsForSwapping() {
     swapcardsfirststage.innerHTML = '';
