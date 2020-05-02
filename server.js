@@ -94,6 +94,30 @@ io.on('connection', socket => {
             }
         });
     });
+
+    socket.on('face-up', data => {
+        let g = getGamebyRoom(data.room);
+        g.faceUp(data.flippedCardsIdx);        
+        io.to(data.room).emit('move-made', g);
+    });
+
+    socket.on('test-game-req', () => {
+
+        let testgame = new Game('testroom', [{
+            id: '28378929812',
+            name: 'John',
+            room: 'testroom'
+        }]);
+
+        testgame.deck.length = 0;
+        testgame.stack = [2];
+        testgame.cards[0].handCards = [];
+        testgame.cards[0].lastCards = [11];
+
+        allgames.push(testgame);
+        socket.join('testroom');
+        io.to(socket.id).emit('test-game', testgame);
+    });
 });
 
 setInterval(() => {

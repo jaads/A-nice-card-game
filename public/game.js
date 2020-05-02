@@ -53,4 +53,8 @@ export function tryMakeAMove(playedCardArr) {
     }
 };
 
+export function faceUpCard(idxparam) {
+    socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
+};
+
 prevcarbtn.onclick = renderPrevCard;

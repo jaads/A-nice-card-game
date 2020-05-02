@@ -73,6 +73,11 @@ class Game {
         this.setNextPlayer();
     };
 
+    faceUp(flippedCardIndex) {
+        let flippedCard = this.cards[this.currentPlayerIdx].flippedCards.splice(flippedCardIndex, 1)[0];
+        this.cards[this.currentPlayerIdx].handCards.push(flippedCard);
+    };
+
     setNextPlayer() {
         if (this.stack[this.stack.length - 1] != 8) {
             this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;

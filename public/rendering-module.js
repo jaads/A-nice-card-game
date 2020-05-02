@@ -13,10 +13,10 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { decideAmount, tryMakeAMove } from './game.js';
+import { decideAmount, tryMakeAMove, faceUpCard } from './game.js';
 import { index, game } from './index.js';
 
-export function renderCards(game, index) {
+export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
     game.cards[index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
@@ -46,30 +46,27 @@ export function renderCards(game, index) {
     });
 
     laststagecardsdiv.innerHTML = '';
-    game.cards[index].flippedCards.forEach(card => {
+    game.cards[index].flippedCards.forEach((card, idx) => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode('?');
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[index].lastCards.length > 0 || game.cards[index].lastCards.length > 0) {
+            if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
                 showNotYetAlert();
             } else {
-
-                // Check if another cards has already been turned
+                // Check if another card has already been turned
                 let anotherCardIsAlreadyturned = false;
                 document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
                     if (elem.innerText != '?') {
                         anotherCardIsAlreadyturned = true;
                     }
                 });
-
                 if (anotherCardIsAlreadyturned) {
                     showNotYetAlert();
                 } else {
-                    node.textContent = card;
-                    newdiv.onclick = decideAmount(Number(newdiv.textContent));
+                    faceUpCard(idx);
                 }
             }
         };
@@ -118,7 +115,7 @@ function hideAmountInput() {
 export function updateView(game, index) {
     if (!game.isOver) {
         renderCurrentCard(game);
-        renderCards(game, index);
+        renderCards();
         rendercoplayers(game);
         updateNumberOfCardsOnStack(game);
         updateBackground(game);
