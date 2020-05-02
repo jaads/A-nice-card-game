@@ -133,7 +133,7 @@ export function rendercoplayers(game) {
             template.querySelector('#coplayername').innerText = player.name;
             if (idx == game.currentPlayerIdx) {
                 template.querySelector('#coplayer').classList.add('background-success');
-            } 
+            }
             game.cards[idx].lastCards.forEach(card => {
                 let newdiv = document.createElement('span');
                 newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
@@ -170,9 +170,14 @@ function updateBackground(game) {
     }
 };
 
-export function renderPrevCard() {
+export function showPrevCards() {
     if (game.stack.length >= 2) {
-        prevcard.innerText = game.stack[game.stack.length - 2];
+        for (let i = 5; i > 0; i--) {
+            let aprevCard = game.stack[game.stack.length - i];
+            if (aprevCard != undefined) {
+                prevcard.innerText += ' ' + aprevCard + ',';
+            }
+        }
     } else {
         prevcard.innerHTML = "&empty;";
     }

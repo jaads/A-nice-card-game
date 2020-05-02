@@ -1,4 +1,4 @@
-import { showAmountInput, updateView, renderPrevCard } from './rendering-module.js';
+import { updateView } from './rendering-module.js';
 import { socket, setGame, index, game, setIndex } from './index.js';
 
 

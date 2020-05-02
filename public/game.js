@@ -1,6 +1,6 @@
 import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateView, renderPrevCard } from './rendering-module.js';
+import { showAmountInput, updateView, showPrevCards } from './rendering-module.js';
 
 let pickupbtn = document.querySelector('#pickupbtn');
 let notvalidalertdiv = document.querySelector('#notvalidalert');
@@ -57,4 +57,4 @@ export function faceUpCard(idxparam) {
     socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
 };
 
-prevcarbtn.onclick = renderPrevCard;
+prevcarbtn.onclick = showPrevCards;
