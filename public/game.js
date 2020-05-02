@@ -2,11 +2,8 @@ import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
 import { showAmountInput, updateView, showPrevCards } from './rendering-module.js';
 import { showGameSection } from './section-rendering.js';
+import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
 
-let pickupbtn = document.querySelector('#pickupbtn');
-let notvalidalertdiv = document.querySelector('#notvalidalert');
-let notyourturnalertdiv = document.querySelector('#notyourturnalert');
-let prevcarbtn = document.querySelector('#prevcardbtn');
 
 socket.on('all-ready', updatedgame => {
     setGame(updatedgame);
@@ -19,7 +16,9 @@ socket.on('move-made', updatedGame => {
     updateView();
 });
 
-pickupbtn.onclick = () => {
+document.querySelector('#prevcardbtn').onclick = showPrevCards;
+
+document.querySelector('#pickupbtn').onclick = () => {
     socket.emit('pick-up', game.room);
 };
 
@@ -38,12 +37,10 @@ export function tryMakeAMove(playedCardArr) {
         if (isValidMove(game.stack, cardNumber)) {
             socket.emit("move", { room: game.room, cards: playedCardArr });
         } else {
-            notvalidalertdiv.style.display = "inline";
-            setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
+            showNotValidAlert();
         }
     } else {
-        notyourturnalertdiv.style.display = "block";
-        setTimeout(() => notyourturnalertdiv.style.display = "none", 3000);
+        showNotYourTurnAlert();
     }
 };
 
@@ -51,9 +48,6 @@ export function faceUpCard(idxparam) {
     if (game.currentPlayerIdx == index) {
         socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
     } else {
-        notyourturnalertdiv.style.display = "block";
-        setTimeout(() => notyourturnalertdiv.style.display = "none", 3000);
+        showNotYourTurnAlert();
     }
 };
-
-prevcarbtn.onclick = showPrevCards;
