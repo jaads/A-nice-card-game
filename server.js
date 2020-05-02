@@ -78,12 +78,13 @@ io.on('connection', socket => {
         let targetedGame = getGamebyRoom(data.room);
         targetedGame.makemove(data.cards);
         io.to(data.room).emit('move-made', targetedGame);
+        broadcastUpdatedGame(data.room, targetedGame);
     });
 
     socket.on('pick-up', room => {
         let targetedGame = getGamebyRoom(room);
         targetedGame.pickUp();
-        io.to(room).emit('move-made', targetedGame);
+        broadcastUpdatedGame(room, targetedGame);
     });
 
     socket.on('disconnect', () => {
@@ -98,8 +99,12 @@ io.on('connection', socket => {
     socket.on('face-up', data => {
         let g = getGamebyRoom(data.room);
         g.faceUp(data.flippedCardsIdx);        
-        io.to(data.room).emit('move-made', g);
+        broadcastUpdatedGame(data.room, g);
     });
+
+    function broadcastUpdatedGame(room, updatedGame) {
+        io.to(room).emit('move-made', updatedGame);
+    };
 
     socket.on('test-game-req', () => {
 
