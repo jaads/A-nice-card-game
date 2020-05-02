@@ -1,5 +1,5 @@
 import { updateView } from './rendering-module.js';
-import { socket, setGame, index, game, setIndex } from './index.js';
+import { socket, setGame, setIndex } from './index.js';
 
 
 document.querySelector('#gettestgame').onclick = function () {
@@ -9,7 +9,7 @@ document.querySelector('#gettestgame').onclick = function () {
 socket.on('test-game', testgame => {
     setGame(testgame);
     setIndex(0);
-    updateView(game, index);
+    updateView();
 
     document.querySelector('#joinsection').innerHTML = '';
     document.querySelector('#swapsection').innerHTML = '';

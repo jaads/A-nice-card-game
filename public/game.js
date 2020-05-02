@@ -8,9 +8,8 @@ let notyourturnalertdiv = document.querySelector('#notyourturnalert');
 let prevcarbtn = document.querySelector('#prevcardbtn');
 
 socket.on('all-ready', updatedgame => {
-    console.log("Let's go!");
     setGame(updatedgame);
-    updateView(game, index);
+    updateView();
     showGameSection();
 });
 
@@ -22,7 +21,7 @@ function showGameSection() {
 
 socket.on('move-made', updatedGame => {
     setGame(updatedGame);
-    updateView(game, index);
+    updateView();
 });
 
 pickupbtn.onclick = () => {

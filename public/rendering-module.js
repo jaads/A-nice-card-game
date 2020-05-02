@@ -112,20 +112,20 @@ function hideAmountInput() {
     amountOptions.innerHTML = '';
 };
 
-export function updateView(game) {
+export function updateView() {
     if (!game.isOver) {
-        renderCurrentCard(game);
+        renderCurrentCard();
         renderCards();
-        rendercoplayers(game);
-        updateNumberOfCardsOnStack(game);
-        updateBackground(game);
+        rendercoplayers();
+        updateNumberOfCardsOnStack();
+        updateBackground();
         prevcard.innerText = '';
     } else {
         showWinner();
     }
 };
 
-export function rendercoplayers(game) {
+export function rendercoplayers() {
     coplayerssection.innerHTML = '';
     game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
@@ -147,14 +147,14 @@ export function rendercoplayers(game) {
     });
 };
 
-function updateNumberOfCardsOnStack(game) {
+function updateNumberOfCardsOnStack() {
     NrOfCardsOnStack.innerText = game.stack.length;
     decksize.innerText = game.deck.length;
     amountburnedcardsspan.innerText = game.outOfGameCards.length;
 };
 
 
-function renderCurrentCard(game) {
+function renderCurrentCard() {
     if (game.stack.length > 0) {
         currentCard.innerText = game.stack[game.stack.length - 1];
     } else {
@@ -162,7 +162,7 @@ function renderCurrentCard(game) {
     }
 };
 
-function updateBackground(game) {
+function updateBackground() {
     if (game.currentPlayerIdx == index) {
         document.querySelector('body').classList.add('background-success');
     } else {
