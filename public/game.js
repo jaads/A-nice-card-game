@@ -48,7 +48,12 @@ export function tryMakeAMove(playedCardArr) {
 };
 
 export function faceUpCard(idxparam) {
-    socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
+    if (game.currentPlayerIdx == index) {
+        socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
+    } else {
+        notyourturnalertdiv.style.display = "block";
+        setTimeout(() => notyourturnalertdiv.style.display = "none", 3000);
+    }
 };
 
 prevcarbtn.onclick = showPrevCards;
