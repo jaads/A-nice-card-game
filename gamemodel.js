@@ -99,11 +99,38 @@ class Game {
     };
 
     setNextPlayer() {
-        if (this.stack[this.stack.length - 1] != 8) {
-            this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
-        } else {
-            this.currentPlayerIdx = (this.currentPlayerIdx + 2) % this.players.length;
+        // Not an elegant way: TODO: use recursion
+        if (this.stack[this.stack.length - 1] == 8) {
+            this.skip();
+            return;
         }
+        if (this.stack[this.stack.length - 1] == 3) {
+            if (this.stack[this.stack.length - 2] == 8) {
+                this.skip();
+                return;
+            }
+            if (this.stack[this.stack.length - 2] == 3) {
+                if (this.stack[this.stack.length - 3] == 8) {
+                    this.skip();
+                    return;
+                }
+                if (this.stack[this.stack.length - 3] == 3) {
+                    if (this.stack[this.stack.length - 4] == 8) {
+                        this.skip();
+                        return;
+                    }
+                }
+            }
+        }
+        this.noSkip();
+    };
+
+    noSkip() {
+        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+    };
+
+    skip() {
+        this.currentPlayerIdx = (this.currentPlayerIdx + 2) % this.players.length;
     };
 
 };
@@ -148,8 +175,8 @@ function handOutCards(deck, players) {
     return tmp;
 };
 
-function numericSort(a,b) {
-    return a-b;
+function numericSort(a, b) {
+    return a - b;
 };
 
 module.exports = Game;
