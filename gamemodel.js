@@ -20,8 +20,8 @@ class Game {
     initstack() {
         let firstCard = this.getCardFromDeck();
         while (firstCard == 10) {
-            this.outOfGameCards.push(firstCard);
             console.log("First card was a 10.");
+            this.burnStack();
             firstCard = this.getCardFromDeck();
         }
         return [firstCard];
@@ -32,6 +32,23 @@ class Game {
         let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].lastCards;
         let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].flippedCards;
 
+        this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
+        this.getNewCards();
+        this.sortHandCards(this.currentPlayerIdx);
+
+        if (playersCardsOnFirstStage.length == 0
+            && playersCardsOnSecondStage.length == 0
+            && playersCardsOnThirdStage.length == 0) {
+            this.isOver = true;
+            this.winnersIndex = this.currentPlayerIdx;
+        } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
+            this.burnStack();
+        } else {
+            this.setNextPlayer();
+        }
+    };
+
+    transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage) {
         // Remove card from hand
         playedCards.forEach(card => {
             if (playersCardsOnFirstStage.indexOf(card) != -1) {
@@ -41,28 +58,27 @@ class Game {
             } else if (playersCardsOnThirdStage.indexOf(card) != -1) {
                 playersCardsOnThirdStage.splice(playersCardsOnThirdStage.indexOf(card), 1);
             }
-
-            // Put on stack
             this.stack.push(card);
         });
+    };
 
-        // Get new card from deck if needed
-        while (this.deck.length > 0 && playersCardsOnFirstStage.length < 3) {
+    getNewCards() {
+        while (this.deck.length > 0 && this.cards[this.currentPlayerIdx].handCards.length < 3) {
             this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
         }
+    };
 
-        this.sortHandCards(this.currentPlayerIdx);
-
-        if (playersCardsOnFirstStage.length == 0
-            && playersCardsOnSecondStage.length == 0
-            && playersCardsOnThirdStage.length == 0) {
-            this.isOver = true;
-            this.winnersIndex = this.currentPlayerIdx;
-        } else if (playedCards[0] == 10 || playedCards.length == 4) {
-            this.burnStack();
-        } else {
-            this.setNextPlayer();
+    fourInARow(playedCards) {
+        let alltogether = playedCards.length == 4;
+        let successively = false;
+        let end = this.stack.length;
+        if (playedCards[0] == this.stack[end - 1] &&
+            playedCards[0] == this.stack[end - 2] &&
+            playedCards[0] == this.stack[end - 3] &&
+            playedCards[0] == this.stack[end - 4]) {
+            successively = true;
         }
+        return (alltogether || successively) ? true : false;
     };
 
     sortHandCards(index) {
