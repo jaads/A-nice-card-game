@@ -39,8 +39,7 @@ class Game {
         if (playersCardsOnFirstStage.length == 0
             && playersCardsOnSecondStage.length == 0
             && playersCardsOnThirdStage.length == 0) {
-            this.isOver = true;
-            this.winnersIndex = this.currentPlayerIdx;
+            this.finish();
         } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
             this.burnStack();
         } else {
@@ -81,6 +80,11 @@ class Game {
         return (alltogether || successively) ? true : false;
     };
 
+    finish() {
+        this.isOver = true;
+        this.winnersIndex = this.currentPlayerIdx;
+    };
+
     sortHandCards(index) {
         this.cards[index].handCards.sort(numericSort);
     };
@@ -93,6 +97,8 @@ class Game {
         while (this.stack.length > 0) {
             this.cards[this.currentPlayerIdx].handCards.push(this.stack.pop());
         }
+        this.sortHandCards(this.currentPlayerIdx);
+        this.sortLastCards(this.currentPlayerIdx);
         this.setNextPlayer();
     };
 

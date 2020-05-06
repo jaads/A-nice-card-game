@@ -20,19 +20,29 @@ document.querySelector('#prevcardbtn').onclick = showPrevCards;
 
 document.querySelector('#pickupbtn').onclick = () => {
     if (game.currentPlayerIdx == index) {
-        socket.emit('pick-up', game.room);
+        if (game.stack.length > 0) {
+            socket.emit('pick-up', game.room);
+        } else {
+            showNotValidAlert();
+        }
     } else {
         showNotYourTurnAlert();
     }
 };
 
 export function decideAmount(playedCard) {
-    let tmp = game.cards[game.currentPlayerIdx].handCards.filter((card) => card == playedCard);
-    if (tmp.length > 1) {
-        showAmountInput(tmp);
-    } else {
-        tryMakeAMove([playedCard]);
+    let hand = game.cards[game.currentPlayerIdx].handCards.filter((card) => card == playedCard);
+    if (hand.length > 1) {
+        showAmountInput(hand);
+        return;
+    } 
+
+    let last = game.cards[game.currentPlayerIdx].lastCards.filter((card) => card == playedCard);
+    if (last.length > 1) {
+        showAmountInput(last);
+        return;
     }
+    tryMakeAMove([playedCard]);
 };
 
 export function tryMakeAMove(playedCardArr) {

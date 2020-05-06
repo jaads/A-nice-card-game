@@ -7,14 +7,13 @@ let NrOfCardsOnStack = document.querySelector('#NrOfCardsOnStack');
 let amountOptions = document.querySelector('#amountOptions');
 let decksize = document.querySelector('#decksize');
 let howmanycardstextpara = document.querySelector('#howmanycardstext');
-let notyetalertdiv = document.querySelector('#notyetalert');
-let notvalidalertdiv = document.querySelector('#notvalidalert');
 let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
 import { decideAmount, tryMakeAMove, faceUpCard } from './game.js';
 import { index, game } from './index.js';
+import { showNotYourTurnAlert, showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
 export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
@@ -25,7 +24,11 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            decideAmount(Number(newdiv.textContent));
+            if (game.currentPlayerIdx == index) {
+                decideAmount(Number(newdiv.textContent));
+            } else {
+                showNotYourTurnAlert();
+            }
         };
     });
 
@@ -37,10 +40,14 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[index].handCards.length > 0) {
-                showNotValidAlert();
+            if (game.currentPlayerIdx == index) {
+                if (game.cards[index].handCards.length > 0) {
+                    showNotValidAlert();
+                } else {
+                    decideAmount(Number(newdiv.textContent));
+                }
             } else {
-                decideAmount(Number(newdiv.textContent));
+                showNotYourTurnAlert();
             }
         };
     });
@@ -53,34 +60,31 @@ export function renderCards() {
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
-                showNotYetAlert();
-            } else {
-                // Check if another card has already been turned
-                let anotherCardIsAlreadyturned = false;
-                document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
-                    if (elem.innerText != '?') {
-                        anotherCardIsAlreadyturned = true;
-                    }
-                });
-                if (anotherCardIsAlreadyturned) {
-                    showNotYetAlert();
+            if (game.currentPlayerIdx == index) {
+                if (game.cards[index].handCards.length > 0) {
+                    showNotValidAlert();
                 } else {
-                    faceUpCard(idx);
+                    if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
+                        showNotYetAlert();
+                    } else {
+                        let anotherCardIsAlreadyturned = false;
+                        document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
+                            if (elem.innerText != '?') {
+                                anotherCardIsAlreadyturned = true;
+                            }
+                        });
+                        if (anotherCardIsAlreadyturned) {
+                            showNotYetAlert();
+                        } else {
+                            faceUpCard(idx);
+                        }
+                    }
                 }
+            } else {
+                showNotYourTurnAlert();
             }
         };
     });
-};
-
-function showNotValidAlert() {
-    notvalidalertdiv.style.display = "block";
-    setTimeout(() => notvalidalertdiv.style.display = "none", 3000);
-};
-
-function showNotYetAlert() {
-    notyetalertdiv.style.display = "block";
-    setTimeout(() => notyetalertdiv.style.display = "none", 3000);
 };
 
 export function showAmountInput(list) {
@@ -172,7 +176,7 @@ function updateBackground() {
 
 export function showPrevCards() {
     if (game.stack.length >= 2) {
-        for (let i = 5; i > 0; i--) {
+        for (let i = 5; i > 1; i--) {
             let aprevCard = game.stack[game.stack.length - i];
             if (aprevCard != undefined) {
                 prevcard.innerText += ' ' + aprevCard + ',';
@@ -186,8 +190,7 @@ export function showPrevCards() {
 export function showWinner() {
     document.querySelector('body header').innerHTML = '';
     document.querySelector('body main').innerHTML = '';
-    let body = document.querySelector('body');
-
+    let body = document.querySelector('body');    
     let d = document.createElement('div');
     d.setAttribute('id', 'winnertext');
     d.classList.add('row', 'flex-center');
