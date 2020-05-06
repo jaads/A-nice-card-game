@@ -24,9 +24,9 @@ function getGamebyRoom(room) {
 function removeGame(g) {
     let res = allgames.splice(allgames.indexOf(g), 1);
     if (res != []) {
-        console.log('Game' + g.room);
+        console.log('Removed game :' + g.room);
     } else {
-        console.log('Cound not find for removal: ' + g.room)
+        console.log('Cound not find for removal: ' + g.room);
     }
 };
 
@@ -97,27 +97,39 @@ io.on('connection', socket => {
         broadcastUpdatedGame(room, targetedGame);
     });
 
-    socket.on('disconnect', () => {
-        // Remove user from list of current players
-        allusers.forEach((user, idx) => {
-            if (user.id == socket.id) {
-                allusers.splice(idx, 1);
-            }
-        });
-    });
-
     socket.on('face-up', data => {
         let g = getGamebyRoom(data.room);
         g.faceUp(data.flippedCardsIdx);
         broadcastUpdatedGame(data.room, g);
     });
 
+    socket.on('disconnect', () => {
+        cleanUpGameFromLeftUser();
+        cleanUpUser();
+    });
+
+    function cleanUpGameFromLeftUser() {
+        allusers.forEach(user => {
+            if (user.id == socket.id) {
+                let notNeededGame = getGamebyRoom(user.room);
+                removeGame(notNeededGame);
+            }
+        });
+    };
+
+    function cleanUpUser() {
+        allusers.forEach((user, idx) => {
+            if (user.id == socket.id) {
+                allusers.splice(idx, 1);
+            }
+        });
+    };
+
     function broadcastUpdatedGame(room, updatedGame) {
         io.to(room).emit('move-made', updatedGame);
     };
 
     socket.on('test-game-req', () => {
-
         let testgame = new Game('testroom', [{
             id: '28378929812',
             name: 'John',
@@ -127,7 +139,7 @@ io.on('connection', socket => {
         testgame.deck.length = 0;
         testgame.stack = [2];
         testgame.cards[0].handCards = [];
-        testgame.cards[0].lastCards = [11,11];
+        testgame.cards[0].lastCards = [11, 11];
 
         allgames.push(testgame);
         socket.join('testroom');
@@ -137,5 +149,6 @@ io.on('connection', socket => {
 
 setInterval(() => {
     console.log("Started games during the last 24 hours: " + dailyGames);
+    console.log("Currently active games: " + allgames.length);
+    console.log("Currently active users: " + allusers.length);
 }, 86400000);
-
