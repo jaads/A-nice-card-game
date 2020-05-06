@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
+
+</html>
 <html>
 
 <head>
@@ -36,15 +38,51 @@
     </nav>
 </header>
 
-<body>
-    <article class="article">
-        <h1 class="article-title">The rules</h1>
-        <p class="article-meta">More infos on: <a href="https://en.wikipedia.org/wiki/Shithead_(card_game)"
-                target_blank>here</a></p>
-        <p>Well the algorithm should be resistent against not allowed moves - so you cannot make anything wrong ;)</p>
-        <p><u>Challange:</u> Try reverse engeneering the game. It's not too hard.</p>
-        <p>Otherwise, here's the actual code:</p>
-    </article>
+<article class="article" id="rulestext">
+    <h1 class="article-title">The rules</h1>
+    <p class="article-meta">Don't worry, the algorithm should be resistent against not allowed moves - so you cannot
+        make anything wrong ;)</p>
+
+    <h2>Basics</h2>
+    <p>A card with a value from 2 to 14 is placed in the middle. Each player needs to play a card which in general needs to have an
+        equivalent or higher value. Meaning that e.g. one can play a 9 on a 9 or anything higher
+        like playing a 11 on a 9. If a player doesn't have such cards the player needs to pick up all cards
+        from the stack and add those to its own cards.</p>
+    <p>Goal of the game is to <u>get rid of all cards</u> a player has. Here the different stages come in which describes
+        the different kinds of cards which leads to the order the cards need to be played.</p>
+
+    <h2>The different stages</h2>
+    <p>At the beginning, each player has nine cards in total divided in three stages.</p>
+    <ol>
+        <li>Three cards on a players "hand": only viewable by the player who owns the cards.</li>
+        <li>Three cards faced-up: viewable by all players.</li>
+        <li>Three cards faced-down: successively viewable only by the player in the very end.</li>
+    </ol>
+
+    <p>A player needs to begin with the cards on the first stage and finishes the game by having played all cards
+        from the third stage. If a player has to pick up the stack, these cards are added to the first stage.</p>
+    <p>When a player plays a card and has less then three cards on the hand, the player gets a new card from
+        the deck until the deck is empty.</p>
+
+    <p>So far, so good, right? Let's introduce some <u>special cards</u> so you don't get bored.</p>
+
+    <h2>Special cards</h2>
+
+    <ul>
+        <li><b>2</b>: Resets the current value of the stack. Meaning if a 12 is the current card and one plays a 2,
+            then the next player could again play e.g. a 4. </li>
+        <li><b>3</b>: Behaves like no cards was played. the current value of the stack is the same as before the 3
+            was played.</li>
+        <li><b>7</b>: Here, instead of playing a greater vaule, a smaller value needs to be played, e.g. a 5. Note:
+            The same card could be played anyways, hence a 7 on a 7 in valid.</li>
+            <li><b>8</b>: The next player needs to take a small break.</li>
+        <li><b>10</b>: The stack gets burned. Meaning the stack is out of the game and noone needs to pick them up.
+        </li>
+    </ul>
+
+    <p class="article-meta">More infos on check wikipedia: <a href="https://en.wikipedia.org/wiki/Shithead_(card_game)"
+            target_blank>here</a></p>
+</article>
 </body>
 
 </html>

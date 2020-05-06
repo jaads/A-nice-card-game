@@ -90,3 +90,8 @@ header {
     max-width: 50rem;
     background-color: whitesmoke;
 }
+
+#rulestext {
+    max-width: 60rem;
+    margin: auto;
+}
