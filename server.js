@@ -21,6 +21,15 @@ function getGamebyRoom(room) {
     return allgames.filter(game => game.room == room)[0];
 };
 
+function removeGame(g) {
+    let res = allgames.splice(allgames.indexOf(g), 1);
+    if (res != []) {
+        console.log('Game' + g.room);
+    } else {
+        console.log('Cound not find for removal: ' + g.room)
+    }
+};
+
 function isGameRunning(room) {
     let tmp = [];
     allgames.forEach(element => {
@@ -76,8 +85,10 @@ io.on('connection', socket => {
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
         targetedGame.makemove(data.cards);
-        io.to(data.room).emit('move-made', targetedGame);
         broadcastUpdatedGame(data.room, targetedGame);
+        if (targetedGame.isOver) {
+            removeGame(targetedGame);
+        };
     });
 
     socket.on('pick-up', room => {
@@ -116,7 +127,7 @@ io.on('connection', socket => {
         testgame.deck.length = 0;
         testgame.stack = [2];
         testgame.cards[0].handCards = [];
-        testgame.cards[0].lastCards = [11];
+        testgame.cards[0].lastCards = [11,11];
 
         allgames.push(testgame);
         socket.join('testroom');
