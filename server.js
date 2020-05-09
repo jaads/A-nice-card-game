@@ -136,10 +136,12 @@ io.on('connection', socket => {
             room: 'testroom'
         }]);
 
+        
         testgame.deck.length = 0;
         testgame.stack = [2];
         testgame.cards[0].handCards = [];
-        testgame.cards[0].lastCards = [11, 11];
+        testgame.cards[0].lastCards = [];
+        testgame.cards[0].flippedCards = [3];
 
         allgames.push(testgame);
         socket.join('testroom');

@@ -190,7 +190,13 @@ export function showPrevCards() {
 export function showWinner() {
     document.querySelector('body header').innerHTML = '';
     document.querySelector('body main').innerHTML = '';
-    let body = document.querySelector('body');    
+    let body = document.querySelector('body');
+
+    let canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'confetti-canvas');
+    canvas.setAttribute('style', 'top: 0');
+    body.appendChild(canvas);
+    
     let d = document.createElement('div');
     d.setAttribute('id', 'winnertext');
     d.classList.add('row', 'flex-center');
@@ -198,6 +204,9 @@ export function showWinner() {
     if (game.winnersIndex == index) {
         winnersname = "You";
         body.classList.add('background-success');
+        var confettiSettings = { "target": "confetti-canvas", "max": "90", "size": "3", "animate": true, "props": ["circle", "square", "triangle", "line"], "colors": [[165, 104, 246], [230, 61, 135], [0, 199, 228], [253, 214, 126]], "clock": "60", "rotate": false, "width": "2560", "height": "1342", "start_from_edge": false, "respawn": true }
+        var confetti = new ConfettiGenerator(confettiSettings);
+        confetti.render();
     } else {
         winnersname = game.players[game.currentPlayerIdx].name;
         body.classList.add('background-warning');
