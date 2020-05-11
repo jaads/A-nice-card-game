@@ -42,7 +42,7 @@
     <main>
         <button id="gettestgame" style="display:none">Load testgame</button>
         <section id="joinsection">
-            <div id="joinarea" class="shadow padding-large">
+            <div id="joinarea" class="shadow">
                 <label for="name">Name:</label>
                 <input id="name" type="text" class="margin">
                 <label for="joinroominput">Room:</label>
@@ -60,8 +60,10 @@
 
         <section id="swapsection">
             <h1 class="row flex-center">Prepare yourself!</h1>
+            <small class="row flex-center"></small>
+            <span class="row flex-center article-meta">Click to select a card and then press swap.</span>
             <div class="row flex-center">
-                <button id="swapbtn" class="margin">Swap</button>
+                <button id="swapbtn">Swap</button>
                 <button id="readybtn">Ready</button>
             </div>
             <h3 class="row flex-center">First Stage:</h3>
@@ -85,40 +87,33 @@
 
             <div id="game">
                 <div class="row flex-center">
-                    <div id="stacketc" class="row flex-center card margin-large">
-                        <div class="card-header">
-                            <div class="row flex-edges">
-                                <div>
-                                    <span>Decksize: </span>
-                                    <span id="decksize"></span>
-                                </div>
-                                <div>
-                                    <span>Burned cards:</span>
-                                    <span id="amountburnedcards">0</span>
-                                </div>
-                            </div>
+                    <div id="stacketc">
+                        <div id="decksizediv">
+                            <span>Decksize: </span>
+                            <span id="decksize"></span>
                         </div>
-                        <div class="card-body">
+                        <div id="burnedcardsdiv">
+                            <span>Burned cards:</span>
+                            <span id="amountburnedcards">0</span>
+                        </div>
+                        <div id="currentstack">
                             <div id="currentcard"></div>
                             <span id="prevcard"></span>
                         </div>
-                        <div class="card-footer">
-                            <div class="row flex-spaces">
-                                <button id="prevcardbtn">Show previous cards</button>
-                                <button id="pickupbtn">Pick up ( <span id="NrOfCardsOnStack"></span> )</button>
-                            </div>
-                        </div>
+                        <button id="prevcardbtn">Show previous cards</button>
+                        <button id="pickupbtn">Pick up ( <span id="NrOfCardsOnStack"></span> )</button>
                     </div>
                 </div>
-                <div>
-                    <p id="howmanycardstext">How many cards you wanna play?</p>
-                    <div id="amountOptions" class="row"></div>
-                </div>
-                <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
-                <hr>
-                <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv"></div>
-                <hr>
-                <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
+            </div>
+            <div>
+                <p id="howmanycardstext">How many cards you wanna play?</p>
+                <div id="amountOptions" class="row"></div>
+            </div>
+            <div class="row flex-center child-borders child-shadows-hover" id="cardsonhanddiv"></div>
+            <hr>
+            <div class="row flex-center child-borders child-shadows-hover" id="cardsontablediv"></div>
+            <hr>
+            <div class="row flex-center child-borders child-shadows-hover" id="laststagecardsdiv"></div>
             </div>
             <div class="row flex-center">
                 <div id="notvalidalert" class="alert alert-warning col-5 col">This is not a valid move</div>
