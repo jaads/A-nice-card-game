@@ -18,6 +18,7 @@ class Game {
     };
 
     initstack() {
+        this.stack = [];
         let firstCard = this.getCardFromDeck();
         while (firstCard == 10) {
             console.log("First card was a 10.");
