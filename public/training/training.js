@@ -40,7 +40,7 @@ refreshbtn.onclick = () => {
 testinput.onkeyup = (e) => {
     testinput.disabled = true;
     let input = isNaN(e.key) ? getNumberMapping(e.key) : e.key;
-    let valid = isValidMove([prev.innerText, current.innerText], input);
+    let valid = isValidMove([Number(prev.innerText), Number(current.innerText)], input);
     next.innerText = input;
     if (valid) {
         next.classList.add("success");
