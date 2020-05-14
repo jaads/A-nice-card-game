@@ -11,7 +11,7 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { decideAmount, tryMakeAMove, faceUpCard } from './game.js';
+import { decideAmount, tryMakeAMove, faceUpCard, makeBelatedMove } from './game.js';
 import { index, game } from './index.js';
 import { showNotYourTurnAlert, showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
@@ -24,8 +24,11 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.currentPlayerIdx == index) {
-                decideAmount(Number(newdiv.textContent));
+            let desiredCard = Number(newdiv.textContent);
+            if (isPlayersTurn()) {
+                decideAmount(desiredCard);
+            } else if (canStill(desiredCard)) {
+                makeBelatedMove(desiredCard);
             } else {
                 showNotYourTurnAlert();
             }
@@ -40,7 +43,7 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.currentPlayerIdx == index) {
+            if (isPlayersTurn()) {
                 if (game.cards[index].handCards.length > 0) {
                     showNotValidAlert();
                 } else {
@@ -60,7 +63,7 @@ export function renderCards() {
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.currentPlayerIdx == index) {
+            if (isPlayersTurn()) {
                 if (game.cards[index].handCards.length > 0) {
                     showNotValidAlert();
                 } else {
@@ -101,6 +104,16 @@ export function showAmountInput(list) {
             handleAmountInput(list, desiredAmount);
         };
     };
+};
+
+function isPlayersTurn() {
+    return game.currentPlayerIdx == index;
+};
+
+function canStill(card) {
+    let wasOneBefore = game.currentPlayerIdx - index == 1 ? true : false;
+    let isTheSame = card == game.stack[game.stack.length - 1];
+    return wasOneBefore && isTheSame;
 };
 
 function handleAmountInput(possibleCards, desiredAmount) {
@@ -196,7 +209,7 @@ export function showWinner() {
     canvas.setAttribute('id', 'confetti-canvas');
     canvas.setAttribute('style', 'top: 0');
     body.appendChild(canvas);
-    
+
     let d = document.createElement('div');
     d.setAttribute('id', 'winnertext');
     d.classList.add('row', 'flex-center');

@@ -28,10 +28,20 @@ class Game {
         return [firstCard];
     };
 
-    makemove(playedCards) {
+    getIndexOfPrevPlayer () {
+        return (this.currentPlayerIdx - 1) % this.players.length;
+    };
+    
+    makemove(playedCards, belated) {
         let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
         let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].lastCards;
         let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].flippedCards;
+
+        if (belated) {
+            playersCardsOnFirstStage = this.cards[this.getIndexOfPrevPlayer()].handCards;
+            playersCardsOnSecondStage = this.cards[this.getIndexOfPrevPlayer()].lastCards;
+            playersCardsOnThirdStage = this.cards[this.getIndexOfPrevPlayer()].flippedCards;
+        }
 
         this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
         this.getNewCards();
@@ -44,7 +54,9 @@ class Game {
         } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
             this.burnStack();
         } else {
-            this.setNextPlayer();
+            if (!belated) {
+                this.setNextPlayer();
+            }
         }
     };
 

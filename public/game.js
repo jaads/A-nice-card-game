@@ -43,16 +43,16 @@ export function decideAmount(playedCard) {
 };
 
 export function tryMakeAMove(playedCardArr) {
-    if (game.currentPlayerIdx == index) {
-        let cardNumber = playedCardArr[0];
-        if (isValidMove(game.stack, cardNumber)) {
-            socket.emit("move", { room: game.room, cards: playedCardArr });
-        } else {
-            showNotValidAlert();
-        }
+    let cardNumber = playedCardArr[0];
+    if (isValidMove(game.stack, cardNumber)) {
+        socket.emit("move", { room: game.room, cards: playedCardArr, belated: false });
     } else {
-        showNotYourTurnAlert();
+        showNotValidAlert();
     }
+};
+
+export function makeBelatedMove(playedCard) {
+    socket.emit("move", { room: game.room, cards: [playedCard], belated: true });  
 };
 
 export function faceUpCard(idxparam) {

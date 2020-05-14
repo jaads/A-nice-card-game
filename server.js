@@ -84,7 +84,7 @@ io.on('connection', socket => {
 
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
-        targetedGame.makemove(data.cards);
+        targetedGame.makemove(data.cards, data.belated);
         broadcastUpdatedGame(data.room, targetedGame);
         if (targetedGame.isOver) {
             removeGame(targetedGame);
@@ -134,14 +134,25 @@ io.on('connection', socket => {
             id: '28378929812',
             name: 'John',
             room: 'testroom'
+        },
+        {
+            id: '37846538745',
+            name: 'asjd',
+            room: 'testroom'
         }]);
 
         
-        testgame.deck.length = 0;
+        testgame.deck = [5];
         testgame.stack = [2];
-        testgame.cards[0].handCards = [];
-        testgame.cards[0].lastCards = [];
-        testgame.cards[0].flippedCards = [3];
+
+
+        testgame.cards[0].handCards = [9,4,8];
+        testgame.cards[0].lastCards = [13,2,6];
+        testgame.cards[0].flippedCards = [9,2,12];
+
+        testgame.cards[0].handCards = [4,4,5];
+        testgame.cards[0].lastCards = [5,6,7];
+        testgame.cards[0].flippedCards = [3,3,3];
 
         allgames.push(testgame);
         socket.join('testroom');
