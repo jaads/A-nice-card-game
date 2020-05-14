@@ -32,17 +32,14 @@ document.querySelector('#pickupbtn').onclick = () => {
 
 export function decideAmount(playedCard) {
     let hand = game.cards[game.currentPlayerIdx].handCards.filter((card) => card == playedCard);
+    let last = game.cards[game.currentPlayerIdx].lastCards.filter((card) => card == playedCard);
     if (hand.length > 1) {
         showAmountInput(hand);
-        return;
-    } 
-
-    let last = game.cards[game.currentPlayerIdx].lastCards.filter((card) => card == playedCard);
-    if (last.length > 1) {
+    } else if (game.cards[index].handCards == 0 && last.length > 1) {
         showAmountInput(last);
-        return;
+    } else {
+        tryMakeAMove([playedCard]);
     }
-    tryMakeAMove([playedCard]);
 };
 
 export function tryMakeAMove(playedCardArr) {
