@@ -28,23 +28,17 @@ class Game {
         return [firstCard];
     };
 
-    getIndexOfPrevPlayer () {
+    getIndexOfPrevPlayer() {
         return (this.currentPlayerIdx - 1) % this.players.length;
     };
-    
-    makemove(playedCards, belated) {
+
+    makemove(playedCards) {
         let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
         let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].lastCards;
         let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].flippedCards;
 
-        if (belated) {
-            playersCardsOnFirstStage = this.cards[this.getIndexOfPrevPlayer()].handCards;
-            playersCardsOnSecondStage = this.cards[this.getIndexOfPrevPlayer()].lastCards;
-            playersCardsOnThirdStage = this.cards[this.getIndexOfPrevPlayer()].flippedCards;
-        }
-
         this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
-        this.getNewCards();
+        this.getNewCards(this.currentPlayerIdx);
         this.sortHandCards(this.currentPlayerIdx);
 
         if (playersCardsOnFirstStage.length == 0
@@ -54,10 +48,19 @@ class Game {
         } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
             this.burnStack();
         } else {
-            if (!belated) {
-                this.setNextPlayer();
-            }
+            this.setNextPlayer();
         }
+    };
+
+    makeBelatedMove(playedCards) {
+        let prevIndex = this.getIndexOfPrevPlayer();
+        let playersCardsOnFirstStage = this.cards[prevIndex].handCards;
+        let playersCardsOnSecondStage = this.cards[prevIndex].lastCards;
+        let playersCardsOnThirdStage = this.cards[prevIndex].flippedCards;
+
+        this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
+        this.getNewCards(prevIndex);
+        this.sortHandCards(prevIndex);
     };
 
     transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage) {
@@ -74,9 +77,9 @@ class Game {
         });
     };
 
-    getNewCards() {
-        while (this.deck.length > 0 && this.cards[this.currentPlayerIdx].handCards.length < 3) {
-            this.cards[this.currentPlayerIdx].handCards.push(this.getCardFromDeck());
+    getNewCards(desiredIndex) {
+        while (this.deck.length > 0 && this.cards[desiredIndex].handCards.length < 3) {
+            this.cards[desiredIndex].handCards.push(this.getCardFromDeck());
         }
     };
 
