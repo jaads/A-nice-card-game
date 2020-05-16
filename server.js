@@ -85,10 +85,9 @@ io.on('connection', socket => {
     socket.on('move', data => {
         let targetedGame = getGamebyRoom(data.room);
         if (data.belated) {
-            targetedGame.makeBelatedMove(data.cards);
-            
+            targetedGame.makemove(data.cards, targetedGame.getIndexOfPrevPlayer());
         } else {
-            targetedGame.makemove(data.cards);
+            targetedGame.makemove(data.cards, targetedGame.currentPlayerIdx);
         }
         broadcastUpdatedGame(data.room, targetedGame);
         if (targetedGame.isOver) {
@@ -104,7 +103,7 @@ io.on('connection', socket => {
 
     socket.on('face-up', data => {
         let g = getGamebyRoom(data.room);
-        g.faceUp(data.flippedCardsIdx);
+        g.faceUp(data.player, data.flippedCardsIdx);
         broadcastUpdatedGame(data.room, g);
     });
 
@@ -147,17 +146,16 @@ io.on('connection', socket => {
         }]);
 
 
-        testgame.deck = [5,9,11];
+        testgame.deck = [];
         testgame.stack = [2];
 
-
-        testgame.cards[0].handCards = [9, 4, 8];
-        testgame.cards[0].lastCards = [13, 2, 6];
-        testgame.cards[0].flippedCards = [9, 2, 12];
-
-        testgame.cards[0].handCards = [4, 4, 5];
+        testgame.cards[0].handCards = [];
         testgame.cards[0].lastCards = [5, 6, 7];
         testgame.cards[0].flippedCards = [3, 3, 3];
+
+        testgame.cards[0].handCards = [];
+        testgame.cards[0].lastCards = [6];
+        testgame.cards[0].flippedCards = [6,6,6];
 
         allgames.push(testgame);
         socket.join('testroom');

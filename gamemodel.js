@@ -32,39 +32,26 @@ class Game {
         return (this.currentPlayerIdx - 1) % this.players.length;
     };
 
-    makemove(playedCards) {
-        let playersCardsOnFirstStage = this.cards[this.currentPlayerIdx].handCards;
-        let playersCardsOnSecondStage = this.cards[this.currentPlayerIdx].lastCards;
-        let playersCardsOnThirdStage = this.cards[this.currentPlayerIdx].flippedCards;
+    makemove(playedCards, i) {
+        this.transferCards(playedCards,
+            this.cards[i].handCards,
+            this.cards[i].lastCards,
+            this.cards[i].flippedCards);
+        this.getNewCards(i);
+        this.sortHandCards(i);
 
-        this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
-        this.getNewCards(this.currentPlayerIdx);
-        this.sortHandCards(this.currentPlayerIdx);
-
-        if (playersCardsOnFirstStage.length == 0
-            && playersCardsOnSecondStage.length == 0
-            && playersCardsOnThirdStage.length == 0) {
-            this.finish();
+        if (this.isFinished(i)) {
+            this.makeAWinner(i);
         } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
             this.burnStack();
         } else {
-            this.setNextPlayer();
+            if (i == this.currentPlayerIdx) {
+                this.setNextPlayer();
+            }
         }
     };
 
-    makeBelatedMove(playedCards) {
-        let prevIndex = this.getIndexOfPrevPlayer();
-        let playersCardsOnFirstStage = this.cards[prevIndex].handCards;
-        let playersCardsOnSecondStage = this.cards[prevIndex].lastCards;
-        let playersCardsOnThirdStage = this.cards[prevIndex].flippedCards;
-
-        this.transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage);
-        this.getNewCards(prevIndex);
-        this.sortHandCards(prevIndex);
-    };
-
     transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage) {
-        // Remove card from hand
         playedCards.forEach(card => {
             if (playersCardsOnFirstStage.indexOf(card) != -1) {
                 playersCardsOnFirstStage.splice(playersCardsOnFirstStage.indexOf(card), 1);
@@ -83,6 +70,12 @@ class Game {
         }
     };
 
+    isFinished(i) {
+        return this.cards[i].handCards.length == 0
+            && this.cards[i].lastCards.length == 0
+            && this.cards[i].flippedCards.length == 0;
+    };
+
     fourInARow(playedCards) {
         let alltogether = playedCards.length == 4;
         let successively = false;
@@ -96,9 +89,9 @@ class Game {
         return (alltogether || successively) ? true : false;
     };
 
-    finish() {
+    makeAWinner(i) {
         this.isOver = true;
-        this.winnersIndex = this.currentPlayerIdx;
+        this.winnersIndex = i;
     };
 
     sortHandCards(index) {
@@ -131,9 +124,9 @@ class Game {
         }
     };
 
-    faceUp(flippedCardIndex) {
-        let flippedCard = this.cards[this.currentPlayerIdx].flippedCards.splice(flippedCardIndex, 1)[0];
-        this.cards[this.currentPlayerIdx].handCards.push(flippedCard);
+    faceUp(playerIndex, flippedCardIndex) {
+        let flippedCard = this.cards[playerIndex].flippedCards.splice(flippedCardIndex, 1)[0];
+        this.cards[playerIndex].handCards.push(flippedCard);
     };
 
     setNextPlayer() {

@@ -43,7 +43,7 @@ export function renderCards() {
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (isPlayersTurn()) {
+            if (isPlayersTurn() || canStill()) {
                 if (game.cards[index].handCards.length > 0) {
                     showNotValidAlert();
                 } else {
@@ -63,28 +63,20 @@ export function renderCards() {
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (isPlayersTurn()) {
-                if (game.cards[index].handCards.length > 0) {
-                    showNotValidAlert();
-                } else {
-                    if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
-                        showNotYetAlert();
-                    } else {
-                        let anotherCardIsAlreadyturned = false;
-                        document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
-                            if (elem.innerText != '?') {
-                                anotherCardIsAlreadyturned = true;
-                            }
-                        });
-                        if (anotherCardIsAlreadyturned) {
-                            showNotYetAlert();
-                        } else {
-                            faceUpCard(idx);
-                        }
-                    }
-                }
+            if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
+                showNotValidAlert();
             } else {
-                showNotYourTurnAlert();
+                let anotherCardIsAlreadyturned = false;
+                document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
+                    if (elem.innerText != '?') {
+                        anotherCardIsAlreadyturned = true;
+                    }
+                });
+                if (anotherCardIsAlreadyturned) {
+                    showNotYetAlert();
+                } else {
+                    faceUpCard(idx);
+                }
             }
         };
     });

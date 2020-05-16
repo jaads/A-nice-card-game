@@ -24,7 +24,7 @@ function testMove(s1Cards, s2Cards, s3Cards, playedCards, expecteds1, expecteds2
     tg.cards[0].handCards = s1Cards;
     tg.cards[0].lastCards = s2Cards;
     tg.cards[0].flippedCards = s3Cards;
-    tg.makemove(playedCards);
+    tg.makemove(playedCards, 0);
 
     if (areEqual(tg.cards[0].handCards, expecteds1) && areEqual(tg.cards[0].lastCards, expecteds2) && areEqual(tg.cards[0].flippedCards, expecteds3)) {
         console.log('\x1b[32m%s\x1b[0m', 'PASSED');

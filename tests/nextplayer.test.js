@@ -35,7 +35,7 @@ function setUp() {
 function testnextplayer(stack, expected) {
     let testgame = setUp();
     stack.forEach(cards => {
-        testgame.makemove(cards, false);
+        testgame.makemove(cards, testgame.currentPlayerIdx);
     });
 
     let actual = testgame.currentPlayerIdx; 

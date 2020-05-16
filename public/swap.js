@@ -7,7 +7,6 @@ let swapcardsfirststage = document.querySelector('#swapcardsfirststage');
 let swapcardssecondstage = document.querySelector('#swapcardssecondstage');
 
 socket.on('room-closed', (data) => {
-    console.log('Room closed');
     setGame(data.game);
     setIndex(data.index);
     showSwapSection();

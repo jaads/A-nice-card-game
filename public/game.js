@@ -52,13 +52,9 @@ export function tryMakeAMove(playedCardArr) {
 };
 
 export function makeBelatedMove(playedCard) {
-    socket.emit("move", { room: game.room, cards: [playedCard], belated: true });  
+    socket.emit("move", { room: game.room, cards: [playedCard], belated: true });
 };
 
 export function faceUpCard(idxparam) {
-    if (game.currentPlayerIdx == index) {
-        socket.emit('face-up', { room: game.room, flippedCardsIdx: idxparam });
-    } else {
-        showNotYourTurnAlert();
-    }
+    socket.emit('face-up', { room: game.room, player: index, flippedCardsIdx: idxparam });
 };
