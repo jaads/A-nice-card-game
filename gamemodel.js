@@ -194,16 +194,16 @@ function getSuffledDeck() {
 };
 
 function handOutCards(deck, players) {
-    let tmp = [];
+    let cardsArr = [];
     players.forEach(() => {
         let playersCards = {
             flippedCards: [deck.pop(), deck.pop(), deck.pop()],
             lastCards: [deck.pop(), deck.pop(), deck.pop()],
             handCards: [deck.pop(), deck.pop(), deck.pop()],
         };
-        tmp.push(playersCards);
+        cardsArr.push(playersCards);
     });
-    return tmp;
+    return cardsArr;
 };
 
 function numericSort(a, b) {

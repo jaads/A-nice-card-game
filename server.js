@@ -18,25 +18,24 @@ function getUsersbyRoom(room) {
 };
 
 function getGamebyRoom(room) {
-    return allgames.filter(game => game.room == room)[0];
+    return allgames.find(game => game.room == room)
 };
 
 function removeGame(g) {
     let res = allgames.splice(allgames.indexOf(g), 1);
     if (res != []) {
-        console.log('Removed game :' + g.room);
+        console.log('Removed game: ' + g.room);
     } else {
         console.log('Cound not find for removal: ' + g.room);
     }
 };
 
+function removePlayer(i) {
+    allusers.splice(i, 1);
+};
+
 function isGameRunning(room) {
-    let tmp = [];
-    allgames.forEach(element => {
-        if (element.room == room) {
-            tmp.push(element)
-        }
-    });
+    let tmp = allgames.filter(game => game.room == room);
     return tmp.length >= 1;
 };
 
@@ -107,24 +106,13 @@ io.on('connection', socket => {
         broadcastUpdatedGame(data.room, g);
     });
 
-    socket.on('disconnect', () => {
-        cleanUpGameFromLeftUser();
-        cleanUpUser();
-    });
+    socket.on('disconnect', cleanUp);
 
-    function cleanUpGameFromLeftUser() {
-        allusers.forEach(user => {
-            if (user.id == socket.id) {
-                let notNeededGame = getGamebyRoom(user.room);
-                removeGame(notNeededGame);
-            }
-        });
-    };
-
-    function cleanUpUser() {
+    function cleanUp() {
         allusers.forEach((user, idx) => {
             if (user.id == socket.id) {
-                allusers.splice(idx, 1);
+                removeGame(getGamebyRoom(user.room));
+                removePlayer(idx);
             }
         });
     };
@@ -155,7 +143,7 @@ io.on('connection', socket => {
 
         testgame.cards[0].handCards = [];
         testgame.cards[0].lastCards = [6];
-        testgame.cards[0].flippedCards = [6,6,6];
+        testgame.cards[0].flippedCards = [6, 6, 6];
 
         allgames.push(testgame);
         socket.join('testroom');
