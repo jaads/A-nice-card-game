@@ -7,7 +7,7 @@ class Game {
         this.currentPlayerIdx = 0;
         this.cards = handOutCards(this.deck, this.players);
         this.outOfGameCards = [];
-        this.stack = this.initstack();
+        this.stack = [];
         this.nrofreadyplayers = 0;
         this.isOver = false;
         this.winnersIndex = null;
@@ -15,17 +15,6 @@ class Game {
 
     getCardFromDeck() {
         return this.deck.pop();
-    };
-
-    initstack() {
-        this.stack = [];
-        let firstCard = this.getCardFromDeck();
-        while (firstCard == 10) {
-            console.log("First card was a 10.");
-            this.burnStack();
-            firstCard = this.getCardFromDeck();
-        }
-        return [firstCard];
     };
 
     getIndexOfPrevPlayer() {
