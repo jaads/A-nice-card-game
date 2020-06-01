@@ -24,9 +24,9 @@ function getGamebyRoom(room) {
 function removeGame(g) {
     let res = allgames.splice(allgames.indexOf(g), 1);
     if (res != []) {
-        console.log('Removed game: ' + g.room);
+        console.log('Removed game.');
     } else {
-        console.log('Cound not find for removal: ' + g.room);
+        console.log('Cound not find for removal.');
     }
 };
 
