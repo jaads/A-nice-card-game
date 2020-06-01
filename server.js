@@ -126,24 +126,25 @@ io.on('connection', socket => {
             id: '28378929812',
             name: 'John',
             room: 'testroom'
-        },
-        {
+        }
+        ,{
             id: '37846538745',
             name: 'asjd',
             room: 'testroom'
-        }]);
+        }
+    ]);
 
 
         testgame.deck = [];
         testgame.stack = [2];
 
-        testgame.cards[0].handCards = [];
+        testgame.cards[0].handCards = [10, 5, 6];
         testgame.cards[0].lastCards = [5, 6, 7];
         testgame.cards[0].flippedCards = [3, 3, 3];
 
-        testgame.cards[0].handCards = [];
-        testgame.cards[0].lastCards = [6];
-        testgame.cards[0].flippedCards = [6, 6, 6];
+        testgame.cards[1].handCards = [];
+        testgame.cards[1].lastCards = [6];
+        testgame.cards[1].flippedCards = [6, 6, 6];
 
         allgames.push(testgame);
         socket.join('testroom');

@@ -1,6 +1,6 @@
 import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateView, showPrevCards } from './rendering-module.js';
+import { showAmountInput, updateView, showPrevCards, indicateCardsGotBurned } from './rendering-module.js';
 import { showGameSection } from './section-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
 
@@ -12,6 +12,9 @@ socket.on('all-ready', updatedgame => {
 });
 
 socket.on('move-made', updatedGame => {
+    if (game.outOfGameCards.length < updatedGame.outOfGameCards.length) {
+        indicateCardsGotBurned();
+    }
     setGame(updatedGame);
     updateView();
 });

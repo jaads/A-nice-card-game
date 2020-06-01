@@ -220,3 +220,10 @@ export function showWinner() {
     d.appendChild(winnertextnode);
     body.appendChild(d);
 };
+
+export function indicateCardsGotBurned() {
+    document.querySelector('body').classList.add('background-warning');
+    setTimeout(() => {
+        document.querySelector('body').classList.remove('background-warning');
+    }, 2000);
+};
