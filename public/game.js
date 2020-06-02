@@ -1,7 +1,7 @@
 import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
 import { showAmountInput, updateView, showPrevCards, indicateCardsGotBurned } from './rendering-module.js';
-import { showGameSection } from './section-rendering.js';
+import { showGameSection, showPlayerLeftSection } from './section-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
 
 
@@ -61,3 +61,5 @@ export function makeBelatedMove(playedCard) {
 export function faceUpCard(idxparam) {
     socket.emit('face-up', { room: game.room, player: index, flippedCardsIdx: idxparam });
 };
+
+socket.on('coplayer-disconnected', () => showPlayerLeftSection());

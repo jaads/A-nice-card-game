@@ -57,7 +57,10 @@ h1 {
     font-size: larger;
 }
 
-#notvalidalert, #notyourturnalert, #notyetalert {
+#notvalidalert, 
+#notyourturnalert, 
+#notyetalert, 
+#playerleftalert {
     position: fixed;
     top: 4rem;
     text-align: center;
@@ -67,6 +70,10 @@ h1 {
 
 #swapsection, #gamesection {
     visibility: hidden;
+}
+
+#playerleftsection {
+    display: none;
 }
 
 #coplayer {

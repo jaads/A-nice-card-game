@@ -4,9 +4,9 @@ const Game = require('./gamemodel.js');
 
 // Setup
 let app = express();
-const port = process.env.port || 4000
-app.use(express.static("./public"))
-let server = app.listen(port, () => console.log('Listening'))
+const port = process.env.port || 4000;
+app.use(express.static("./public"));
+let server = app.listen(port, () => console.log('Listening'));
 let io = socket(server);
 
 let allusers = [];
@@ -31,8 +31,9 @@ function removeGame(g) {
     }
 };
 
-function removePlayer(i) {
-    allusers.splice(i, 1);
+function removeAllPlayers(game) {
+    let newPayersList = [...allusers].filter((user) => user.room != game.room);
+    allusers = newPayersList;
 };
 
 function isGameRunning(room) {
@@ -65,7 +66,7 @@ io.on('connection', socket => {
         newgame.players.forEach((player, idx) => {
             io.to(player.id).emit('room-closed', { game: newgame, index: idx });
         });
-        console.log('Started new game: ' + newgame.room);
+        console.log('Game started: ' + newgame.room);
         dailyGames++;
     });
 
@@ -108,39 +109,39 @@ io.on('connection', socket => {
         broadcastUpdatedGame(data.room, g);
     });
 
-    socket.on('disconnect', cleanUp);
-
-    function cleanUp() {
-        allusers.forEach((user, idx) => {
-            if (user.id == socket.id) {
-                removeGame(getGamebyRoom(user.room));
-                removePlayer(idx);
-            }
-        });
-    };
+    socket.on('disconnect', () => {
+        let player = allusers.find((user) => user.id == socket.id);
+        if (player != undefined) {
+            let canceldGame = getGamebyRoom(player.room);
+            io.to(game.room).emit('coplayer-disconnected');
+            removeAllPlayers(canceldGame);
+            removeGame(canceldGame);
+        }
+    });
 
     function broadcastUpdatedGame(room, updatedGame) {
         io.to(room).emit('move-made', updatedGame);
     };
 
     socket.on('test-game-req', () => {
-        let testgame = new Game('testroom', [{
-            id: '28378929812',
-            name: 'John',
-            room: 'testroom'
-        }
-        ,{
-            id: '37846538745',
-            name: 'asjd',
-            room: 'testroom'
-        }
-    ]);
+        let testgame = new Game('testroom', [
+            {
+                id: '28378929812',
+                name: 'John',
+                room: 'testroom'
+            }
+            , {
+                id: '37846538745',
+                name: 'asjd',
+                room: 'testroom'
+            }
+        ]);
 
 
         testgame.deck = [];
         testgame.stack = [2];
 
-        testgame.cards[0].handCards = [10, 5, 6, 5,6,4,3,4,6,8,2,2,];
+        testgame.cards[0].handCards = [10, 5, 6, 5, 6, 4, 3, 4, 6, 8, 2, 2,];
         testgame.cards[0].lastCards = [5, 6, 7];
         testgame.cards[0].flippedCards = [3, 3, 3];
 

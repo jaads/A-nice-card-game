@@ -1,3 +1,4 @@
+let body = document.querySelector('body');
 let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
 let laststagecardsdiv = document.querySelector('#laststagecardsdiv');
@@ -173,9 +174,9 @@ function renderCurrentCard() {
 
 function updateBackground() {
     if (game.currentPlayerIdx == index) {
-        document.querySelector('body').classList.add('background-success');
+        body.classList.add('background-success');
     } else {
-        document.querySelector('body').classList.remove('background-success');
+        body.classList.remove('background-success');
     }
 };
 
@@ -222,8 +223,8 @@ export function showWinner() {
 };
 
 export function indicateCardsGotBurned() {
-    document.querySelector('body').classList.add('background-warning');
+    body.classList.add('background-warning');
     setTimeout(() => {
-        document.querySelector('body').classList.remove('background-warning');
+        body.classList.remove('background-warning');
     }, 2000);
 };
