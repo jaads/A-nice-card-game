@@ -22,18 +22,28 @@ h1 {
     text-align: center;
 }
 
+#handcardscontainer {
+    display: flex;
+    flex: 1;
+    overflow: auto;
+}
+
 #cardsonhanddiv {
     display: flex;
-    overflow-x: auto;
+    margin: auto;
+    padding-bottom: 1rem;
 }
 
 #prevcard {
     font-size: 3rem;
 }
 
+#prevcardbtn, #pickupbtn {
+    margin: 0 1rem;
+}
+
 .acard {
     font-size: larger;
-    text-align: center;
     padding: 1.5rem;
     width: 3.5rem;
 }
@@ -111,6 +121,7 @@ h1 {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 2fr 2fr;
     width: 100%;
+    margin: 1rem;
     max-width: 50rem;
     background-color: whitesmoke;
 }
@@ -158,12 +169,11 @@ h1 {
     }
 
     #stacketc {
-        margin: 1rem;
         grid-template-rows: 1fr 1fr 1fr;
-
     }
 
     .card-footer {
         padding: 0.5rem 0.2rem;
     }
+
 }

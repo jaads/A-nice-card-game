@@ -141,7 +141,7 @@ io.on('connection', socket => {
         testgame.deck = [];
         testgame.stack = [2];
 
-        testgame.cards[0].handCards = [10, 5, 6, 5, 6, 4, 3, 4, 6, 8, 2, 2,];
+        testgame.cards[0].handCards = [10, 9, 8, 7, 6, 5, 4, 3, 4, 6, 8, 2, 2];
         testgame.cards[0].lastCards = [5, 6, 7];
         testgame.cards[0].flippedCards = [3, 3, 3];
 
