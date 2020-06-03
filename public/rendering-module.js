@@ -12,9 +12,9 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { decideAmount, tryMakeAMove, faceUpCard, makeBelatedMove } from './game.js';
+import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick} from './game.js';
 import { index, game } from './index.js';
-import { showNotYourTurnAlert, showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
+import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
 export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
@@ -24,16 +24,7 @@ export function renderCards() {
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnHandDiv.appendChild(newdiv);
-        newdiv.onclick = () => {
-            let desiredCard = Number(newdiv.textContent);
-            if (isPlayersTurn()) {
-                decideAmount(desiredCard);
-            } else if (canStill(desiredCard)) {
-                makeBelatedMove(desiredCard);
-            } else {
-                showNotYourTurnAlert();
-            }
-        };
+        newdiv.onclick = handleFirstStageClick;
     });
 
     cardsOnTableDiv.innerHTML = '';
@@ -43,17 +34,7 @@ export function renderCards() {
         let node = document.createTextNode(card);
         newdiv.appendChild(node);
         cardsOnTableDiv.appendChild(newdiv);
-        newdiv.onclick = () => {
-            if (isPlayersTurn() || canStill()) {
-                if (game.cards[index].handCards.length > 0) {
-                    showNotValidAlert();
-                } else {
-                    decideAmount(Number(newdiv.textContent));
-                }
-            } else {
-                showNotYourTurnAlert();
-            }
-        };
+        newdiv.onclick = handleSecondStageClick;
     });
 
     laststagecardsdiv.innerHTML = '';
@@ -99,26 +80,16 @@ export function showAmountInput(list) {
     };
 };
 
-function isPlayersTurn() {
-    return game.currentPlayerIdx == index;
-};
-
-function canStill(card) {
-    let wasOneBefore = game.currentPlayerIdx - index == 1 ? true : false;
-    let isTheSame = card == game.stack[game.stack.length - 1];
-    return wasOneBefore && isTheSame;
-};
-
 function handleAmountInput(possibleCards, desiredAmount) {
     let finallist = [];
     while (finallist.length < desiredAmount) {
         finallist.push(possibleCards.pop());
     }
     tryMakeAMove(finallist);
-    hideAmountInput();
+    removeAmountInput();
 };
 
-function hideAmountInput() {
+function removeAmountInput() {
     amountOptions.innerHTML = '';
 };
 

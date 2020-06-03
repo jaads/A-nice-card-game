@@ -33,7 +33,40 @@ document.querySelector('#pickupbtn').onclick = () => {
     }
 };
 
-export function decideAmount(playedCard) {
+export function handleFirstStageClick() {
+    let desiredCard = Number(this.textContent);
+    if (isPlayersTurn()) {
+        decideAmount(desiredCard);
+    } else if (canStill(desiredCard)) {
+        makeBelatedMove(desiredCard);
+    } else {
+        showNotYourTurnAlert();
+    }
+};
+
+export function handleSecondStageClick() {
+    if (isPlayersTurn() || canStill()) {
+        if (game.cards[index].handCards.length > 0) {
+            showNotValidAlert();
+        } else {
+            decideAmount(Number(newdiv.textContent));
+        }
+    } else {
+        showNotYourTurnAlert();
+    }
+};
+
+function isPlayersTurn() {
+    return game.currentPlayerIdx == index;
+};
+
+function canStill(card) {
+    let wasOneBefore = game.currentPlayerIdx - index == 1 ? true : false;
+    let isTheSame = card == game.stack[game.stack.length - 1];
+    return wasOneBefore && isTheSame;
+};
+
+function decideAmount(playedCard) {
     let hand = game.cards[game.currentPlayerIdx].handCards.filter((card) => card == playedCard);
     let last = game.cards[game.currentPlayerIdx].lastCards.filter((card) => card == playedCard);
     if (hand.length > 1) {
