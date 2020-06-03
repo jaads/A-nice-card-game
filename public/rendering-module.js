@@ -12,7 +12,7 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick} from './game.js';
+import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick } from './game.js';
 import { index, game } from './index.js';
 import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
@@ -65,6 +65,7 @@ export function renderCards() {
 };
 
 export function showAmountInput(list) {
+    clearAmountInput();
     howmanycardstextpara.style.display = "block";
     for (let i = 0; i < list.length; i++) {
         let newdiv = document.createElement('div');
@@ -74,7 +75,6 @@ export function showAmountInput(list) {
         amountOptions.appendChild(newdiv);
         newdiv.onclick = () => {
             let desiredAmount = Number(newdiv.textContent);
-            howmanycardstextpara.style.display = "none";
             handleAmountInput(list, desiredAmount);
         };
     };
@@ -86,10 +86,11 @@ function handleAmountInput(possibleCards, desiredAmount) {
         finallist.push(possibleCards.pop());
     }
     tryMakeAMove(finallist);
-    removeAmountInput();
+    clearAmountInput();
 };
 
-function removeAmountInput() {
+export function clearAmountInput() {
+    howmanycardstextpara.style.display = "none";
     amountOptions.innerHTML = '';
 };
 

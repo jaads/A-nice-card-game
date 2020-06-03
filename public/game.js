@@ -1,6 +1,6 @@
 import { socket, setGame, index, game } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateView, showPrevCards, indicateCardsGotBurned } from './rendering-module.js';
+import { showAmountInput, updateView, showPrevCards, indicateCardsGotBurned, clearAmountInput} from './rendering-module.js';
 import { showGameSection, showPlayerLeftSection } from './section-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
 
@@ -85,6 +85,7 @@ export function tryMakeAMove(playedCardArr) {
     } else {
         showNotValidAlert();
     }
+    clearAmountInput();
 };
 
 export function makeBelatedMove(playedCard) {
