@@ -4,6 +4,7 @@
   "description": "A nice card game",
   "main": "server.js",
   "scripts": {
+    "run": "node server.js",
     "dev": "nodemon ./server.js",
     "testValidation": "node tests/validation.test.js",
     "testMoves": "node tests/move.test.js"
