@@ -113,7 +113,7 @@ io.on('connection', socket => {
         let player = allusers.find((user) => user.id == socket.id);
         if (player != undefined) {
             let canceldGame = getGamebyRoom(player.room);
-            io.to(game.room).emit('coplayer-disconnected');
+            io.to(canceldGame.room).emit('coplayer-disconnected');
             removeAllPlayers(canceldGame);
             removeGame(canceldGame);
         }
