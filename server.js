@@ -18,11 +18,15 @@ function getUsersbyRoom(room) {
 };
 
 function getGamebyRoom(room) {
-    return allgames.find(game => game.room == room)
+    let game = allgames.find(game => game.room == room);
+    if (game == undefined) {
+        console.log("Could not find game by room. Tryied to find room " + room + "in " + allgames);
+    }
+    return game;
 };
 
 function removeGame(g) {
-    console.log('Removing game: ' + g.room + ' ...');
+    console.log('Removing game: ' + g.room);
     let res = allgames.splice(allgames.indexOf(g), 1);
     if (res != []) {
         console.log('Removed.');
@@ -71,7 +75,11 @@ io.on('connection', socket => {
     });
 
     socket.on('swap-cards', data => {
-        getGamebyRoom(data.room).swapCards(data.index, data.newHandCards, data.newLastCards);
+        // TypeError: Cannot read property 'swapCards' of undefined
+        let game = getGamebyRoom(data.room)
+        if (game != undefined) {
+            g.swapCards(data.index, data.newHandCards, data.newLastCards);
+        }
     });
 
     socket.on('i-am-ready', room => {
@@ -113,9 +121,13 @@ io.on('connection', socket => {
         let player = allusers.find((user) => user.id == socket.id);
         if (player != undefined) {
             let canceldGame = getGamebyRoom(player.room);
-            io.to(canceldGame.room).emit('coplayer-disconnected');
-            removeAllPlayers(canceldGame);
-            removeGame(canceldGame);
+            // Hotfix for server crahses 'TypeError: Cannot read property 'room' of undefined' 
+            // TODO: why undefiend?
+            if (canceldGame != undefined) {
+                io.to(canceldGame.room).emit('coplayer-disconnected');
+                removeAllPlayers(canceldGame);
+                removeGame(canceldGame);
+            }
         }
     });
 
@@ -141,7 +153,7 @@ io.on('connection', socket => {
         testgame.deck = [5];
         testgame.stack = [4];
 
-        testgame.cards[0].handCards = [5,5,7];
+        testgame.cards[0].handCards = [5, 5, 7];
         testgame.cards[0].lastCards = [5, 6, 7];
         testgame.cards[0].flippedCards = [3, 3, 3];
 

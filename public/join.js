@@ -1,4 +1,4 @@
-import { socket, setRoom} from './index.js';
+import { socket, setRoom } from './index.js';
 
 let nameinput = document.querySelector('#name');
 let roominput = document.querySelector('#joinroominput');
@@ -8,11 +8,20 @@ let playercount = document.querySelector('#playercount');
 let currentroommates = document.querySelector('#currentroommates');
 
 joinroombtn.onclick = () => {
-    setRoom(roominput.value);
-    socket.emit('join-room', {
-        user: nameinput.value,
-        room: roominput.value
-    });
+    console.log(nameinput.value);
+    console.log(roominput.value);
+    if (roominput.value === '' || nameinput.value === '') {
+        roominput.classList.add("border-danger");
+        nameinput.classList.add("border-danger");
+    } else {
+        setRoom(roominput.value);
+        socket.emit('join-room', {
+            user: nameinput.value,
+            room: roominput.value
+        });
+        roominput.classList.remove("border-danger");
+        nameinput.classList.remove("border-danger");
+    }
 };
 
 socket.on('full-room', () => alert("Sorry, you are too late."));
