@@ -12,7 +12,7 @@ let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 
-import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick } from './game.js';
+import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard } from './game.js';
 import { index, game } from './index.js';
 import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
