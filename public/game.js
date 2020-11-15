@@ -45,11 +45,12 @@ export function handleFirstStageClick() {
 };
 
 export function handleSecondStageClick() {
+    let desiredCard = Number(this.textContent);
     if (isPlayersTurn() || canStill()) {
         if (game.cards[index].handCards.length > 0) {
             showNotValidAlert();
         } else {
-            decideAmount(Number(newdiv.textContent));
+            decideAmount(desiredCard);
         }
     } else {
         showNotYourTurnAlert();
