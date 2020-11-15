@@ -78,7 +78,7 @@ io.on('connection', socket => {
         // TypeError: Cannot read property 'swapCards' of undefined
         let game = getGamebyRoom(data.room)
         if (game != undefined) {
-            g.swapCards(data.index, data.newHandCards, data.newLastCards);
+            game.swapCards(data.index, data.newHandCards, data.newLastCards);
         }
     });
 
