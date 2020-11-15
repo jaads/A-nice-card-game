@@ -8,8 +8,6 @@ let playercount = document.querySelector('#playercount');
 let currentroommates = document.querySelector('#currentroommates');
 
 joinroombtn.onclick = () => {
-    console.log(nameinput.value);
-    console.log(roominput.value);
     if (roominput.value === '' || nameinput.value === '') {
         roominput.classList.add("border-danger");
         nameinput.classList.add("border-danger");
