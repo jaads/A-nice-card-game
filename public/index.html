@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-</html>
-<html>
-
 <head>
     <title>Shithead</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./vendor/paper.min.css">
+    <!-- <link rel="stylesheet" href="./vendor/paper.min.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/papercss@1.8.1/dist/paper.min.css">
     <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
     <header>
-        <nav class="border split-nav background-primary">
+        <nav id="navigation" class="border split-nav background-secondary">
             <div class="nav-brand">
                 <h3><a href="/">Shithead</a></h3>
             </div>
@@ -39,7 +37,7 @@
     </header>
 
     <main>
-        <button id="gettestgame" style="display:none">Load testgame</button>
+        <button id="gettestgame" style="display: none">Load testgame</button>
         <section id="joinsection">
             <div id="joinarea" class="shadow">
                 <label for="name">Name:</label>
@@ -87,19 +85,22 @@
             <div id="game">
                 <div class="row flex-center">
                     <div id="stacketc">
-                        <div id="decksizediv">
-                            <span>Decksize: </span>
-                            <span id="decksize"></span>
+                        <div id="firstCol">
+                            <div id="decksizediv">
+                                <span>Decksize: </span>
+                                <span id="decksize"></span>
+                            </div>
+                            <button id="prevcardbtn">Show stack</button>
                         </div>
                         <div id="burnedcardsdiv">
-                            <span>Burned cards:</span>
+                            <span>&#128293;</span>
                             <span id="amountburnedcards">0</span>
+                            <span>Burned cards</span>
                         </div>
                         <div id="currentstack">
                             <div id="currentcard"></div>
-                            <span id="prevcard"></span>
+                            <span id="prevcard">3,4</span>
                         </div>
-                        <button id="prevcardbtn">Show stack</button>
                         <button id="pickupbtn">Pick up ( <span id="NrOfCardsOnStack"></span> )</button>
                     </div>
                 </div>

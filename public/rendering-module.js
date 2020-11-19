@@ -1,4 +1,3 @@
-let body = document.querySelector('body');
 let cardsOnHandDiv = document.querySelector('#cardsonhanddiv');
 let cardsOnTableDiv = document.querySelector('#cardsontablediv');
 let laststagecardsdiv = document.querySelector('#laststagecardsdiv');
@@ -11,6 +10,7 @@ let howmanycardstextpara = document.querySelector('#howmanycardstext');
 let amountburnedcardsspan = document.querySelector('#amountburnedcards');
 let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
+let stackRect = document.querySelector('#stacketc');
 
 import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard } from './game.js';
 import { index, game } from './index.js';
@@ -146,9 +146,9 @@ function renderCurrentCard() {
 
 function updateBackground() {
     if (game.currentPlayerIdx == index) {
-        body.classList.add('background-success');
+        currentCard.classList.add('background-success');
     } else {
-        body.classList.remove('background-success');
+        currentCard.classList.remove('background-success');
     }
 };
 
@@ -195,7 +195,7 @@ export function showWinner() {
 };
 
 export function indicateCardsGotBurned() {
-    body.classList.add('background-warning');
+    stackRect.classList.add('background-warning');
     setTimeout(() => {
         body.classList.remove('background-warning');
     }, 2000);
