@@ -168,7 +168,6 @@ io.on('connection', socket => {
 });
 
 setInterval(() => {
-    console.log("Started games during the last 24 hours: " + dailyGames);
-    console.log("Currently active games: " + allgames.length);
-    console.log("Currently active users: " + allusers.length);
+    console.log(new Date() + ": Started games during the last 24 hours: " + dailyGames);
+    dailyGames = 0;
 }, 86400000);
