@@ -26,10 +26,10 @@ function getGamebyRoom(room) {
 };
 
 function removeGame(g) {
-    console.log('Removing game: ' + g.room);
+    console.log(new Date() + ': Removing game: ' + g.room);
     let res = allgames.splice(allgames.indexOf(g), 1);
     if (res != []) {
-        console.log('Removed.');
+        console.log('Successfully removed');
     } else {
         console.log('Cound not find game for removal.');
     }
@@ -70,7 +70,7 @@ io.on('connection', socket => {
         newgame.players.forEach((player, idx) => {
             io.to(player.id).emit('room-closed', { game: newgame, index: idx });
         });
-        console.log('Game started: ' + newgame.room);
+        console.log(new Date() + ': Started game: ' + newgame.room);
         dailyGames++;
     });
 
