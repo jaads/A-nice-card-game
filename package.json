@@ -12,9 +12,6 @@
   },
   "author": "Jan Arends",
   "license": "GPL-3.0-only",
-  "jest": {
-    "verbose": true
-  },
   "babel": {
     "presets": ["@babel/preset-env"]
   },
