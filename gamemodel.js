@@ -22,10 +22,7 @@ class Game {
     };
 
     makemove(playedCards, i) {
-        this.transferCards(playedCards,
-            this.cards[i].handCards,
-            this.cards[i].lastCards,
-            this.cards[i].flippedCards);
+        this.transferCards(playedCards, i);
         this.getNewCards(i);
         this.sortHandCards(i);
 
@@ -40,15 +37,21 @@ class Game {
         }
     };
 
-    transferCards(playedCards, playersCardsOnFirstStage, playersCardsOnSecondStage, playersCardsOnThirdStage) {
+    transferCards(playedCards, i) {
+        const handCards = this.cards[i].handCards;
+        const lastCards = this.cards[i].lastCards;
+        const flippedCards = this.cards[i].flippedCards;
+
         playedCards.forEach(card => {
-            if (playersCardsOnFirstStage.indexOf(card) != -1) {
-                playersCardsOnFirstStage.splice(playersCardsOnFirstStage.indexOf(card), 1);
-            } else if (playersCardsOnSecondStage.indexOf(card) != -1) {
-                playersCardsOnSecondStage.splice(playersCardsOnSecondStage.indexOf(card), 1);
-            } else if (playersCardsOnThirdStage.indexOf(card) != -1) {
-                playersCardsOnThirdStage.splice(playersCardsOnThirdStage.indexOf(card), 1);
+            // Remove card from player
+            if (handCards.indexOf(card) != -1) {
+                handCards.splice(handCards.indexOf(card), 1);
+            } else if (lastCards.indexOf(card) != -1) {
+                lastCards.splice(lastCards.indexOf(card), 1);
+            } else if (flippedCards.indexOf(card) != -1) {
+                flippedCards.splice(flippedCards.indexOf(card), 1);
             }
+            // Add card to stack in the middle
             this.stack.push(card);
         });
     };
