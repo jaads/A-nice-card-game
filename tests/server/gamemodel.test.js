@@ -2,7 +2,7 @@ const Game = require('../../gamemodel.js');
 
 let testGame = null;
 
-beforeEach(() => {
+beforeAll(() => {
     const testplayers = [
         {
             id: '28378929812',
@@ -59,13 +59,3 @@ describe('Complete move procedure', () => {
         expect(testGame.winnersIndex).toEqual(0);
     });
 });
-
-// describe('Complete move procedure', () => {
-//     test('Normal move', () => {
-//         testGame.cards[0].handCards = [14, 3];
-//         testGame.makemove([14], 0);
-//         expect(Game.transferCards()).toEqual([3]);
-//     });
-// });
-
-
