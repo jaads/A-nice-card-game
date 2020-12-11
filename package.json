@@ -7,15 +7,25 @@
     "run": "node server.js",
     "dev": "nodemon ./server.js",
     "testValidation": "node tests/validation.test.js",
-    "testMoves": "node tests/move.test.js"
+    "testMoves": "node tests/move.test.js",
+    "tests": "./node_modules/jest/bin/jest.js"
   },
   "author": "Jan Arends",
   "license": "GPL-3.0-only",
+  "jest": {
+    "verbose": true
+  },
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  },
   "dependencies": {
     "express": "^4.17.1",
+    "jest": "^26.6.3",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
     "nodemon": "^2.0.4"
   }
 }
