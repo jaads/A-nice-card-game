@@ -197,6 +197,6 @@ export function showWinner() {
 export function indicateCardsGotBurned() {
     stackRect.classList.add('background-warning');
     setTimeout(() => {
-        body.classList.remove('background-warning');
+        stackRect.classList.remove('background-warning');
     }, 2000);
 };
