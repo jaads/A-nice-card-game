@@ -1,14 +1,21 @@
-const express = require('express');
-const socket = require('socket.io');
-const Game = require('./gamemodel.js');
-
-// Setup
-let app = express();
+//Setup port variable
 const port = process.env.port || 4000;
-app.use(express.static("./public"));
-let server = app.listen(port, () => console.log('Listening'));
-let io = socket(server);
 
+// Setup express
+const express = require('express');
+let app = express();
+app.use(express.static("./public"));
+let httpServer = app.listen(port, () => console.log('Listening'));
+
+// Setup socket.io
+let io = require('socket.io')(httpServer, {
+    cors: {
+        origin: "http:shithead.onl", // for dev: http://127.0.0.1:5500, for prod: http:shithead.onl
+        methods: ["GET", "POST"]
+    }
+});
+
+const Game = require('./gamemodel.js');
 let allusers = [];
 let allgames = [];
 let dailyGames = 0;
@@ -117,7 +124,8 @@ io.on('connection', socket => {
         broadcastUpdatedGame(data.room, g);
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (socket) => {
+        // add socket.leave for the disconnedted user and for all other users that were in that room
         let player = allusers.find((user) => user.id == socket.id);
         if (player != undefined) {
             let canceldGame = getGamebyRoom(player.room);

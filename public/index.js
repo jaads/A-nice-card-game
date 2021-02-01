@@ -1,7 +1,5 @@
-// export let socket = io.connect('shithead.onl');
-// export let socket = io.connect('localhost:4000');
-const socket = io();
-console.log(socket);
+// dev: http://localhost:4000, prod: http://shithead
+export const socket = io('http://shithead');
 
 export let room = null;
 export let game = null;
