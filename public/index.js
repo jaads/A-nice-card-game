@@ -1,5 +1,7 @@
-export let socket = io.connect('shithead.onl');
+// export let socket = io.connect('shithead.onl');
 // export let socket = io.connect('localhost:4000');
+const socket = io();
+console.log(socket);
 
 export let room = null;
 export let game = null;
