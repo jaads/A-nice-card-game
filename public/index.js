@@ -1,5 +1,5 @@
-// dev: http://localhost:4000, prod: http://shithead
-export const socket = io('http://shithead');
+// dev: http://localhost:4000, prod: http://shithead.onl
+export const socket = io('http://shithead.onl');
 
 export let room = null;
 export let game = null;
