@@ -50,7 +50,7 @@ export function renderCards() {
             } else {
                 let anotherCardIsAlreadyturned = false;
                 document.querySelectorAll('#laststagecardsdiv .acard').forEach(elem => {
-                    if (elem.innerText != '?') {
+                    if (elem.innerText !== '?') {
                         anotherCardIsAlreadyturned = true;
                     }
                 });
@@ -111,9 +111,9 @@ export function rendercoplayers() {
     coplayerssection.innerHTML = '';
     game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
-        if (idx != index) {
+        if (idx !== index) {
             template.querySelector('#coplayername').innerText = player.name;
-            if (idx == game.currentPlayerIdx) {
+            if (idx === game.currentPlayerIdx) {
                 template.querySelector('#coplayer').classList.add('background-success');
             }
             game.cards[idx].lastCards.forEach(card => {
@@ -145,7 +145,7 @@ function renderCurrentCard() {
 };
 
 function updateBackground() {
-    if (game.currentPlayerIdx == index) {
+    if (game.currentPlayerIdx === index) {
         currentCard.classList.add('background-success');
     } else {
         currentCard.classList.remove('background-success');
@@ -156,7 +156,7 @@ export function showPrevCards() {
     if (game.stack.length >= 2) {
         for (let i = 5; i > 1; i--) {
             let aprevCard = game.stack[game.stack.length - i];
-            if (aprevCard != undefined) {
+            if (aprevCard !== undefined) {
                 prevcard.innerText += ' ' + aprevCard + ',';
             }
         }
@@ -179,7 +179,7 @@ export function showWinner() {
     d.setAttribute('id', 'winnertext');
     d.classList.add('row', 'flex-center');
     let winnersname = null;
-    if (game.winnersIndex == index) {
+    if (game.winnersIndex === index) {
         winnersname = "You";
         body.classList.add('background-success');
         var confettiSettings = { "target": "confetti-canvas", "max": "90", "size": "3", "animate": true, "props": ["circle", "square", "triangle", "line"], "colors": [[165, 104, 246], [230, 61, 135], [0, 199, 228], [253, 214, 126]], "clock": "60", "rotate": false, "width": "2560", "height": "1342", "start_from_edge": false, "respawn": true }

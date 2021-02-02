@@ -10,17 +10,17 @@ testinput.focus();
 
 function find() {
     let randomPrev = Math.floor(Math.random() * 12) + 2;
-    while (randomPrev == 10) {
+    while (randomPrev === 10) {
         randomPrev = Math.floor(Math.random() * 12) + 2;
     }
     let randomCurrent = 0;
 
-    if (randomPrev == 3) {
+    if (randomPrev === 3) {
         randomCurrent = Math.floor(Math.random() * 12) + 2;
-    } else if (randomPrev == 7) {
+    } else if (randomPrev === 7) {
         randomCurrent = Math.floor(Math.random() * 6) + 2;
     } else {
-        while (randomPrev > randomCurrent || randomCurrent == 10) {
+        while (randomPrev > randomCurrent || randomCurrent === 10) {
             randomCurrent = Math.floor(Math.random() * 12) + 2;
         }
     }

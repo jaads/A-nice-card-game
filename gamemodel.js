@@ -28,10 +28,10 @@ class Game {
 
         if (this.isFinished(i)) {
             this.makeAWinner(i);
-        } else if (playedCards[0] == 10 || this.fourInARow(playedCards)) {
+        } else if (playedCards[0] === 10 || this.fourInARow(playedCards)) {
             this.burnStack();
         } else {
-            if (i == this.currentPlayerIdx) {
+            if (i === this.currentPlayerIdx) {
                 this.setNextPlayer();
             }
         }
@@ -44,11 +44,11 @@ class Game {
 
         playedCards.forEach(card => {
             // Remove card from player
-            if (handCards.indexOf(card) != -1) {
+            if (handCards.indexOf(card) !== -1) {
                 handCards.splice(handCards.indexOf(card), 1);
-            } else if (lastCards.indexOf(card) != -1) {
+            } else if (lastCards.indexOf(card) !== -1) {
                 lastCards.splice(lastCards.indexOf(card), 1);
-            } else if (flippedCards.indexOf(card) != -1) {
+            } else if (flippedCards.indexOf(card) !== -1) {
                 flippedCards.splice(flippedCards.indexOf(card), 1);
             }
             // Add card to stack in the middle
@@ -63,19 +63,19 @@ class Game {
     };
 
     isFinished(i) {
-        return this.cards[i].handCards.length == 0
-            && this.cards[i].lastCards.length == 0
-            && this.cards[i].flippedCards.length == 0;
+        return this.cards[i].handCards.length === 0
+            && this.cards[i].lastCards.length === 0
+            && this.cards[i].flippedCards.length === 0;
     };
 
     fourInARow(playedCards) {
-        let alltogether = playedCards.length == 4;
+        let alltogether = playedCards.length === 4;
         let successively = false;
         let end = this.stack.length;
-        if (playedCards[0] == this.stack[end - 1] &&
-            playedCards[0] == this.stack[end - 2] &&
-            playedCards[0] == this.stack[end - 3] &&
-            playedCards[0] == this.stack[end - 4]) {
+        if (playedCards[0] === this.stack[end - 1] &&
+            playedCards[0] === this.stack[end - 2] &&
+            playedCards[0] === this.stack[end - 3] &&
+            playedCards[0] === this.stack[end - 4]) {
             successively = true;
         }
         return (alltogether || successively) ? true : false;
@@ -123,22 +123,22 @@ class Game {
 
     setNextPlayer() {
         // Not an elegant way: TODO: use recursion
-        if (this.stack[this.stack.length - 1] == 8) {
+        if (this.stack[this.stack.length - 1] === 8) {
             this.skip();
             return;
         }
-        if (this.stack[this.stack.length - 1] == 3) {
-            if (this.stack[this.stack.length - 2] == 8) {
+        if (this.stack[this.stack.length - 1] === 3) {
+            if (this.stack[this.stack.length - 2] === 8) {
                 this.skip();
                 return;
             }
-            if (this.stack[this.stack.length - 2] == 3) {
-                if (this.stack[this.stack.length - 3] == 8) {
+            if (this.stack[this.stack.length - 2] === 3) {
+                if (this.stack[this.stack.length - 3] === 8) {
                     this.skip();
                     return;
                 }
-                if (this.stack[this.stack.length - 3] == 3) {
-                    if (this.stack[this.stack.length - 4] == 8) {
+                if (this.stack[this.stack.length - 3] === 3) {
+                    if (this.stack[this.stack.length - 4] === 8) {
                         this.skip();
                         return;
                     }

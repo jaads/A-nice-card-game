@@ -39,7 +39,7 @@ function testnextplayer(stack, expected) {
     });
 
     let actual = testgame.currentPlayerIdx; 
-    if (actual == expected) {
+    if (actual === expected) {
         console.log('\x1b[32m%s\x1b[0m', 'PASSED');        
     } else {
         console.log('\x1b[31m%s\x1b[0m', 'FAILED', 'expected: ', expected, ' but got', actual);

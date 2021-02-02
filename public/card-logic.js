@@ -1,44 +1,44 @@
 export function isValidMove(stack, card) {
-    if (stack.length == 0) {
+    if (stack.length === 0) {
         return true;
     }
     let topCard = stack[stack.length - 1];
-    if (topCard == 2) {
+    if (topCard === 2) {
         return true;
     }
-    if (topCard == 3) {
+    if (topCard === 3) {
         if (stack.length > 0) {
             return isValidMove(stack.slice(0, stack.length - 1), card);
         }
     }
-    if (topCard == 7) {
+    if (topCard === 7) {
         return card <= 7 ? true : false;
     }
-    if (card == 10) {
-        if (topCard != 7) {
+    if (card === 10) {
+        if (topCard !== 7) {
             return true;
         }
     }
-    if (topCard <= card || card == 3 || card == 2) {
+    if (topCard <= card || card === 3 || card === 2) {
         return true;
     }
     return false;
 };
 
 export function getNumberMapping(letter) {
-    if (letter == 't') {
+    if (letter === 't') {
         return 10;
     }
-    if (letter == 'j') {
+    if (letter === 'j') {
         return 11;
     }
-    if (letter == 'q') {
+    if (letter === 'q') {
         return 12;
     }
-    if (letter == 'k') {
+    if (letter === 'k') {
         return 13;
     }
-    if (letter == 'a') {
+    if (letter === 'a') {
         return 14;
     }
     return 0;

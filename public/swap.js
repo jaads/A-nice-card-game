@@ -39,13 +39,13 @@ function renderCardsForSwapping() {
 };
 
 function selectForSwap(div) {
-    if (div.parentElement.id == 'swapcardsfirststage') {
+    if (div.parentElement.id === 'swapcardsfirststage') {
         document.querySelectorAll('#swapcardsfirststage .background-secondary').forEach((elem) => {
             elem.classList.remove('background-secondary');
             elem.classList.add('background-primary');
         });
     }
-    if (div.parentElement.id == 'swapcardssecondstage') {
+    if (div.parentElement.id === 'swapcardssecondstage') {
         document.querySelectorAll('#swapcardssecondstage .background-secondary').forEach((elem) => {
             elem.classList.remove('background-secondary');
             elem.classList.add('background-primary');
@@ -70,7 +70,7 @@ swapbtn.onclick = () => {
             secondIndex = idx;
         }
     });
-    if (firstIndex != null && secondIndex != null) {
+    if (firstIndex !== null && secondIndex !== null) {
         swapCards(firstIndex, secondIndex);
         renderCardsForSwapping();
     } else {

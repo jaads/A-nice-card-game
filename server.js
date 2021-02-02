@@ -21,13 +21,13 @@ let allgames = [];
 let dailyGames = 0;
 
 function getUsersbyRoom(room) {
-    return allusers.filter(user => user.room == room);
+    return allusers.filter(user => user.room === room);
 };
 
 function getGamebyRoom(room) {
-    let game = allgames.find(game => game.room == room);
-    if (game == undefined) {
-        console.log("Could not find game by room. Tryied to find room " + room + "in " + allgames);
+    let game = allgames.find(game => game.room === room);
+    if (game === undefined) {
+        throw new Error("Could not find game by room. Tryied to find room " + room + "in " + allgames);
     }
     return game;
 };
@@ -35,7 +35,7 @@ function getGamebyRoom(room) {
 function removeGame(g) {
     console.log(new Date().toUTCString() + ': Removing game: ' + g.room);
     let res = allgames.splice(allgames.indexOf(g), 1);
-    if (res != []) {
+    if (res !== []) {
         console.log('Successfully removed');
     } else {
         console.log('Cound not find game for removal.');
@@ -43,12 +43,12 @@ function removeGame(g) {
 };
 
 function removeAllPlayers(game) {
-    let newPayersList = [...allusers].filter((user) => user.room != game.room);
+    let newPayersList = [...allusers].filter((user) => user.room !== game.room);
     allusers = newPayersList;
 };
 
 function isGameRunning(room) {
-    let tmp = allgames.filter(game => game.room == room);
+    let tmp = allgames.filter(game => game.room === room);
     return tmp.length >= 1;
 };
 
@@ -83,16 +83,14 @@ io.on('connection', socket => {
 
     socket.on('swap-cards', data => {
         // TypeError: Cannot read property 'swapCards' of undefined
-        let game = getGamebyRoom(data.room)
-        if (game != undefined) {
-            game.swapCards(data.index, data.newHandCards, data.newLastCards);
-        }
+        let game = getGamebyRoom(data.room);
+        game.swapCards(data.index, data.newHandCards, data.newLastCards);
     });
 
     socket.on('i-am-ready', room => {
         let g = getGamebyRoom(room);
         g.nrofreadyplayers++;
-        if (g.nrofreadyplayers == g.players.length) {
+        if (g.nrofreadyplayers === g.players.length) {
             io.to(room).emit('all-ready', getGamebyRoom(room));
         } else {
             io.to(socket.id).emit('wait-for-others-to-swap');
@@ -126,12 +124,12 @@ io.on('connection', socket => {
 
     socket.on('disconnect', (socket) => {
         // add socket.leave for the disconnedted user and for all other users that were in that room
-        let player = allusers.find((user) => user.id == socket.id);
-        if (player != undefined) {
+        let player = allusers.find((user) => user.id === socket.id);
+        if (player !== undefined) {
             let canceldGame = getGamebyRoom(player.room);
             // Hotfix for server crahses 'TypeError: Cannot read property 'room' of undefined' 
             // TODO: why undefiend?
-            if (canceldGame != undefined) {
+            if (canceldGame !== undefined) {
                 io.to(canceldGame.room).emit('coplayer-disconnected');
                 removeAllPlayers(canceldGame);
                 removeGame(canceldGame);
