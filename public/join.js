@@ -7,29 +7,48 @@ let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let currentroommates = document.querySelector('#currentroommates');
 
+import { showNotJoinedAlert } from './alert-rendering.js';
+
+let hadJoined = false;
+
 joinroombtn.onclick = () => {
     if (roominput.value === '' || nameinput.value === '') {
         roominput.classList.add("border-danger");
         nameinput.classList.add("border-danger");
+        return;
+    }
+    if (hadJoined) {
+        // Indicate that user cannot join more than 1 game
+        console.log("Already joined a game");
+        return;
+    }
+    hadJoined = true;
+    setRoom(roominput.value);
+    socket.emit('join-room', {
+        username: nameinput.value,
+        room: roominput.value
+    });
+    roominput.classList.remove("border-danger");
+    nameinput.classList.remove("border-danger");
+};
+
+startbtn.onclick = () => {
+    if (hadJoined) {
+        socket.emit('start-game', roominput.value);
     } else {
-        setRoom(roominput.value);
-        socket.emit('join-room', {
-            user: nameinput.value,
-            room: roominput.value
-        });
-        roominput.classList.remove("border-danger");
-        nameinput.classList.remove("border-danger");
+        showNotJoinedAlert();
     }
 };
 
-socket.on('full-room', () => alert("Sorry, you are too late."));
+socket.on('cannot-join-anymore', () => alert("Sorry, you are too late."));
 
 socket.on('user-joined', playersInRoom => {
+    hadJoined = true;
     playercount.innerText = playersInRoom.length;
     showplayers(playersInRoom);
-    startbtn.onclick = () => socket.emit('start-game', roominput.value);
 });
 
+// Rendering
 function showplayers(players) {
     currentroommates.innerHTML = '';
     players.forEach(element => {

@@ -55,18 +55,16 @@ function isGameRunning(room) {
 io.on('connection', socket => {
 
     socket.on('join-room', data => {
-        let reachedMaxAmountOfPlayers = getUsersbyRoom(data.room).length >= 5;
-        let roomIsAlreadyPlaying = isGameRunning(data.room);
-        if (reachedMaxAmountOfPlayers || roomIsAlreadyPlaying) {
-            io.to(socket.id).emit('full-room');
+        const usersInRoom = getUsersbyRoom(data.room);
+        if (usersInRoom.length >= 5 || isGameRunning(data.room)) {
+            io.to(socket.id).emit('cannot-join-anymore');
         } else {
             socket.join(data.room);
-            let user = {
+            allusers.push({
                 id: socket.id,
-                name: data.user,
+                name: data.username,
                 room: data.room
-            };
-            allusers.push(user);
+            });
             io.to(data.room).emit('user-joined', getUsersbyRoom(data.room));
         }
     });

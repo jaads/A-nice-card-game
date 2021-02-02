@@ -44,7 +44,8 @@ h1 {
 #notvalidalert, 
 #notyourturnalert, 
 #notyetalert, 
-#playerleftalert {
+#playerleftalert,
+#notjoinedalert {
     position: fixed;
     top: 4rem;
     text-align: center;
