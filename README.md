@@ -7,16 +7,4 @@ You'll also need to change the application server for `socket.io` in `public/ind
 
 To run Jest tests,  run `npm run tests`.
 
-## Websockets workflow
-
-sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>John: Hello John, how are you?
-    loop Healthcheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
+[![](https://mermaid.ink/img/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgcGFydGljaXBhbnQgYyBhcyBjbGllbnRcbiAgICBwYXJ0aWNpcGFudCBzIGFzIHNlcnZlclxuICAgIHBhcnRpY2lwYW50IHIgYXMgcm9vbW1hdGVzXG5cbiAgICBjIC0-PiBzOiBqb2luLXJvb20gKHVzZXIsIHJvb20pXG4gICAgYWx0IGNhbiBzdGlsbCBqb2luXG4gICAgICAgIHMtPj5yOiB1c2VyLWpvaW5lZCAodXNlcnNJblJvb20pXG4gICAgZWxzZSBjYW5ub3Qgam9pbiBhbnltb3JlXG4gICAgICAgIHMtPj5jOiBjYW5ub3Qtam9pbi1hbnltb3JlICggKVxuICAgIGVuZCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgcGFydGljaXBhbnQgYyBhcyBjbGllbnRcbiAgICBwYXJ0aWNpcGFudCBzIGFzIHNlcnZlclxuICAgIHBhcnRpY2lwYW50IHIgYXMgcm9vbW1hdGVzXG5cbiAgICBjIC0-PiBzOiBqb2luLXJvb20gKHVzZXIsIHJvb20pXG4gICAgYWx0IGNhbiBzdGlsbCBqb2luXG4gICAgICAgIHMtPj5yOiB1c2VyLWpvaW5lZCAodXNlcnNJblJvb20pXG4gICAgZWxzZSBjYW5ub3Qgam9pbiBhbnltb3JlXG4gICAgICAgIHMtPj5jOiBjYW5ub3Qtam9pbi1hbnltb3JlICggKVxuICAgIGVuZCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
