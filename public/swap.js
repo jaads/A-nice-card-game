@@ -1,19 +1,14 @@
 import { socket, datastore } from './index.js';
-import { showSwapSection } from './section-rendering.js';
+import { showGameSection } from './section-rendering.js';
+import { updateGameView } from './rendering-module.js';
 
 let swapbtn = document.querySelector('#swapbtn');
 let readybtn = document.querySelector('#readybtn');
 let swapcardsfirststage = document.querySelector('#swapcardsfirststage');
 let swapcardssecondstage = document.querySelector('#swapcardssecondstage');
 
-socket.on('room-closed', (data) => {
-    datastore.game = data.game;
-    datastore.index = data.index;
-    showSwapSection();
-    renderCardsForSwapping();
-});
 
-function renderCardsForSwapping() {
+export function renderCardsForSwapping() {
     swapcardsfirststage.innerHTML = '';
     datastore.game.cards[datastore.index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
@@ -85,16 +80,21 @@ function swapCards(index1, index2) {
 };
 
 readybtn.onclick = () => {
-    socket.emit('swap-cards', {
+    socket.emit('i-am-ready', {
         room: datastore.room,
         index: datastore.index,
         newHandCards: datastore.game.cards[datastore.index].handCards,
         newLastCards: datastore.game.cards[datastore.index].lastCards
     });
-    socket.emit('i-am-ready', datastore.room);
 };
 
-socket.on('wait-for-others-to-swap', () => {
+socket.on('all-ready', updatedgame => {
+    datastore.game = updatedgame;
+    showGameSection();
+    updateGameView();
+});
+
+socket.on('wait-for-others', () => {
     document.querySelector('#swapsection').innerHTML = '';
     let h = document.createElement('h1');
     h.classList.add('row', 'flex-center');

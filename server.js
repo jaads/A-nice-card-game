@@ -79,19 +79,14 @@ io.on('connection', socket => {
         dailyGames++;
     });
 
-    socket.on('swap-cards', data => {
-        // TypeError: Cannot read property 'swapCards' of undefined
+    socket.on('i-am-ready', data => {
         let game = getGamebyRoom(data.room);
-        game.swapCards(data.index, data.newHandCards, data.newLastCards);
-    });
-
-    socket.on('i-am-ready', room => {
-        let g = getGamebyRoom(room);
-        g.nrofreadyplayers++;
-        if (g.nrofreadyplayers === g.players.length) {
-            io.to(room).emit('all-ready', getGamebyRoom(room));
+        const updatedGame = game.swapCards(data.index, data.newHandCards, data.newLastCards);
+        updatedGame.nrOfReadyPlayers++;
+        if (updatedGame.nrOfReadyPlayers === updatedGame.players.length) {
+            io.to(data.room).emit('all-ready', updatedGame);
         } else {
-            io.to(socket.id).emit('wait-for-others-to-swap');
+            io.to(socket.id).emit('wait-for-others');
         }
     });
 

@@ -1,22 +1,18 @@
 import { socket, datastore } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateView, showPrevCards, indicateCardsGotBurned, clearAmountInput } from './rendering-module.js';
-import { showGameSection, showPlayerLeftSection } from './section-rendering.js';
+import { showAmountInput, updateGameView, showPrevCards, indicateCardsGotBurned, clearAmountInput } from './rendering-module.js';
+import { showPlayerLeftSection } from './section-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
 
 
-socket.on('all-ready', updatedgame => {
-    datastore.game = updatedgame;
-    updateView();
-    showGameSection();
-});
+
 
 socket.on('move-made', updatedGame => {
     if (datastore.game.outOfGameCards.length < updatedGame.outOfGameCards.length) {
         indicateCardsGotBurned();
     }
     datastore.game = updatedGame;
-    updateView();
+    updateGameView();
 });
 
 document.querySelector('#prevcardbtn').onclick = showPrevCards;

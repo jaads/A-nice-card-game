@@ -1,4 +1,7 @@
-import { socket, datastore} from './index.js';
+import { socket, datastore } from './index.js';
+import { showSwapSection } from './section-rendering.js';
+import { showNotJoinedAlert } from './alert-rendering.js';
+import { renderCardsForSwapping } from './swap.js';
 
 let nameinput = document.querySelector('#name');
 let roominput = document.querySelector('#joinroominput');
@@ -7,7 +10,6 @@ let startbtn = document.querySelector('#startbtn');
 let playercount = document.querySelector('#playercount');
 let currentroommates = document.querySelector('#currentroommates');
 
-import { showNotJoinedAlert } from './alert-rendering.js';
 
 let hadJoined = false;
 
@@ -46,6 +48,13 @@ socket.on('user-joined', playersInRoom => {
     hadJoined = true;
     playercount.innerText = playersInRoom.length;
     showplayers(playersInRoom);
+});
+
+socket.on('room-closed', (data) => {
+    datastore.game = data.game;
+    datastore.index = data.index;
+    showSwapSection();
+    renderCardsForSwapping();
 });
 
 // Rendering

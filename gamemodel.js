@@ -8,7 +8,7 @@ class Game {
         this.cards = handOutCards(this.deck, this.players);
         this.outOfGameCards = [];
         this.stack = [];
-        this.nrofreadyplayers = 0;
+        this.nrOfReadyPlayers = 0;
         this.isOver = false;
         this.winnersIndex = null;
     };
@@ -108,6 +108,7 @@ class Game {
         this.cards[playerIndex].lastCards = newlast;
         this.sortHandCards(playerIndex);
         this.sortLastCards(playerIndex);
+        return this;
     };
 
     burnStack() {

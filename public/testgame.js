@@ -1,4 +1,4 @@
-import { updateView } from './rendering-module.js';
+import { updateGameView } from './rendering-module.js';
 import { socket, datastore } from './index.js';
 
 
@@ -9,7 +9,7 @@ document.querySelector('#gettestgame').onclick = () => {
 socket.on('test-game', testgame => {
     datastore.game = testgame;
     datastore.index = 0;
-    updateView();
+    updateGameView();
 
     document.querySelector('#joinsection').innerHTML = '';
     document.querySelector('#swapsection').innerHTML = '';

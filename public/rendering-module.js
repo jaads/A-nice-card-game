@@ -94,7 +94,7 @@ export function clearAmountInput() {
     amountOptions.innerHTML = '';
 };
 
-export function updateView() {
+export function updateGameView() {
     if (!datastore.game.isOver) {
         renderCurrentCard();
         renderCards();
