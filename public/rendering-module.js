@@ -13,12 +13,12 @@ let coplayerssection = document.querySelector('#coplayers');
 let stackRect = document.querySelector('#stacketc');
 
 import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard } from './game.js';
-import { index, game } from './index.js';
+import { datastore } from './index.js';
 import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
 export function renderCards() {
     cardsOnHandDiv.innerHTML = '';
-    game.cards[index].handCards.forEach(card => {
+    datastore.game.cards[datastore.index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
@@ -28,7 +28,7 @@ export function renderCards() {
     });
 
     cardsOnTableDiv.innerHTML = '';
-    game.cards[index].lastCards.forEach(card => {
+    datastore.game.cards[datastore.index].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
@@ -38,14 +38,14 @@ export function renderCards() {
     });
 
     laststagecardsdiv.innerHTML = '';
-    game.cards[index].flippedCards.forEach((card, idx) => {
+    datastore.game.cards[datastore.index].flippedCards.forEach((card, idx) => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode('?');
         newdiv.appendChild(node);
         laststagecardsdiv.appendChild(newdiv);
         newdiv.onclick = () => {
-            if (game.cards[index].handCards.length > 0 || game.cards[index].lastCards.length > 0) {
+            if (datastore.game.cards[datastore.index].handCards.length > 0 || datastore.game.cards[datastore.index].lastCards.length > 0) {
                 showNotValidAlert();
             } else {
                 let anotherCardIsAlreadyturned = false;
@@ -95,7 +95,7 @@ export function clearAmountInput() {
 };
 
 export function updateView() {
-    if (!game.isOver) {
+    if (!datastore.game.isOver) {
         renderCurrentCard();
         renderCards();
         rendercoplayers();
@@ -109,43 +109,43 @@ export function updateView() {
 
 export function rendercoplayers() {
     coplayerssection.innerHTML = '';
-    game.players.forEach((player, idx) => {
+    datastore.game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
-        if (idx !== index) {
+        if (idx !== datastore.index) {
             template.querySelector('#coplayername').innerText = player.name;
-            if (idx === game.currentPlayerIdx) {
+            if (idx === datastore.game.currentPlayerIdx) {
                 template.querySelector('#coplayer').classList.add('background-success');
             }
-            game.cards[idx].lastCards.forEach(card => {
+            datastore.game.cards[idx].lastCards.forEach(card => {
                 let newdiv = document.createElement('span');
                 newdiv.classList.add('opponentCard', 'background-primary', 'margin-small', 'border', 'shadow');
                 let node = document.createTextNode(card);
                 newdiv.appendChild(node);
                 template.querySelector('#coplayercards').appendChild(newdiv);
             });
-            template.querySelector('#coplayernrcardsleft').innerText = game.cards[idx].handCards.length;
+            template.querySelector('#coplayernrcardsleft').innerText = datastore.game.cards[idx].handCards.length;
             coplayerssection.appendChild(template);
         }
     });
 };
 
 function updateNumberOfCardsOnStack() {
-    NrOfCardsOnStack.innerText = game.stack.length;
-    decksize.innerText = game.deck.length;
-    amountburnedcardsspan.innerText = game.outOfGameCards.length;
+    NrOfCardsOnStack.innerText = datastore.game.stack.length;
+    decksize.innerText = datastore.game.deck.length;
+    amountburnedcardsspan.innerText = datastore.game.outOfGameCards.length;
 };
 
 
 function renderCurrentCard() {
-    if (game.stack.length > 0) {
-        currentCard.innerText = game.stack[game.stack.length - 1];
+    if (datastore.game.stack.length > 0) {
+        currentCard.innerText = datastore.game.stack[datastore.game.stack.length - 1];
     } else {
         currentCard.innerHTML = "&empty;";
     }
 };
 
 function updateBackground() {
-    if (game.currentPlayerIdx === index) {
+    if (datastore.game.currentPlayerIdx === datastore.index) {
         currentCard.classList.add('background-success');
     } else {
         currentCard.classList.remove('background-success');
@@ -153,9 +153,9 @@ function updateBackground() {
 };
 
 export function showPrevCards() {
-    if (game.stack.length >= 2) {
+    if (datastore.game.stack.length >= 2) {
         for (let i = 5; i > 1; i--) {
-            let aprevCard = game.stack[game.stack.length - i];
+            let aprevCard = datastore.game.stack[datastore.game.stack.length - i];
             if (aprevCard !== undefined) {
                 prevcard.innerText += ' ' + aprevCard + ',';
             }
@@ -179,14 +179,14 @@ export function showWinner() {
     d.setAttribute('id', 'winnertext');
     d.classList.add('row', 'flex-center');
     let winnersname = null;
-    if (game.winnersIndex === index) {
+    if (datastore.game.winnersIndex === datastore.index) {
         winnersname = "You";
         body.classList.add('background-success');
         var confettiSettings = { "target": "confetti-canvas", "max": "90", "size": "3", "animate": true, "props": ["circle", "square", "triangle", "line"], "colors": [[165, 104, 246], [230, 61, 135], [0, 199, 228], [253, 214, 126]], "clock": "60", "rotate": false, "width": "2560", "height": "1342", "start_from_edge": false, "respawn": true }
         var confetti = new ConfettiGenerator(confettiSettings);
         confetti.render();
     } else {
-        winnersname = game.players[game.currentPlayerIdx].name;
+        winnersname = datastore.game.players[datastore.game.currentPlayerIdx].name;
         body.classList.add('background-warning');
     }
     let winnertextnode = document.createTextNode(winnersname.toUpperCase() + " WON");

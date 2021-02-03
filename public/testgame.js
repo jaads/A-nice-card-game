@@ -1,14 +1,14 @@
 import { updateView } from './rendering-module.js';
-import { socket, setGame, setIndex } from './index.js';
+import { socket, datastore } from './index.js';
 
 
-document.querySelector('#gettestgame').onclick = function () {
+document.querySelector('#gettestgame').onclick = () => {
     socket.emit('test-game-req');
 };
 
 socket.on('test-game', testgame => {
-    setGame(testgame);
-    setIndex(0);
+    datastore.game = testgame;
+    datastore.index = 0;
     updateView();
 
     document.querySelector('#joinsection').innerHTML = '';

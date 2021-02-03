@@ -33,6 +33,7 @@ describe('Current player index', () => {
     test('Inital', () => {
         expect(testGame.currentPlayerIdx).toEqual(0);
     });
+    // TODO: rework test. the random card meight be a card which is not a valid move..
     test('After first move', () => {
         expect(testGame.currentPlayerIdx).toEqual(0);
         testGame.makemove([getRamdomCard()], testGame.currentPlayerIdx);

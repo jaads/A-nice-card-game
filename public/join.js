@@ -1,4 +1,4 @@
-import { socket, setRoom } from './index.js';
+import { socket, datastore} from './index.js';
 
 let nameinput = document.querySelector('#name');
 let roominput = document.querySelector('#joinroominput');
@@ -23,7 +23,7 @@ joinroombtn.onclick = () => {
         return;
     }
     hadJoined = true;
-    setRoom(roominput.value);
+    datastore.room = roominput.value;
     socket.emit('join-room', {
         username: nameinput.value,
         room: roominput.value

@@ -1,4 +1,4 @@
-import { socket, game, setGame, setIndex, index, room } from './index.js';
+import { socket, datastore } from './index.js';
 import { showSwapSection } from './section-rendering.js';
 
 let swapbtn = document.querySelector('#swapbtn');
@@ -7,15 +7,15 @@ let swapcardsfirststage = document.querySelector('#swapcardsfirststage');
 let swapcardssecondstage = document.querySelector('#swapcardssecondstage');
 
 socket.on('room-closed', (data) => {
-    setGame(data.game);
-    setIndex(data.index);
+    datastore.game = data.game;
+    datastore.index = data.index;
     showSwapSection();
     renderCardsForSwapping();
 });
 
 function renderCardsForSwapping() {
     swapcardsfirststage.innerHTML = '';
-    game.cards[index].handCards.forEach(card => {
+    datastore.game.cards[datastore.index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
@@ -26,7 +26,7 @@ function renderCardsForSwapping() {
         };
     });
     swapcardssecondstage.innerHTML = '';
-    game.cards[index].lastCards.forEach(card => {
+    datastore.game.cards[datastore.index].lastCards.forEach(card => {
         let newdiv = document.createElement('div');
         newdiv.classList.add('acard', 'background-primary', 'margin');
         let node = document.createTextNode(card);
@@ -79,26 +79,26 @@ swapbtn.onclick = () => {
 };
 
 function swapCards(index1, index2) {
-    let tmp = game.cards[index].handCards[index1];
-    game.cards[index].handCards[index1] = game.cards[index].lastCards[index2];
-    game.cards[index].lastCards[index2] = tmp;
+    let tmp = datastore.game.cards[datastore.index].handCards[index1];
+    datastore.game.cards[datastore.index].handCards[index1] = datastore.game.cards[datastore.index].lastCards[index2];
+    datastore.game.cards[datastore.index].lastCards[index2] = tmp;
 };
 
 readybtn.onclick = () => {
     socket.emit('swap-cards', {
-        room: room,
-        index: index,
-        newHandCards: game.cards[index].handCards,
-        newLastCards: game.cards[index].lastCards
+        room: datastore.room,
+        index: datastore.index,
+        newHandCards: datastore.game.cards[datastore.index].handCards,
+        newLastCards: datastore.game.cards[datastore.index].lastCards
     });
-    socket.emit('i-am-ready', room);
+    socket.emit('i-am-ready', datastore.room);
 };
 
 socket.on('wait-for-others-to-swap', () => {
     document.querySelector('#swapsection').innerHTML = '';
     let h = document.createElement('h1');
-        h.classList.add('row', 'flex-center');
-        let node = document.createTextNode('Wait for the others...');
-        h.appendChild(node);
-        document.querySelector('#swapsection').appendChild(h);    
+    h.classList.add('row', 'flex-center');
+    let node = document.createTextNode('Wait for the others...');
+    h.appendChild(node);
+    document.querySelector('#swapsection').appendChild(h);
 });
