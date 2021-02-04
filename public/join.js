@@ -12,7 +12,6 @@ let currentroommates = document.querySelector('#currentroommates');
 
 
 let hadJoined = false;
-
 joinroombtn.onclick = () => {
     if (roominput.value === '' || nameinput.value === '') {
         roominput.classList.add("border-danger");
@@ -25,7 +24,6 @@ joinroombtn.onclick = () => {
         return;
     }
     hadJoined = true;
-    datastore.room = roominput.value;
     socket.emit('join-room', {
         username: nameinput.value,
         room: roominput.value
@@ -45,7 +43,6 @@ startbtn.onclick = () => {
 socket.on('cannot-join-anymore', () => alert("Sorry, you are too late."));
 
 socket.on('user-joined', playersInRoom => {
-    hadJoined = true;
     playercount.innerText = playersInRoom.length;
     showplayers(playersInRoom);
 });

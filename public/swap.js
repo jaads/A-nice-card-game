@@ -81,7 +81,7 @@ function swapCards(index1, index2) {
 
 readybtn.onclick = () => {
     socket.emit('i-am-ready', {
-        room: datastore.room,
+        room: datastore.game.room,
         index: datastore.index,
         newHandCards: datastore.game.cards[datastore.index].handCards,
         newLastCards: datastore.game.cards[datastore.index].lastCards
