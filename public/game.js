@@ -7,7 +7,7 @@ import { showNotYourTurnAlert, showNotValidAlert } from './rendering/alert-rende
 
 socket.on('move-made', updatedGame => {
     if (datastore.game.outOfGameCards.length < updatedGame.outOfGameCards.length) {
-        indicateCardsGotBurned();
+        gameRenderer.indicateCardsGotBurned();
     }
     datastore.game = updatedGame;
     gameRenderer.updateGameView();

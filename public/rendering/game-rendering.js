@@ -16,6 +16,7 @@ import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard
 import { datastore } from '../index.js';
 import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
+
 function renderCards() {
     cardsOnHandDiv.innerHTML = '';
     datastore.game.cards[datastore.index].handCards.forEach(card => {
@@ -152,7 +153,14 @@ function updateBackground() {
     }
 };
 
+let showingPrevCards = false;
 export function showPrevCards() {
+    if (showingPrevCards) {
+        prevcard.innerText = '';
+        showingPrevCards = !showingPrevCards;
+        return
+    }
+    showingPrevCards = !showingPrevCards;
     if (datastore.game.stack.length >= 2) {
         for (let i = 5; i > 1; i--) {
             let aprevCard = datastore.game.stack[datastore.game.stack.length - i];
@@ -165,7 +173,7 @@ export function showPrevCards() {
     }
 };
 
-export function showWinner() {
+function showWinner() {
     document.querySelector('body header').innerHTML = '';
     document.querySelector('body main').innerHTML = '';
     let body = document.querySelector('body');
