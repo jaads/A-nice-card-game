@@ -1,7 +1,6 @@
 import { socket, datastore } from './index.js';
 import { isValidMove } from './card-logic.js';
 import * as gameRenderer from './rendering/game-rendering.js';
-import { showPlayerLeftSection } from './rendering/section-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './rendering/alert-rendering.js';
 
 
@@ -104,4 +103,3 @@ export function faceUpCard(idxparam) {
     });
 };
 
-socket.on('coplayer-disconnected', () => showPlayerLeftSection());
