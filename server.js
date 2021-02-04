@@ -27,7 +27,7 @@ function getUsersbyRoom(room) {
 function getGamebyRoom(room) {
     let game = allgames.find(game => game.room === room);
     if (game === undefined) {
-        throw new Error("Could not find game by room. Tryied to find room " + room + "in " + allgames);
+        throw new Error("Could not find game by room. Tried to find room " + room + "in " + allgames);
     }
     return game;
 };
@@ -47,16 +47,19 @@ function removeAllPlayers(game) {
     allusers = newPayersList;
 };
 
-function isGameRunning(room) {
-    let tmp = allgames.filter(game => game.room === room);
-    return tmp.length >= 1;
+function roomClosed(room) {
+    const game = allgames.find(game => game.room === room);
+    if (game === undefined) {
+        return false;
+    }
+    return true;
 };
 
 io.on('connection', socket => {
 
     socket.on('join-room', data => {
         const usersInRoom = getUsersbyRoom(data.room);
-        if (usersInRoom.length >= 5 || isGameRunning(data.room)) {
+        if (usersInRoom.length >= 5 || roomClosed(data.room)) {
             io.to(socket.id).emit('cannot-join-anymore');
         } else {
             socket.join(data.room);
