@@ -1,6 +1,6 @@
 import { socket, datastore } from './index.js';
-import { showSwapSection } from './section-rendering.js';
-import { showNotJoinedAlert } from './alert-rendering.js';
+import { showSwapSection } from './rendering/section-rendering.js';
+import { showNotJoinedAlert } from './rendering/alert-rendering.js';
 import { renderCardsForSwapping } from './swap.js';
 
 let nameinput = document.querySelector('#name');

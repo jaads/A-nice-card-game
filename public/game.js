@@ -1,10 +1,8 @@
 import { socket, datastore } from './index.js';
 import { isValidMove } from './card-logic.js';
-import { showAmountInput, updateGameView, showPrevCards, indicateCardsGotBurned, clearAmountInput } from './rendering-module.js';
-import { showPlayerLeftSection } from './section-rendering.js';
-import { showNotYourTurnAlert, showNotValidAlert } from './alert-rendering.js';
-
-
+import * as gameRenderer from './rendering/game-rendering.js';
+import { showPlayerLeftSection } from './rendering/section-rendering.js';
+import { showNotYourTurnAlert, showNotValidAlert } from './rendering/alert-rendering.js';
 
 
 socket.on('move-made', updatedGame => {
@@ -12,10 +10,10 @@ socket.on('move-made', updatedGame => {
         indicateCardsGotBurned();
     }
     datastore.game = updatedGame;
-    updateGameView();
+    gameRenderer.updateGameView();
 });
 
-document.querySelector('#prevcardbtn').onclick = showPrevCards;
+document.querySelector('#prevcardbtn').onclick = gameRenderer.showPrevCards;
 
 document.querySelector('#pickupbtn').onclick = () => {
     if (datastore.game.currentPlayerIdx === datastore.index) {
@@ -68,9 +66,9 @@ function decideAmount(playedCard) {
     let hand = playersCards.handCards.filter((card) => card === playedCard);
     let last = playersCards.lastCards.filter((card) => card === playedCard);
     if (hand.length > 1) {
-        showAmountInput(hand);
+        gameRenderer.showAmountInput(hand);
     } else if (datastore.game.cards[datastore.index].handCards === 0 && last.length > 1) {
-        showAmountInput(last);
+        gameRenderer.showAmountInput(last);
     } else {
         tryMakeAMove([playedCard]);
     }
@@ -87,7 +85,7 @@ export function tryMakeAMove(playedCardArr) {
     } else {
         showNotValidAlert();
     }
-    clearAmountInput();
+    gameRenderer.clearAmountInput();
 };
 
 export function makeBelatedMove(playedCard) {

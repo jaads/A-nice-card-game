@@ -1,6 +1,6 @@
 import { socket, datastore } from './index.js';
-import { showGameSection } from './section-rendering.js';
-import { updateGameView } from './rendering-module.js';
+import { showGameSection } from './rendering/section-rendering.js';
+import { updateGameView } from './rendering/game-rendering.js';
 
 let swapbtn = document.querySelector('#swapbtn');
 let readybtn = document.querySelector('#readybtn');

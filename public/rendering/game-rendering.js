@@ -12,11 +12,11 @@ let coplayerstemplate = document.querySelector('#coplayerstemplate');
 let coplayerssection = document.querySelector('#coplayers');
 let stackRect = document.querySelector('#stacketc');
 
-import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard } from './game.js';
-import { datastore } from './index.js';
+import { tryMakeAMove, handleFirstStageClick, handleSecondStageClick, faceUpCard } from '../game.js';
+import { datastore } from '../index.js';
 import { showNotValidAlert, showNotYetAlert } from './alert-rendering.js';
 
-export function renderCards() {
+function renderCards() {
     cardsOnHandDiv.innerHTML = '';
     datastore.game.cards[datastore.index].handCards.forEach(card => {
         let newdiv = document.createElement('div');
@@ -107,7 +107,7 @@ export function updateGameView() {
     }
 };
 
-export function rendercoplayers() {
+function rendercoplayers() {
     coplayerssection.innerHTML = '';
     datastore.game.players.forEach((player, idx) => {
         const template = coplayerstemplate.content.cloneNode(true);
