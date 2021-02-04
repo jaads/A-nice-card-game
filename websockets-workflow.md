@@ -21,4 +21,15 @@ sequenceDiagram
         s ->> c: wait-for-others
         c ->> c: renderWaitScreen ( )
     end
+    loop until one wins
+        c ->> s: move
+        s ->> s: handleMove ( )
+        s ->> r: move-made
+        r ->> r: updateGame ( )
+    end
+    opt
+        c -->> s: disconnects
+        s ->> r: coplayer-disconnected
+        r ->> r: clearDatastore ( )
+    end
 ```
