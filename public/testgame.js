@@ -1,4 +1,4 @@
-import { updateGameView } from './rendering-module.js';
+import { updateGameView } from './rendering/game-rendering.js';
 import { socket, datastore } from './index.js';
 
 
