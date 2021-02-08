@@ -12,11 +12,13 @@ sequenceDiagram
     end
     c ->> s: start-game
     s ->> r: room-closed
+    s -->> c: 
     r ->> r: renderSwapSection ( )
     c ->> s: i-am-ready
     s ->> s: swapCards ( )
     alt all pressed ready btn
         s ->> r: all-ready
+        s -->> c: 
     else
         s ->> c: wait-for-others
         c ->> c: renderWaitScreen ( )
@@ -25,11 +27,13 @@ sequenceDiagram
         c ->> s: move
         s ->> s: handleMove ( )
         s ->> r: move-made
+        s -->> c: 
         r ->> r: updateGame ( )
     end
     opt
         c -->> s: disconnects
         s ->> r: coplayer-disconnected
+        s -->> c: 
         r ->> r: clearDatastore ( )
     end
-```
+``` 
