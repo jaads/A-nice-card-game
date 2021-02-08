@@ -38,7 +38,6 @@
     <main>
         <button id="gettestgame" style="display: none">Load testgame</button>
         <section id="joinsection">
-            <h1 class="text-danger">currently under maintenance (4th Feb. 2021)</h1>
             <div class="row flex-center">
                 <div id="notjoinedalert" class="alert alert-warning col-5 col">Please join a game first</div>
             </div>
@@ -129,6 +128,9 @@
         </section>
         <section id="playerleftsection">
             <h1>A player left. The game is over.</h1>
+        </section>
+        <section id="errorsection">
+            <h2 class="text-warn">The requested game could not be found on the server. A co-player probably left.</h2>
         </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.1/socket.io.min.js"></script>

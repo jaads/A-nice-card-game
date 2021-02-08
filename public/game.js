@@ -2,6 +2,7 @@ import { socket, datastore } from './index.js';
 import { isValidMove } from './card-logic.js';
 import * as gameRenderer from './rendering/game-rendering.js';
 import { showNotYourTurnAlert, showNotValidAlert } from './rendering/alert-rendering.js';
+import { showErrorSection } from './rendering/section-rendering.js';
 
 
 socket.on('move-made', updatedGame => {
@@ -10,6 +11,10 @@ socket.on('move-made', updatedGame => {
     }
     datastore.game = updatedGame;
     gameRenderer.updateGameView();
+});
+
+socket.on('error', () => {
+    showErrorSection();
 });
 
 document.querySelector('#prevcardbtn').onclick = gameRenderer.showPrevCards;

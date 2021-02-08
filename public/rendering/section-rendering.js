@@ -15,3 +15,11 @@ export function showPlayerLeftSection() {
     document.querySelector('#gamesection').innerHTML = '';
     document.querySelector('#playerleftsection').style.display = 'block';
 };
+
+export function showErrorSection() {
+    document.querySelector('#joinsection').innerHTML = '';
+    document.querySelector('#swapsection').innerHTML = '';
+    document.querySelector('#gamesection').innerHTML = '';
+    document.querySelector('#playerleftsection').innerHTML = '';
+    document.querySelector('#errorsection').style.display = 'block';
+};

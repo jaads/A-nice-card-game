@@ -83,52 +83,68 @@ io.on('connection', socket => {
     });
 
     socket.on('i-am-ready', data => {
-        let game = getGamebyRoom(data.room);
-        const updatedGame = game.swapCards(data.index, data.newHandCards, data.newLastCards);
-        updatedGame.nrOfReadyPlayers++;
-        if (updatedGame.nrOfReadyPlayers === updatedGame.players.length) {
-            io.to(data.room).emit('all-ready', updatedGame);
-        } else {
-            io.to(socket.id).emit('wait-for-others');
+        try {
+            let game = getGamebyRoom(data.room);
+            const updatedGame = game.swapCards(data.index, data.newHandCards, data.newLastCards);
+            updatedGame.nrOfReadyPlayers++;
+            if (updatedGame.nrOfReadyPlayers === updatedGame.players.length) {
+                io.to(data.room).emit('all-ready', updatedGame);
+            } else {
+                io.to(socket.id).emit('wait-for-others');
+            }
+        } catch (error) {
+            publishError(error, data.room);
         }
     });
 
     socket.on('move', data => {
-        let targetedGame = getGamebyRoom(data.room);
-        if (data.belated) {
-            targetedGame.makemove(data.cards, targetedGame.getIndexOfPrevPlayer());
-        } else {
-            targetedGame.makemove(data.cards, targetedGame.currentPlayerIdx);
+        try {
+            let targetedGame = getGamebyRoom(data.room);
+            if (data.belated) {
+                targetedGame.makemove(data.cards, targetedGame.getIndexOfPrevPlayer());
+            } else {
+                targetedGame.makemove(data.cards, targetedGame.currentPlayerIdx);
+            }
+            broadcastUpdatedGame(data.room, targetedGame);
+            if (targetedGame.isOver) {
+                removeGame(targetedGame);
+            };
+        } catch (err) {
+            publishError(err, data.room)
         }
-        broadcastUpdatedGame(data.room, targetedGame);
-        if (targetedGame.isOver) {
-            removeGame(targetedGame);
-        };
     });
 
     socket.on('pick-up', room => {
-        let targetedGame = getGamebyRoom(room);
-        targetedGame.pickUp();
-        broadcastUpdatedGame(room, targetedGame);
+        try {
+            let targetedGame = getGamebyRoom(room);
+            targetedGame.pickUp();
+            broadcastUpdatedGame(room, targetedGame);
+        } catch (err) {
+            publishError(err, room);
+        }
     });
 
     socket.on('face-up', data => {
-        let g = getGamebyRoom(data.room);
-        g.faceUp(data.player, data.flippedCardsIdx);
-        broadcastUpdatedGame(data.room, g);
+        try {
+            let g = getGamebyRoom(data.room);
+            g.faceUp(data.player, data.flippedCardsIdx);
+            broadcastUpdatedGame(data.room, g);
+        } catch (err) {
+            publishError(err, data.room);
+        }
     });
 
     socket.on('disconnect', (socket) => {
         // add socket.leave for the disconnedted user and for all other users that were in that room
         let player = allusers.find((user) => user.id === socket.id);
         if (player !== undefined) {
-            let canceldGame = getGamebyRoom(player.room);
-            // Hotfix for server crahses 'TypeError: Cannot read property 'room' of undefined' 
-            // TODO: why undefiend?
-            if (canceldGame !== undefined) {
+            try {
+                let canceldGame = getGamebyRoom(player.room);
                 io.to(canceldGame.room).emit('coplayer-disconnected');
                 removeAllPlayers(canceldGame);
                 removeGame(canceldGame);
+            } catch (err) {
+                publishError(err, player.room);
             }
         }
     });
@@ -167,6 +183,11 @@ io.on('connection', socket => {
         socket.join('testroom');
         io.to(socket.id).emit('test-game', testgame);
     });
+
+    function publishError(error, room) {
+        console.log(new Date() + error);
+        io.to(room).emit('error');
+    }
 });
 
 setInterval(() => {
