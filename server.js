@@ -10,7 +10,7 @@ let httpServer = app.listen(port, () => console.log('Listening'));
 // Setup socket.io
 let io = require('socket.io')(httpServer, {
     cors: {
-        origin: "http://shithead.onl", // for dev: http://127.0.0.1:5500, for prod: http://shithead.onl
+        origin: "http://127.0.0.1:5500", // for dev: http://127.0.0.1:5500, for prod: http://shithead.onl
         methods: ["GET", "POST"]
     }
 });
